@@ -1,5 +1,6 @@
 BeautifulSoup==3.2.1
 Flask==0.11.1
+Flask-DebugToolbar==0.10.0
 Flask-SQLAlchemy==2.1
 Jinja2==2.8
 MarkupSafe==0.23
@@ -8,6 +9,7 @@ SQLAlchemy==1.0.14
 Werkzeug==0.11.10
 argparse==1.2.1
 blessings==1.6
+blinker==1.4
 bottlenose==1.0.1
 bpython==0.15
 click==6.6
@@ -15,6 +17,7 @@ curtsies==0.2.6
 greenlet==0.4.10
 itsdangerous==0.24
 lxml==3.6.1
+psycopg2==2.6.2
 python-amazon-product-api==0.2.8
 python-dateutil==2.5.3
 requests==2.10.0

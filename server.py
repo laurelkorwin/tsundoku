@@ -18,6 +18,38 @@ app.jinja_env.undefined = StrictUndefined
 #MY ROUTES GO HERE
 
 
+@app.route('/')
+def show_homepage():
+    """Homepage"""
+
+    return render_template("homepage.html")
+
+
+@app.route('/login')
+def show_login():
+    """Login form"""
+
+    return render_template('login.html')
+
+@app.route('/process_login', methods=['POST'])
+def process_login():
+    """Process user log-in information."""
+
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    user_exists = User.query.filter_by(user_name=username).first()
+
+    if user_exists != None and user_exists.password == password:
+        flash('Successfully logged in!')
+        session['logged_in'] = user_exists.user_id
+        return redirect('/')
+    elif user_exists != None and user_exists.password != password:
+        flash('Incorrect password. Please reenter.')
+        return redirect('/login')
+    else:
+        flash('User account not found. Please register.')
+        return redirect('/')
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
@@ -29,5 +61,4 @@ if __name__ == "__main__":
     # Use the DebugToolbar
     DebugToolbarExtension(app)
 
-    app.run()
-    
+    app.run(host='0.0.0.0', debug=True, port=5000)

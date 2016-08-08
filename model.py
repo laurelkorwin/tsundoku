@@ -1,6 +1,6 @@
 
 from flask_sqlalchemy import SQLAlchemy
-import correlation
+
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -17,7 +17,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_name = db.Column(db.String(20), nullable=False, unique=True)
+    user_name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
@@ -35,9 +35,9 @@ class Book(db.Model):
     __tablename__ = "books"
 
     book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    asin = db.Column(db.Integer, unique=True)
-    title = db.Column(db.String(64), nullable=False)
-    author = db.Column(db.String(64))
+    asin = db.Column(db.Integer, unique=True, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(100))
     md_image = db.Column(db.String(200))
     lg_image = db.Column(db.String(200))
     date_added = db.Column(db.DateTime, nullable=True)
@@ -51,7 +51,7 @@ class Book(db.Model):
 
 
 class Rating(db.Model):
-    """Rating and 'has-read' information for each book/user"""
+    """Rating information for each book/user"""
 
     __tablename__ = "ratings"
 
@@ -60,11 +60,11 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'))
     rating = db.Column(db.Integer, nullable=True)
-    read = db.Column(db.Boolean, nullable=False)
+    has_read = db.Column(db.Boolean, nullable=False, default=False)
     date_added = db.Column(db.DateTime, nullable=False)
     date_deleted = db.Column(db.DateTime, nullable=True)
 
-    user = db.relationship('User', backref=db.backref('ratings', order_by=rating_id))
+    userrtg = db.relationship('User', backref=db.backref('ratings', order_by=rating_id))
     book = db.relationship('Book', backref=db.backref('books', order_by=rating_id))
     board = db.relationship('Board', backref=db.backref('boards', order_by=rating_id))
 
@@ -86,12 +86,17 @@ class Board(db.Model):
     board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     board_name = db.Column(db.String(100), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    published = db.Column(db.Boolean, nullable=False)
-    date_created = db.Column(db.DateTime, nullable=True)
+    published = db.Column(db.Boolean, nullable=False, default=False)
+    date_created = db.Column(db.DateTime, nullable=False)
 
+    userbd = db.relationship('User', backref=db.backref('users', order_by=user_id))
 
+    def __repr__(self):
+        """Return board data in a better format."""
 
-
+        return "<Board Board ID: {}, Board name: {}, User ID: {}>".format(self.board_id,
+                                                                   self.board_name,
+                                                                   self.user_id)
 
 
 
@@ -102,7 +107,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ratings'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///tsundoku'
     db.app = app
     db.init_app(app)
 
