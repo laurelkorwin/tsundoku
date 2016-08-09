@@ -4,6 +4,7 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board
 from search import setup_API, search_API, process_result
+import datetime
 
 app = Flask(__name__)
 
@@ -70,9 +71,10 @@ def process_registration():
         new_user = User(user_name=username, email=email, password=password) #adds user to DB with form inputs
         db.session.add(new_user)
         db.session.commit()
+        new_user_id = User.query.filter_by(user_name=username).first().user_id
 
         flash('Your account has been successfully created!')                #sets session key for logged in and redirects home (now should show search!)
-        session['logged_in'] = username
+        session['logged_in'] = new_user_id
 
         return redirect('/')
 
@@ -98,6 +100,30 @@ def add_book():
     url = request.form.get('url')
 
     return "I GOTCHU. Here's your stuff. {} {} {} {} {} {}".format(title, author, asin, md_image, lg_image, url) #returns page with form info (for now)
+
+@app.route('/create_board')
+def create_board():
+    """Allows user to create a board"""
+
+    user_id = session['logged_in']
+    existing_boards = Board.query.filter_by(user_id=user_id).all()
+
+    return render_template("create_board.html", existing_boards=existing_boards)
+
+@app.route('/process_board', methods=['POST'])
+def process_new_board():
+    """Adds new board to the database."""
+
+    board_name = request.form.get('board_name')
+    date_created = datetime.datetime.now().strftime('%m-%d-%y')
+    user_id = session['logged_in']
+
+    new_board = Board(board_name=board_name, user_id=user_id, date_created=date_created)
+
+    db.session.add(new_board)
+    db.session.commit()
+
+    return redirect('/create_board')
 
 
 @app.route('/logout')

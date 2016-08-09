@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Create New Board</h2>
+<form action='/process_board' method='POST'>
+    <input type='text' id='board_name_field' name='board_name'>
+    <input type='submit' value='Create Board'>
+</form>
+
+{% if existing_boards|length > 0 %}
+<h2>Your Current Boards: </h2>
+    {% for board in existing_boards %}
+        Board name: {{ board.board_name }}
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

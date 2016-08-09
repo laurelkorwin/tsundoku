@@ -9,6 +9,7 @@
         <a id='nav_title' href="/">tsundoku</a>
         {% if 'logged_in' in session %}
             <button class='nav_btn'><a href="logout">Log out</a></button>
+            <button class='nav_btn'><a href="create_board">Create Board</a></button>
             <form action='/search'>
             <label for='search_field'>
             <input type="text" name="search" placeholder="Search for a book title">
