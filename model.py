@@ -65,8 +65,8 @@ class Rating(db.Model):
     date_deleted = db.Column(db.DateTime, nullable=True)
 
     userrtg = db.relationship('User', backref=db.backref('ratings', order_by=rating_id))
-    book = db.relationship('Book', backref=db.backref('books', order_by=rating_id))
-    board = db.relationship('Board', backref=db.backref('boards', order_by=rating_id))
+    book = db.relationship('Book', backref=db.backref('ratings', order_by=rating_id))
+    board = db.relationship('Board', backref=db.backref('ratings', order_by=rating_id))
 
     def __repr__(self):
         """Return ratings data in a better format"""

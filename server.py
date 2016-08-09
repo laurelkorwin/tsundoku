@@ -3,29 +3,15 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board
-import os
-import lxml
-from amazonproduct import API
-import collections
-
-access_key = os.environ['AWS_ACCESS_KEY_ID']
-secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
-associate_tag = os.environ['AWS_ASSOCIATE_TAG']
-
-api = API(locale='us', access_key_id=access_key, secret_access_key=secret_key, associate_tag=associate_tag) #sets up api gateway w/keys above
+from search import setup_API, search_API, process_result
 
 app = Flask(__name__)
 
-# Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails
-# silently. This is horrible. Fix this so that, instead, it raises an
-# error.
 app.jinja_env.undefined = StrictUndefined
 
-#MY ROUTES GO HERE
-
+#ROUTES
 
 @app.route('/')
 def show_homepage():
@@ -94,31 +80,11 @@ def process_registration():
 @app.route('/search')
 def search():
 
-    search_term = request.args.get('search')                    #gets search term from search box
+    search_term = request.args.get('search')
 
-    result = api.item_search('Books', Title=search_term, ResponseGroup='Images,ItemAttributes', paginate=False) #searches api with search term
+    results_list = process_result(search_API(search_term))
 
-    result_items = result.Items.Item                            #'Unpacks' data from result page into a list of items
-
-    results_dict = collections.OrderedDict()                    #sets empty dictionary to hold result values
-
-    for index in range(len(result_items)):                      #goes through every item in the list of result items by index value
-        try:                                                    #sets attributes as below for each item (title, author, etc.)
-            key = index + 1
-            asin = result_items[index].ASIN
-            title = result_items[index].ItemAttributes.Title
-            author = result_items[index].ItemAttributes.Author
-            md_image = result_items[index].MediumImage.URL
-            lg_image = result_items[index].LargeImage.URL
-        except AttributeError:
-            title = ''
-            author = ''
-            md_image = ''
-            lg_image = ''
-        if len(title) > 0:                                      #if the result has a title, puts it into the results dictionary
-            results_dict[key] = {'title': title, 'author': author, 'asin': asin, 'md_image': md_image, 'lg_image': lg_image}
-
-    return render_template('search_results.html', results_dict=results_dict)
+    return render_template('search_results.html', results_list=results_list)
 
 @app.route('/add_book', methods=['POST'])
 def add_book():
@@ -129,8 +95,9 @@ def add_book():
     asin = request.form.get('asin')
     md_image = request.form.get('md_image')
     lg_image = request.form.get('lg_image')
+    url = request.form.get('url')
 
-    return "I GOTCHU. Here's your stuff. {} {} {} {} {}".format(title, author, asin, md_image, lg_image) #returns page with form info (for now)
+    return "I GOTCHU. Here's your stuff. {} {} {} {} {} {}".format(title, author, asin, md_image, lg_image, url) #returns page with form info (for now)
 
 
 @app.route('/logout')

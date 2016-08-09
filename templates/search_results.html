@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Search Results</h2>
+
+{% for result in results_list %}
+    <ul>
+        <li>        <!--Putting here for testing only-->
+            Title: {{ result['title'] }} <br>   <!--Gets title, author and image info from results dict-->
+            Author: {{ result['author'] }} <br><br>
+            <img src="{{ result['md_image'] }}"> <br><br>
+             <form action='add_book', method="POST">                             <!-- Sets form info w/hidden values and submits to add_book route-->
+                <input type="hidden" name="title" value="{{ result['title'] }}">
+                <input type="hidden" name="author" value="{{ result['author'] }}">
+                <input type="hidden" name="asin" value="{{ result['ASIN'] }}">
+                <input type="hidden" name="md_image" value="{{ result['md_image'] }}">
+                <input type="hidden" name="lg_image" value="{{ result['lg_image'] }}">
+                <input type="hidden" name="url" value="{{ result['URL'] }}">
+                <input type="submit" value="Add book to board">
+            </form>
+        </li>
+    </ul>
+{% endfor %}
+
+
+
+{% endblock %}
