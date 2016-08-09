@@ -10,7 +10,7 @@
 {% if existing_boards|length > 0 %}
 <h2>Your Current Boards: </h2>
     {% for board in existing_boards %}
-        Board name: {{ board.board_name }}
+        Board name: {{ board.board_name }}<br>
     {% endfor %}
 {% endif %}
 

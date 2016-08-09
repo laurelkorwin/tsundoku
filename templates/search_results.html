@@ -9,19 +9,48 @@
             Title: {{ result['title'] }} <br>   <!--Gets title, author and image info from results dict-->
             Author: {{ result['author'] }} <br><br>
             <img src="{{ result['md_image'] }}"> <br><br>
-             <form action='add_book', method="POST">                             <!-- Sets form info w/hidden values and submits to add_book route-->
-                <input type="hidden" name="title" value="{{ result['title'] }}">
+            <form action='add_book', method="POST"> 
+              <!--   <input type="hidden" name="title" value="{{ result['title'] }}">
                 <input type="hidden" name="author" value="{{ result['author'] }}">
                 <input type="hidden" name="asin" value="{{ result['ASIN'] }}">
                 <input type="hidden" name="md_image" value="{{ result['md_image'] }}">
                 <input type="hidden" name="lg_image" value="{{ result['lg_image'] }}">
-                <input type="hidden" name="url" value="{{ result['URL'] }}">
-                <input type="submit" value="Add book to board">
-            </form>
+                <input type="hidden" name="url" value="{{ result['URL'] }}"> -->
+<!--                 <input type ="submit" value="Add book to board"> -->
+            <!-- </form> -->
+            <button type='button' class="btn btn-primary btn-lg book_result"
+            data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
+            data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
+            data-md-image="{{ result['md_image'] }}" data-lg-image="{{ result['lg_image'] }}"
+            data-url="{{ result['URL'] }}"> Add book to board</button>
         </li>
     </ul>
 {% endfor %}
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Choose a board:</h4>
+      </div>
+      <div class="modal-body">
+        <form action='add_book', method="POST"> 
+            <input type="hidden" id="title" name="title" value=''>
+            <input type="hidden" id='author' name="author" value=''>
+            <input type="hidden" id='asin' name="asin" value=''>
+            <input type="hidden" id='md_image' name="md_image" value=''>
+            <input type="hidden" id='lg_image' name="lg_image" value=''>
+            <input type="hidden" id='url' name="url" value=''>
+            {% for board in existing_boards %}
+            <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}
+            {% endfor %}
+            <input type="submit" value="Add book!">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}

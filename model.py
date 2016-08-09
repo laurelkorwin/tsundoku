@@ -35,11 +35,12 @@ class Book(db.Model):
     __tablename__ = "books"
 
     book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    asin = db.Column(db.Integer, unique=True, nullable=False)
+    asin = db.Column(db.String(100), unique=True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100))
     md_image = db.Column(db.String(200))
     lg_image = db.Column(db.String(200))
+    url = db.Column(db.String(400))
     date_added = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):

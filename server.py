@@ -85,8 +85,10 @@ def search():
     search_term = request.args.get('search')
 
     results_list = process_result(search_API(search_term))
+    user_id = session['logged_in']
+    existing_boards = Board.query.filter_by(user_id=user_id).all()
 
-    return render_template('search_results.html', results_list=results_list)
+    return render_template('search_results.html', results_list=results_list, existing_boards=existing_boards)
 
 @app.route('/add_book', methods=['POST'])
 def add_book():
@@ -98,8 +100,23 @@ def add_book():
     md_image = request.form.get('md_image')
     lg_image = request.form.get('lg_image')
     url = request.form.get('url')
+    board = request.form.get('board')
+    user_id = session['logged_in']
+    current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
-    return "I GOTCHU. Here's your stuff. {} {} {} {} {} {}".format(title, author, asin, md_image, lg_image, url) #returns page with form info (for now)
+
+    book_exists = Book.query.filter_by(asin=asin).first()
+
+    if book_exists == None:
+        new_book = Book(asin=asin, title=title, author=author, md_image=md_image, url=url)
+        db.session.add(new_book)
+        db.session.commit()
+        new_book_id = Book.query.filter_by(asin=asin).first().book_id
+        new_rating = Rating(book_id=new_book_id, user_id=user_id, board_id=board, date_added=current_date)
+        db.session.add(new_rating)
+        db.session.commit()
+
+    return "I GOTCHU. Here's your stuff. {} {} {} {} {} {} {}".format(title, author, asin, md_image, lg_image, url, board) #returns page with form info (for now)
 
 @app.route('/create_board')
 def create_board():
