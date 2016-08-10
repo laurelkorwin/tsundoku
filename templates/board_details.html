@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>{{ board_title }}</h2>
+
+{% for book in books %}
+            Title: {{ book['title'] }} <br>   
+            Author: {{ book['author'] }} <br><br>
+            <img src="{{ book['md_image'] }}"> <br><br>
+{% endfor %}
+
+{% endblock %}

@@ -115,8 +115,15 @@ def add_book():
         new_rating = Rating(book_id=new_book_id, user_id=user_id, board_id=board, date_added=current_date)
         db.session.add(new_rating)
         db.session.commit()
+    else:
+        current_book_id = book_exists.book_id
+        new_rating = Rating(book_id=current_book_id, user_id=user_id, board_id=board, date_added=current_date)
+        db.session.add(new_rating)
+        db.session.commit()
 
-    return "I GOTCHU. Here's your stuff. {} {} {} {} {} {} {}".format(title, author, asin, md_image, lg_image, url, board) #returns page with form info (for now)
+    flash('Book successfully added!')
+
+    return redirect('/board_details/' + board)
 
 @app.route('/create_board')
 def create_board():
@@ -139,8 +146,28 @@ def process_new_board():
 
     db.session.add(new_board)
     db.session.commit()
+    flash('Your board successfully created!')
 
     return redirect('/create_board')
+
+@app.route('/board_details/<board_id>')
+def show_board_details(board_id):
+    """Show books in board"""
+
+    ratings = Rating.query.filter_by(board_id=board_id).all()
+    board = Board.query.get(board_id).board_name
+
+    books = []
+
+    for rating in ratings:
+        title = rating.book.title
+        author = rating.book.author
+        md_image = rating.book.md_image
+        books.append({'title': title, 'author': author, 'md_image': md_image})
+
+    return render_template("board_details.html", books=books, board_title=board)
+
+
 
 
 @app.route('/logout')

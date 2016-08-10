@@ -8,8 +8,8 @@
     <nav>
         <a id='nav_title' href="/">tsundoku</a>
         {% if 'logged_in' in session %}
-            <button class='nav_btn'><a href="logout">Log out</a></button>
-            <button class='nav_btn'><a href="create_board">Create Board</a></button>
+            <button class='nav_btn'><a href="/logout">Log out</a></button>
+            <button class='nav_btn'><a href="/create_board">Create Board</a></button>
             <form action='/search'>
             <label for='search_field'>
             <input type="text" name="search" placeholder="Search for a book title">
@@ -39,40 +39,8 @@
 
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-    
-        $('.book_result').click(
-            function(){
+    <script type="text/javascript" src="../static/my_script.js"></script>
 
-            title = $(this).data('title');
-            $('#title').val(title);
-            console.log(title);
-
-            author = $(this).data('author');
-            $('#author').val(author);
-            console.log(author);
-
-            asin = $(this).data('asin');
-            $('#asin').val(asin);
-            console.log(asin);
-
-            md_image = $(this).data('md-image');
-            $('#md_image').val(md_image);
-            console.log(md_image);
-
-            lg_image = $(this).data('lg-image');
-            $('#lg_image').val(lg_image);
-            console.log(lg_image);
-
-            url = $(this).data('url');
-            $('#url').val(url);
-            console.log(url);
-
-
-        });
-
-
-    </script>
 
 </body>
 </html>
