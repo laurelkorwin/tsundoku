@@ -7,6 +7,7 @@
             Title: {{ book['title'] }} <br>   
             Author: {{ book['author'] }} <br><br>
             <img src="{{ book['md_image'] }}"> <br><br>
+            <button><a href="{{ book.url }}"> Buy </a></button><br><br>
 {% endfor %}
 
 {% endblock %}

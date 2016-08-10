@@ -163,7 +163,8 @@ def show_board_details(board_id):
         title = rating.book.title
         author = rating.book.author
         md_image = rating.book.md_image
-        books.append({'title': title, 'author': author, 'md_image': md_image})
+        url = rating.book.url
+        books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url})
 
     return render_template("board_details.html", books=books, board_title=board)
 
