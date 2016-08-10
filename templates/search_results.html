@@ -23,7 +23,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Choose a board:</h4>
+        <h4 class="modal-title" id="myModalLabel">Give us a few more details:</h4>
       </div>
       <div class="modal-body">
         <form action='add_book', method="POST"> 
@@ -33,9 +33,20 @@
             <input type="hidden" id='md_image' name="md_image" value=''>
             <input type="hidden" id='lg_image' name="lg_image" value=''>
             <input type="hidden" id='url' name="url" value=''>
+            <p>Pick a board:</p>
             {% for board in existing_boards %}
-            <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}
+            <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}<br>
             {% endfor %}
+            Have you read this book before?
+            <input type="checkbox" name="hasread" checked data-toggle="toggle" data-on="Yes" data-off="No" data-style="pretty"><br>
+            If you've read the book, how would you rate it? <br>
+            <fieldset class="rating">
+                <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="5 stars"></label>
+                <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="4 stars"></label>
+                <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
+                <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
+                <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
+            </fieldset> <br> <br>
             <input type="submit" value="Add book!">
         </form>
       </div>

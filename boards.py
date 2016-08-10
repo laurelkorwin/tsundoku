@@ -19,15 +19,17 @@ def add_board(board_name, user_id):
 def add_new_book(asin, title, author, md_image, lg_image, url):
     """Given inputs, adds a new book to the database."""
 
-    new_book = Book(asin=asin, title=title, author=author, md_image=md_image, lg_image=lg_image, url=url)
+    new_book = Book(asin=asin, title=title, author=author, md_image=md_image,
+                    lg_image=lg_image, url=url)
     db.session.add(new_book)
     db.session.commit()
 
 
-def add_rating(book_id, user_id, board, current_date):
+def add_rating(book_id, user_id, board, current_date, hasread, rating):
     """Given inputs, add a new rating."""
 
-    new_rating = Rating(book_id=book_id, user_id=user_id, board_id=board, date_added=current_date)
+    new_rating = Rating(book_id=book_id, user_id=user_id, board_id=board,
+                        date_added=current_date, has_read=hasread, rating=rating)
     db.session.add(new_rating)
     db.session.commit()
 
@@ -41,6 +43,9 @@ def evaluate_ratings(ratings):
         author = rating.book.author
         md_image = rating.book.md_image
         url = rating.book.url
-        books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url})
+        hasread = rating.has_read
+        rating = rating.rating
+        books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url,
+                      'hasread': hasread, 'rating': rating})
 
     return books

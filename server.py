@@ -83,19 +83,26 @@ def add_book():
     lg_image = request.form.get('lg_image')
     url = request.form.get('url')
     board = request.form.get('board')
+    hasread = request.form.get('hasread')
+    rating = request.form.get('rating')
+
+    if hasread:
+        hasread = True
+    else:
+        hasread = False
+
     user_id = session['logged_in']
     current_date = datetime.datetime.now().strftime('%m-%d-%y')
-
 
     book_exists = get_book_by_asin(asin)
 
     if book_exists == None:
         new_book = add_new_book(asin, title, author, md_image, lg_image, url)
         new_book_id = get_book_by_asin(asin)
-        new_rating = add_rating(new_book_id, user_id, board, current_date)
+        new_rating = add_rating(new_book_id, user_id, board, current_date, hasread, rating)
     else:
         current_book_id = book_exists
-        new_rating = add_rating(current_book_id, user_id, board, current_date)
+        new_rating = add_rating(current_book_id, user_id, board, current_date, hasread, rating)
 
     flash('Book successfully added!')
 
