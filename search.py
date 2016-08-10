@@ -1,3 +1,5 @@
+"""API SEARCH"""
+
 import os
 import lxml
 from amazonproduct import API

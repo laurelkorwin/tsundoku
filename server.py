@@ -4,6 +4,9 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board
 from search import setup_API, search_API, process_result
+from boards import add_board, add_new_book, add_rating, evaluate_ratings
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id
+from login import process_new_login, process_new_registration
 import datetime
 
 app = Flask(__name__)
@@ -34,18 +37,9 @@ def process_login():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user_exists = User.query.filter_by(user_name=username).first()  #gets first result if username exists in DB, otherwise gets None.
+    user_exists = get_user_by_username(username)
 
-    if user_exists != None and user_exists.password == password:    #checks to see if user is in DB, and is password matches.
-        flash('Successfully logged in!')                            #If not, redirects to login / register accordingly.
-        session['logged_in'] = user_exists.user_id
-        return redirect('/')
-    elif user_exists != None and user_exists.password != password:
-        flash('Incorrect password. Please reenter.')
-        return redirect('/login')
-    else:
-        flash('User account not found. Please register.')
-        return redirect('/register')
+    return process_new_login(user_exists, password)
 
 
 @app.route('/register')
@@ -62,21 +56,9 @@ def process_registration():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    user_exists = User.query.filter_by(user_name=username).first()
+    user_exists = get_user_by_username(username)
 
-    if user_exists != None:                                     #Validates to see if username is in database (in case someone tries to pick one already in use)
-        flash('Oops, that user name is already registered. Please choose another.')
-        return redirect('/register')
-    else:
-        new_user = User(user_name=username, email=email, password=password) #adds user to DB with form inputs
-        db.session.add(new_user)
-        db.session.commit()
-        new_user_id = User.query.filter_by(user_name=username).first().user_id
-
-        flash('Your account has been successfully created!')                #sets session key for logged in and redirects home (now should show search!)
-        session['logged_in'] = new_user_id
-
-        return redirect('/')
+    return process_new_registration(user_exists, username, email, password)
 
 
 @app.route('/search')
@@ -86,7 +68,7 @@ def search():
 
     results_list = process_result(search_API(search_term))
     user_id = session['logged_in']
-    existing_boards = Board.query.filter_by(user_id=user_id).all()
+    existing_boards = get_board_by_userid(user_id)
 
     return render_template('search_results.html', results_list=results_list, existing_boards=existing_boards)
 
@@ -105,21 +87,15 @@ def add_book():
     current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
 
-    book_exists = Book.query.filter_by(asin=asin).first()
+    book_exists = get_book_by_asin(asin)
 
     if book_exists == None:
-        new_book = Book(asin=asin, title=title, author=author, md_image=md_image, url=url)
-        db.session.add(new_book)
-        db.session.commit()
-        new_book_id = Book.query.filter_by(asin=asin).first().book_id
-        new_rating = Rating(book_id=new_book_id, user_id=user_id, board_id=board, date_added=current_date)
-        db.session.add(new_rating)
-        db.session.commit()
+        new_book = add_new_book(asin, title, author, md_image, lg_image, url)
+        new_book_id = get_book_by_asin(asin)
+        new_rating = add_rating(new_book_id, user_id, board, current_date)
     else:
-        current_book_id = book_exists.book_id
-        new_rating = Rating(book_id=current_book_id, user_id=user_id, board_id=board, date_added=current_date)
-        db.session.add(new_rating)
-        db.session.commit()
+        current_book_id = book_exists
+        new_rating = add_rating(current_book_id, user_id, board, current_date)
 
     flash('Book successfully added!')
 
@@ -130,7 +106,7 @@ def create_board():
     """Allows user to create a board"""
 
     user_id = session['logged_in']
-    existing_boards = Board.query.filter_by(user_id=user_id).all()
+    existing_boards = get_board_by_userid(user_id)
 
     return render_template("create_board.html", existing_boards=existing_boards)
 
@@ -139,14 +115,9 @@ def process_new_board():
     """Adds new board to the database."""
 
     board_name = request.form.get('board_name')
-    date_created = datetime.datetime.now().strftime('%m-%d-%y')
     user_id = session['logged_in']
 
-    new_board = Board(board_name=board_name, user_id=user_id, date_created=date_created)
-
-    db.session.add(new_board)
-    db.session.commit()
-    flash('Your board successfully created!')
+    new_board = add_board(board_name, user_id)
 
     return redirect('/create_board')
 
@@ -154,21 +125,12 @@ def process_new_board():
 def show_board_details(board_id):
     """Show books in board"""
 
-    ratings = Rating.query.filter_by(board_id=board_id).all()
+    ratings = get_ratings_by_board_id(board_id)
     board = Board.query.get(board_id).board_name
 
-    books = []
-
-    for rating in ratings:
-        title = rating.book.title
-        author = rating.book.author
-        md_image = rating.book.md_image
-        url = rating.book.url
-        books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url})
+    books = evaluate_ratings(ratings)
 
     return render_template("board_details.html", books=books, board_title=board)
-
-
 
 
 @app.route('/logout')
