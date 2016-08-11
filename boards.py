@@ -39,6 +39,7 @@ def evaluate_ratings(ratings):
     books = []
 
     for rating in ratings:
+        book_id = rating.book_id
         title = rating.book.title
         author = rating.book.author
         md_image = rating.book.md_image
@@ -46,6 +47,15 @@ def evaluate_ratings(ratings):
         hasread = rating.has_read
         rating = rating.rating
         books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url,
-                      'hasread': hasread, 'rating': rating})
+                      'hasread': hasread, 'rating': rating, 'book_id': book_id})
 
     return books
+
+def mark_read(user_id, book_id):
+    """Given a user ID and Book ID, mark the book as read for that user."""
+
+    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+    this_rating.has_read = True
+    db.session.commit()
+
+    return "Marked this book as read!"

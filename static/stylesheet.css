@@ -42,10 +42,3 @@ form {
 .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
 .rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
 
-/*.search-results {
-  display: inline-block;
-  width: 300px;
-  height: 500px;
-  border: 2px solid gray;
-  border-radius: 5px;
-}*/

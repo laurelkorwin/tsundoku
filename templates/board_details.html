@@ -16,7 +16,8 @@
             {% if book['hasread'] %}
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> You've read this book! <br>
             {% else %}
-                <span class="glyphicon glyphicon-book" aria-hidden="true"></span> You still need to read this book. <br>
+                <span class="glyphicon glyphicon-book" aria-hidden="true"></span> You still need to read this book.
+                <a href="/read_book?book_id={{ book['book_id']}}"><button>Mark book as read</button></a><br>
             {% endif %}
             {% if book['rating'] %}
                 Rating:
