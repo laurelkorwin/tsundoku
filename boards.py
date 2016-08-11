@@ -39,6 +39,8 @@ def evaluate_ratings(ratings):
     books = []
 
     for rating in ratings:
+        rating_id = rating.rating_id
+        asin = rating.book.asin
         book_id = rating.book_id
         title = rating.book.title
         author = rating.book.author
@@ -47,7 +49,8 @@ def evaluate_ratings(ratings):
         hasread = rating.has_read
         rating = rating.rating
         books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url,
-                      'hasread': hasread, 'rating': rating, 'book_id': book_id})
+                      'hasread': hasread, 'rating_id': rating_id, 'rating': rating, 'book_id': book_id,
+                      'asin': asin})
 
     return books
 
@@ -59,3 +62,14 @@ def mark_read(user_id, book_id):
     db.session.commit()
 
     return "Marked this book as read!"
+
+def update_book_rating(user_id, book_id, score):
+    """Given a user ID, book ID and score, rate the book in the DB."""
+
+    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+    rating_id = this_rating.rating_id
+    asin = this_rating.book.asin
+    this_rating.rating = score
+    db.session.commit()
+
+    return asin

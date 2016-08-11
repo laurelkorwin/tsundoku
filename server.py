@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board
 from search import setup_API, search_API, process_result
-from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read
+from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating
 from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id
 from login import process_new_login, process_new_registration
 import datetime
@@ -128,7 +128,7 @@ def process_new_board():
 
     return redirect('/create_board')
 
-@app.route('/board_details/<board_id>')
+@app.route('/board_details/<board_id>', methods=['POST', 'GET'])
 def show_board_details(board_id):
     """Show books in board"""
 
@@ -165,17 +165,30 @@ def get_read_books():
 
     return render_template("board_details.html", books=books, board_title=board)
 
-@app.route('/read_book')
+@app.route('/read_book', methods=['POST'])
 def mark_book_as_read():
 
     user_id = session['logged_in']
-    book_id = request.args.get('book_id')
-    board_id = session['board_id']
+    book_id = request.form.get('book_id')
 
     message = mark_read(user_id, book_id)
-    flash(message)
 
-    return redirect('/board_details/' + board_id)
+    results = {'book_id': book_id, 'message': message}
+
+    return jsonify(results)
+
+@app.route('/rate_book', methods=['POST'])
+def rate_book():
+
+    user_id = session['logged_in']
+    book_id = request.form.get('book_id')
+    score = request.form.get('score')
+
+    asin = update_book_rating(user_id, book_id, score)
+
+    results = {'asin': asin, 'score': score}
+
+    return jsonify(results)
 
 
 @app.route('/logout')
