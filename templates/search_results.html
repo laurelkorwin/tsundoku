@@ -4,8 +4,9 @@
 <h2>Search Results</h2>
 
 {% for result in results_list %}
+<div class="search-results">
     <ul>
-        <li>        <!--Putting here for testing only-->
+        <li>
             Title: {{ result['title'] }} <br>   <!--Gets title, author and image info from results dict-->
             Author: {{ result['author'] }} <br><br>
             <img src="{{ result['md_image'] }}"> <br><br>
@@ -16,6 +17,7 @@
             data-url="{{ result['URL'] }}"> Add book to board</button>
         </li>
     </ul>
+</div>
 {% endfor %}
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

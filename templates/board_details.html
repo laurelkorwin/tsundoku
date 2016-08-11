@@ -2,7 +2,12 @@
 {% block content %}
 
 <h2>{{ board_title }}</h2>
-
+<h4>Filter:</h4>
+<a href="/get_read_books?hasread=True"><button>Read</button></a>
+<a href="/get_read_books?hasread=False"><button>Unread</button></a>
+<a href="/get_read_books?hasread=NA"><button>All</button></a>
+<br>
+<div id="books">
 {% for book in books %}
             Title: {{ book['title'] }} <br>   
             Author: {{ book['author'] }} <br><br>
@@ -23,5 +28,6 @@
             {% endif %}
             <br> <br>
 {% endfor %}
+</div>
 
 {% endblock %}

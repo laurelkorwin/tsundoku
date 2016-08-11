@@ -132,10 +132,36 @@ def process_new_board():
 def show_board_details(board_id):
     """Show books in board"""
 
+    session['board_id'] = board_id
+
     ratings = get_ratings_by_board_id(board_id)
     board = Board.query.get(board_id).board_name
 
     books = evaluate_ratings(ratings)
+
+    return render_template("board_details.html", books=books, board_title=board, board_id=board_id)
+
+@app.route('/get_read_books')
+def get_read_books():
+    """Get books read by user ID"""
+
+    user_id = session['logged_in']
+    board_id = session['board_id']
+    board = Board.query.get(board_id).board_name
+    hasread = request.args.get('hasread')
+    if hasread == "True":
+        hasread = True
+        read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
+    elif hasread == "False":
+        hasread = False
+        read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
+    else:
+        read_books = Rating.query.filter_by(user_id=user_id, board_id=board_id).all()
+
+
+    # read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
+
+    books = evaluate_ratings(read_books)
 
     return render_template("board_details.html", books=books, board_title=board)
 
