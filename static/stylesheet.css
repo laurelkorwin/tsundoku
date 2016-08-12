@@ -5,6 +5,11 @@ form {
   display: inline-block;
 }
 
+.search-results {
+  display: inline-block;
+  width: 350px;
+}
+
 /****** Style Star Rating Widget *****/
 
 .rating { 

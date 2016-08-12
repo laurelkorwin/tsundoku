@@ -2,23 +2,27 @@
 {% block content %}
 
 <h2>Search Results</h2>
-
+<!-- <div class="row"> -->
+<!-- <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'> -->
 {% for result in results_list %}
-<div class="search-results">
+
     <ul>
-        <li>
-            Title: {{ result['title'] }} <br>   <!--Gets title, author and image info from results dict-->
-            Author: {{ result['author'] }} <br><br>
-            <img src="{{ result['md_image'] }}"> <br><br>
-            <button type='button' class="btn btn-primary btn-lg book_result"
-            data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
-            data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
-            data-md-image="{{ result['md_image'] }}" data-lg-image="{{ result['lg_image'] }}"
-            data-url="{{ result['URL'] }}"> Add book to board</button>
-        </li>
+        <!-- <div class='grid-item'> -->
+            <li>
+                Title: {{ result['title'] }} <br>
+                Author: {{ result['author'] }} <br><br>
+                <img src="{{ result['md_image'] }}"> <br><br>
+                <button type='button' class="btn btn-primary btn-lg book_result"
+                data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
+                data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
+                data-md-image="{{ result['md_image'] }}" data-lg-image="{{ result['lg_image'] }}"
+                data-url="{{ result['URL'] }}"> Add book to board</button>
+            </li>
+        <!-- </div> -->
     </ul>
-</div>
+
 {% endfor %}
+<!-- </div> -->
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">

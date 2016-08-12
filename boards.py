@@ -14,7 +14,9 @@ def add_board(board_name, user_id):
 
     db.session.add(new_board)
     db.session.commit()
+
     flash("Your board successfully created!")
+
 
 def add_new_book(asin, title, author, md_image, lg_image, url):
     """Given inputs, adds a new book to the database."""
@@ -32,6 +34,7 @@ def add_rating(book_id, user_id, board, current_date, hasread, rating):
                         date_added=current_date, has_read=hasread, rating=rating)
     db.session.add(new_rating)
     db.session.commit()
+
 
 def evaluate_ratings(ratings):
     """Given a list of user ratings, return a list of dictionaries with ratings info."""
@@ -54,6 +57,7 @@ def evaluate_ratings(ratings):
 
     return books
 
+
 def mark_read(user_id, book_id):
     """Given a user ID and Book ID, mark the book as read for that user."""
 
@@ -63,11 +67,11 @@ def mark_read(user_id, book_id):
 
     return "Marked this book as read!"
 
+
 def update_book_rating(user_id, book_id, score):
     """Given a user ID, book ID and score, rate the book in the DB."""
 
     this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
-    rating_id = this_rating.rating_id
     asin = this_rating.book.asin
     this_rating.rating = score
     db.session.commit()
