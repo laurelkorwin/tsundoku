@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="board-header">
 <h2>Create New Board</h2>
+</div>
 <form action='/process_board' method='POST'>
     <input type='text' id='board_name_field' name='board_name'>
     <input type='submit' value='Create Board'>
 </form>
 
 {% if existing_boards|length > 0 %}
+<div class="board-header">
 <h2>Your Current Boards: </h2>
+</div>
     {% for board in existing_boards %}
-        Board name: <a href="board_details/{{ board.board_id }}">{{ board.board_name }}</a><br>
+        <a href="board_details/{{ board.board_id }}">{{ board.board_name }}</a><br>
     {% endfor %}
 {% endif %}
 

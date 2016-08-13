@@ -1,6 +1,7 @@
 """DATABASE QUERIES AND FUNCTIONS"""
 
 from model import connect_to_db, db, User, Book, Rating, Board
+from collections import defaultdict
 
 
 def get_user_by_username(username):
@@ -39,3 +40,8 @@ def get_ratings_by_board_id(board_id):
     result = Rating.query.filter_by(board_id=board_id).all()
 
     return result
+
+
+
+
+

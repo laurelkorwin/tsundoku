@@ -71,7 +71,7 @@ def search():
     search_term = request.args.get('search')
 
     #gets and processes search results from Amazon API (see search.py)
-    results_list = process_result(search_API(search_term))
+    results_list = process_result(search_API(search_term, 1))
 
     #using session key, gets the boards for the logged-in user
     user_id = session['logged_in']

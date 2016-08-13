@@ -48,12 +48,13 @@ def evaluate_ratings(ratings):
         title = rating.book.title
         author = rating.book.author
         md_image = rating.book.md_image
+        lg_image = rating.book.lg_image
         url = rating.book.url
         hasread = rating.has_read
         rating = rating.rating
         books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url,
                       'hasread': hasread, 'rating_id': rating_id, 'rating': rating, 'book_id': book_id,
-                      'asin': asin})
+                      'asin': asin, 'lg_image': lg_image})
 
     return books
 

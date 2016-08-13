@@ -1,13 +1,53 @@
 fieldset, label { margin: 0; padding: 0; }
-body{ margin: 20px; }
+body{ margin: 20px;
+      font-family: Avenir;
+      font-size: 14px;  }
 h1 { font-size: 1.5em; margin: 10px; }
 form {
   display: inline-block;
 }
 
-.search-results {
-  display: inline-block;
-  width: 350px;
+ul {
+  list-style-type: none;
+}
+
+.board-title, .search-header, .board-header {
+  color: #36648B;
+  text-transform: capitalize;
+  font-variant: small-caps;
+  font-weight:bold;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.book {
+  margin: 10px;
+  padding: 20px;
+  border: 2px solid #36648B;
+  background-color: #f6f6f6;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px #888888;
+}
+
+.title{
+  font-weight: bold;
+  font-size: 18px;
+  height: 45px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.filters{
+  font-size: 18px;
+}
+
+.centerBlock {
+                display: table;
+                margin: 0 auto;
+            }
+
+.rating-info, .read-info, .image {
+  padding: 5px;
 }
 
 /****** Style Star Rating Widget *****/

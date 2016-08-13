@@ -16,12 +16,12 @@ def setup_API():
 
     return api
 
-def search_API(search_term):
+def search_API(search_term, page=1):
     """Search API given a search term."""
 
     api = setup_API()
 
-    result = api.item_search('Books', Title=search_term, ResponseGroup='Images,ItemAttributes', paginate=False)
+    result = api.item_search('Books', Title=search_term, ResponseGroup='Images,ItemAttributes', ItemPage=page, paginate=False)
 
     return result
 

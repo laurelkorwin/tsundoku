@@ -31,7 +31,7 @@ function updateHTML(results){
       // sets book id equal to the value in results dict
       var book_id = results.book_id;
       // puts in HTML stating that user has read book before div with the same id as book id
-      $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> You\'ve read this book! <br>').insertBefore('#' + book_id);
+      $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Read').insertBefore('#' + book_id);
       // hides div with id of book id
       $('#' + book_id).hide();
 }
