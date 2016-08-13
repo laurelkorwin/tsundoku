@@ -17,4 +17,13 @@
     {% endfor %}
 {% endif %}
 
+{% for item, values in my_dict.iteritems() %}
+
+<a href="board_details/{{ item[1] }}">{{ item[0] }}</a>
+    {% for image in values %}
+    <img src="{{ image }}">
+    {% endfor %}
+
+{% endfor %}
+
 {% endblock %}

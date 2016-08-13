@@ -131,9 +131,21 @@ def create_board():
 
     user_id = session['logged_in']
     existing_boards = get_board_by_userid(user_id)
+    existing_board_ids_names = [(board.board_id, board.board_name) for board in existing_boards]
+
+    my_dict = {}
+
+    for item in existing_board_ids_names:
+        board_name = item[1]
+        board_id = item[0]
+        my_dict[(board_name, board_id)] = []
+        ratings = Rating.query.filter_by(board_id=board_id)
+        for rating in ratings:
+            md_image = rating.book.md_image
+            my_dict[(board_name, board_id)].append(md_image)
 
     # simple form input allowing user to specify a new board name
-    return render_template("create_board.html", existing_boards=existing_boards)
+    return render_template("create_board.html", existing_boards=existing_boards, my_dict=my_dict)
 
 @app.route('/process_board', methods=['POST'])
 def process_new_board():
