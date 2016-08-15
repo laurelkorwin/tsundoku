@@ -12,18 +12,20 @@
 <div class="board-header">
 <h2>Your Current Boards: </h2>
 </div>
-    {% for board in existing_boards %}
-        <a href="board_details/{{ board.board_id }}">{{ board.board_name }}</a><br>
-    {% endfor %}
-{% endif %}
 
 {% for item, values in my_dict.iteritems() %}
-
-<a href="board_details/{{ item[1] }}">{{ item[0] }}</a>
-    {% for image in values %}
-    <img src="{{ image }}">
-    {% endfor %}
-
+<div class="col-xs-12 col-lg-3 board">
+    <div class="board-name">
+        <a href="board_details/{{ item[0] }}">{{ item[1] }}</a>
+    </div>
+    <div class="board-images">
+        {% for image in values[:4] %}
+        <img src="{{ image }}">
+        {% endfor %}
+    </div>
+</div>
 {% endfor %}
+
+{% endif %}
 
 {% endblock %}

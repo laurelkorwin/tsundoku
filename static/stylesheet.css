@@ -20,7 +20,7 @@ ul {
   padding-bottom: 10px;
 }
 
-.book {
+.book, .board {
   margin: 10px;
   padding: 20px;
   border: 2px solid #36648B;
@@ -48,6 +48,11 @@ ul {
 
 .rating-info, .read-info, .image {
   padding: 5px;
+}
+
+.board-name {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /****** Style Star Rating Widget *****/

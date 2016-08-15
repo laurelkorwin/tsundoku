@@ -136,13 +136,12 @@ def create_board():
     my_dict = {}
 
     for item in existing_board_ids_names:
-        board_name = item[1]
         board_id = item[0]
-        my_dict[(board_name, board_id)] = []
+        my_dict[item] = []
         ratings = Rating.query.filter_by(board_id=board_id)
         for rating in ratings:
             md_image = rating.book.md_image
-            my_dict[(board_name, board_id)].append(md_image)
+            my_dict[item].append(md_image)
 
     # simple form input allowing user to specify a new board name
     return render_template("create_board.html", existing_boards=existing_boards, my_dict=my_dict)
