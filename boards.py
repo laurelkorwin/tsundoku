@@ -18,11 +18,11 @@ def add_board(board_name, user_id):
     flash("Your board successfully created!")
 
 
-def add_new_book(asin, title, author, md_image, lg_image, url):
+def add_new_book(asin, title, author, md_image, lg_image, url, primary_node_id, parent_node_id):
     """Given inputs, adds a new book to the database."""
 
     new_book = Book(asin=asin, title=title, author=author, md_image=md_image,
-                    lg_image=lg_image, url=url)
+                    lg_image=lg_image, url=url, primary_node_id=primary_node_id, parent_node_id=parent_node_id)
     db.session.add(new_book)
     db.session.commit()
 

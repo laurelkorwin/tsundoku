@@ -43,9 +43,9 @@ class Book(db.Model):
     md_image = db.Column(db.String(200))
     lg_image = db.Column(db.String(200))
     url = db.Column(db.String(400))
-    num_pages = db.Column(db.Integer, nullable=True) #ADDED FIELD
-    primary_node = db.Column(db.String(200), nullable=True) #ADDED FIELD
-    primary_node_id = db.Column(db.Integer, nullable=True) #ADDED FIELD
+    num_pages = db.Column(db.Integer, nullable=True)
+    primary_node_id = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=True)
+    parent_node_id = db.Column(db.Integer, nullable=True)
     date_added = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
@@ -54,6 +54,17 @@ class Book(db.Model):
         return "<Book Book ID: {}, ASIN: {}, Title: {}, Author: {}>".format(self.book_id,
                                                                     self.asin, self.title,
                                                                     self.author)
+
+
+class Node(db.Model):
+    """Amazon product node information"""
+
+    __tablename__ = "nodes"
+
+    node_id = db.Column(db.Integer, primary_key=True)
+    node_name = db.Column(db.String(100), nullable=False)
+
+    nodebk = db.relationship('Book', backref=db.backref('nodes'))
 
 
 class Rating(db.Model):

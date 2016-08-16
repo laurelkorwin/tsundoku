@@ -21,6 +21,42 @@ $('.book_result').click(
       var url = $(this).data('url');
       $('#url').val(url);
 
+      var primaryNodeID = $(this).data('primary-node-id');
+      $('#primary_node_id').val(primaryNodeID);
+
+      var primaryNode = $(this).data('primary-node');
+      $('#primary_node').val(primaryNode);
+
+      var parentNodeID = $(this).data('parent-node-id');
+      $('#parent_node_id').val(parentNodeID);
+
+      var parentNode = $(this).data('parent-node');
+      $('#parent_node').val(parentNode);
+
+
+  });
+
+$('.friend_book').click(
+      function(){
+
+      var title = $(this).data('title');
+      $('#title').val(title);
+
+      var author = $(this).data('author');
+      $('#author').val(author);
+
+      var asin = $(this).data('asin');
+      $('#asin').val(asin);
+
+      var md_image = $(this).data('md-image');
+      $('#md_image').val(md_image);
+
+      var lg_image = $(this).data('lg-image');
+      $('#lg_image').val(lg_image);
+
+      var url = $(this).data('url');
+      $('#url').val(url);
+
 
   });
 

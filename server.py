@@ -2,7 +2,7 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
+from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating
 from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db
@@ -92,6 +92,10 @@ def add_book():
     md_image = request.form.get('md_image')
     lg_image = request.form.get('lg_image')
     url = request.form.get('url')
+    primary_node_id = request.form.get('primary_node_id')
+    primary_node = request.form.get('primary_node')
+    parent_node_id = request.form.get('parent_node_id')
+    parent_node = request.form.get('parent_node')
     #user form inputs
     board = request.form.get('board')
     hasread = request.form.get('hasread')
@@ -111,10 +115,22 @@ def add_book():
     #queries the database for book based on asin
     book_exists = get_book_by_asin(asin)
 
+    primary_node_exists = Node.query.filter_by(node_id=primary_node_id).first()
+    if primary_node_exists == None:
+        new_node = Node(node_id=primary_node_id, node_name=primary_node)
+        db.session.add(new_node)
+        db.session.commit()
+
+    parent_node_exists = Node.query.filter_by(node_id=parent_node_id).first()
+    if parent_node_exists == None:
+        new_node_2 = Node(node_id=parent_node_id, node_name=parent_node)
+        db.session.add(new_node_2)
+        db.session.commit()
+
     #if the book isn't in the database, adds both book and rating to the database
     #otherwise, uses the book id for the book currently in the db and creates a new rating
     if book_exists == None:
-        new_book = add_new_book(asin, title, author, md_image, lg_image, url)
+        new_book = add_new_book(asin, title, author, md_image, lg_image, url, primary_node_id, parent_node_id)
         new_book_id = get_book_by_asin(asin)
         new_rating = add_rating(new_book_id, user_id, board, current_date, hasread, rating)
     else:
@@ -165,17 +181,24 @@ def show_board_details(board_id):
     """Show books in board"""
 
     #sets session key to board id when page is visited
-    session['board_id'] = board_id
+    user_id = session['logged_in']
 
-    #gets ratings for that board, as well as board name
-    ratings = get_ratings_by_board_id(board_id)
-    board = Board.query.get(board_id).board_name
+    my_boards = [board.board_id for board in get_board_by_userid(user_id)]
 
-    #goes through the list of ratings and unpacks them into variables (see boards.py)
-    books = evaluate_ratings(ratings)
+    if int(board_id) in my_boards:
+        session['board_id'] = board_id
+        #gets ratings for that board, as well as board name
+        ratings = get_ratings_by_board_id(board_id)
+        board = Board.query.get(board_id).board_name
 
-    #renders template showing books currently on the board
-    return render_template("board_details.html", books=books, board_title=board, board_id=board_id)
+        #goes through the list of ratings and unpacks them into variables (see boards.py)
+        books = evaluate_ratings(ratings)
+
+        #renders template showing books currently on the board
+        return render_template("board_details.html", books=books, board_title=board, board_id=board_id)
+    else:
+        flash("Oops, looks like you don't have a board with that ID.")
+        return redirect('/create_board')
 
 @app.route('/get_read_books')
 def get_read_books():
@@ -330,21 +353,25 @@ def show_friend_boards(friend_id):
             md_image = rating.book.md_image
             friend_dict[item].append(md_image)
 
-    # NEED TO TAKE OUT FUNCTIONALITY FOR PEOPLE TO MARK FRIEND'S STUFF
-
     return render_template("friend_boards.html", existing_boards=friend_boards, friend_dict=friend_dict, friend_name=friend_name)
+
 
 @app.route('/friend_board_details/<board_id>', methods=['POST', 'GET'])
 def show_friend_board_details(board_id):
 
+    user_id = session['logged_in']
+
     ratings = get_ratings_by_board_id(board_id)
     board = Board.query.get(board_id).board_name
-
+    my_boards = get_board_by_userid(user_id)
+    my_book_ids = [book.book_id for book in db.session.query(Rating.book_id).filter(Rating.user_id==user_id).all()]
+    print my_book_ids
     #goes through the list of ratings and unpacks them into variables (see boards.py)
     books = evaluate_ratings(ratings)
+    print my_boards
 
     #renders template showing books currently on the board
-    return render_template("friend_board_details.html", books=books, board_title=board, board_id=board_id)
+    return render_template("friend_board_details.html", books=books, board_title=board, board_id=board_id, existing_boards=my_boards, my_book_ids=my_book_ids)
 
 @app.route('/logout')
 def logout_user():
