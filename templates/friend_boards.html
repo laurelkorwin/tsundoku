@@ -9,7 +9,8 @@
 {% for item, values in friend_dict.iteritems() %}
 <div class="col-xs-12 col-lg-3 board">
     <div class="board-name">
-        <a href="/board_details/{{ item[0] }}">{{ item[1] }}</a>
+        <a href="/friend_board_details/{{ item[0] }}">{{ item[1] }}</a>
+        <!-- SEND ABOVE TO A DIFFERENT URL OR WE WILL HAVE PROBLEMS YO -->
     </div>
     <div class="board-images">
         {% for image in values[:4] %}

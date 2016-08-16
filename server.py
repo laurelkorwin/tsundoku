@@ -334,6 +334,17 @@ def show_friend_boards(friend_id):
 
     return render_template("friend_boards.html", existing_boards=friend_boards, friend_dict=friend_dict, friend_name=friend_name)
 
+@app.route('/friend_board_details/<board_id>', methods=['POST', 'GET'])
+def show_friend_board_details(board_id):
+
+    ratings = get_ratings_by_board_id(board_id)
+    board = Board.query.get(board_id).board_name
+
+    #goes through the list of ratings and unpacks them into variables (see boards.py)
+    books = evaluate_ratings(ratings)
+
+    #renders template showing books currently on the board
+    return render_template("friend_board_details.html", books=books, board_title=board, board_id=board_id)
 
 @app.route('/logout')
 def logout_user():
