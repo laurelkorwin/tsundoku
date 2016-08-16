@@ -11,4 +11,18 @@
     </label>
 </form>
 
+{% if pending_relationships|length > 0%}
+<h2>Pending Requests</h2>
+
+    {% for relationship in pending_relationships %}
+
+    Username: {{ relationship [0] }}<br>
+    Status {{ relationship [2] }}<br><br>
+
+
+    {% endfor %}
+
+
+{% endif %}
+
 {% endblock %}
