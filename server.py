@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
@@ -248,13 +248,21 @@ def friend_search():
     #NOTE - where user is requester.
     user_id = session['logged_in']
 
-    pending_relationships = Relationship.query.filter_by(primary_friend=user_id, status="Pending").all()
+    pending_relationships = Relationship.query.filter_by(primary_friend=user_id, status="Pending", requesting_friend=True).all()
 
     #gets secondary friend info for each relationship in pending relationships
     secondary_friends = [(relationship.get_secondary_friend_info().user_name, relationship.relationship_id, relationship.status) for relationship in pending_relationships]
 
+    my_pending_requests = Relationship.query.filter_by(secondary_friend=user_id, status="Pending", requesting_friend=True).all()
+
+    requester_info = [(relationship.users.user_name, relationship.primary_friend, relationship.status) for relationship in my_pending_requests]
+
+    current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
+
+    current_friends = [friend.get_secondary_friend_info().user_name for friend in current]
+
     #renders search page along with any pending relationships, as defined above.
-    return render_template('find_friends.html', pending_relationships=secondary_friends)
+    return render_template('find_friends.html', pending_relationships=secondary_friends, pending_requests=requester_info, current_friends=current_friends)
 
 
 @app.route('/search_friends')
@@ -281,6 +289,29 @@ def add_friend(friend_id):
     flash(added_message)
 
     return redirect("/find_friends")
+
+@app.route('/accept_friend/<friend_id>', methods=['POST', 'GET'])
+def accept_friend(friend_id):
+
+    user_id = session['logged_in']
+
+    accept_message = accept_friend_db(user_id, friend_id)
+
+    flash(accept_message)
+
+    return redirect('/find_friends')
+
+
+@app.route('/deny_friend/<friend_id>', methods=['POST', 'GET'])
+def deny_friend(friend_id):
+
+    user_id = session['logged_in']
+
+    deny_message = deny_friend_db(user_id, friend_id)
+
+    flash(deny_message)
+
+    return redirect('/find_friends')
 
 
 @app.route('/logout')

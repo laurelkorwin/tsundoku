@@ -57,6 +57,25 @@ def add_relationships(user_id, friend_id):
     return "Friend request sent!"
 
 
+def accept_friend_db(user_id, friend_id):
+    """Given a user id and a friend id, change relationship status to accepted."""
+
+    this_relationship_1 = Relationship.query.filter_by(primary_friend=user_id, secondary_friend=friend_id).first()
+    this_relationship_1.status = "Accepted"
+    this_relationship_2 = Relationship.query.filter_by(primary_friend=friend_id, secondary_friend=user_id).first()
+    this_relationship_2.status = "Accepted"
+    db.session.commit()
+
+    return "Accepted friend!"
 
 
+def deny_friend_db(user_id, friend_id):
+    """Given a user id and a friend id, change relationship status to denied."""
 
+    this_relationship_1 = Relationship.query.filter_by(primary_friend=user_id, secondary_friend=friend_id).first()
+    this_relationship_1.status = "Denied"
+    this_relationship_2 = Relationship.query.filter_by(primary_friend=friend_id, secondary_friend=user_id).first()
+    this_relationship_2.status = "Denied"
+    db.session.commit()
+
+    return "Denied friend."

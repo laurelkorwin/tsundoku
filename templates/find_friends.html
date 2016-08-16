@@ -12,16 +12,37 @@
 </form>
 
 {% if pending_relationships|length > 0%}
-<h2>Pending Requests</h2>
+<h2>Requests you've sent:</h2>
 
     {% for relationship in pending_relationships %}
 
-    Username: {{ relationship [0] }}<br>
-    Status {{ relationship [2] }}<br><br>
+    Username: {{ relationship[0] }}<br>
+    Status {{ relationship[2] }}<br><br>
 
 
     {% endfor %}
 
+
+{% endif %}
+
+{% if pending_requests|length > 0%}
+<h2>Requests for you:</h2>
+
+    {% for request in pending_requests %}
+    Username: {{ request[0] }}<br>
+    Status {{ request[2] }}<br><br>
+    <button><a href="/accept_friend/{{ request[1] }}">Accept</a></button>
+    <button><a href="/deny_friend/{{ request[1] }}">Deny</a></button><br>
+    {% endfor %}
+
+{% endif %}
+
+{% if current_friends|length > 0 %}
+<h2>Your current friends:</h2>
+
+    {% for friend in current_friends %}
+    Username: {{ friend }} <br>
+    {% endfor %}
 
 {% endif %}
 
