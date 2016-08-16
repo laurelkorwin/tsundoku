@@ -259,7 +259,7 @@ def friend_search():
 
     current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
 
-    current_friends = [friend.get_secondary_friend_info().user_name for friend in current]
+    current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
 
     #renders search page along with any pending relationships, as defined above.
     return render_template('find_friends.html', pending_relationships=secondary_friends, pending_requests=requester_info, current_friends=current_friends)
@@ -312,6 +312,27 @@ def deny_friend(friend_id):
     flash(deny_message)
 
     return redirect('/find_friends')
+
+@app.route('/friend_boards/<friend_id>', methods=['POST', 'GET'])
+def show_friend_boards(friend_id):
+
+    friend_boards = get_board_by_userid(friend_id)
+    friend_name = User.query.get(friend_id).user_name
+    friend_board_names = [(board.board_id, board.board_name) for board in friend_boards]
+
+    friend_dict = {}
+
+    for item in friend_board_names:
+        board_id = item[0]
+        friend_dict[item] = []
+        ratings = Rating.query.filter_by(board_id=board_id)
+        for rating in ratings:
+            md_image = rating.book.md_image
+            friend_dict[item].append(md_image)
+
+    # NEED TO TAKE OUT FUNCTIONALITY FOR PEOPLE TO MARK FRIEND'S STUFF
+
+    return render_template("friend_boards.html", existing_boards=friend_boards, friend_dict=friend_dict, friend_name=friend_name)
 
 
 @app.route('/logout')

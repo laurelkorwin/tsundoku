@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="friend-header">
 <h2> Search for friends </h2>
+</div>
 
 
 <form action='/search_friends'>
@@ -12,7 +14,9 @@
 </form>
 
 {% if pending_relationships|length > 0%}
+<div class="friend-header">
 <h2>Requests you've sent:</h2>
+</div>
 
     {% for relationship in pending_relationships %}
 
@@ -26,7 +30,9 @@
 {% endif %}
 
 {% if pending_requests|length > 0%}
+<div class="friend-header">
 <h2>Requests for you:</h2>
+</div>
 
     {% for request in pending_requests %}
     Username: {{ request[0] }}<br>
@@ -38,10 +44,13 @@
 {% endif %}
 
 {% if current_friends|length > 0 %}
+<div class="friend-header">
 <h2>Your current friends:</h2>
+</div>
 
     {% for friend in current_friends %}
-    Username: {{ friend }} <br>
+    Username: {{ friend[0] }} <br>
+    <button><a href="/friend_boards/{{ friend[1] }}">See {{ friend[0] }}'s boards!</a></button><br>
     {% endfor %}
 
 {% endif %}

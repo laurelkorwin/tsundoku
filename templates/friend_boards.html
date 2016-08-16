@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if existing_boards|length > 0 %}
+<div class="board-header">
+<h2>{{ friend_name }}'s Boards: </h2>
+</div>
+
+{% for item, values in friend_dict.iteritems() %}
+<div class="col-xs-12 col-lg-3 board">
+    <div class="board-name">
+        <a href="/board_details/{{ item[0] }}">{{ item[1] }}</a>
+    </div>
+    <div class="board-images">
+        {% for image in values[:4] %}
+        <img src="{{ image }}">
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

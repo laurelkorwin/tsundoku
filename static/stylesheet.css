@@ -11,7 +11,7 @@ ul {
   list-style-type: none;
 }
 
-.board-title, .search-header, .board-header {
+.board-title, .search-header, .board-header, .friend-header {
   color: #36648B;
   text-transform: capitalize;
   font-variant: small-caps;
