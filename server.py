@@ -5,8 +5,9 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships
 from login import process_new_login, process_new_registration
+from friends import return_potential_friends, make_friend_dict
 import datetime
 
 app = Flask(__name__)
@@ -243,49 +244,41 @@ def rate_book():
 @app.route('/find_friends')
 def friend_search():
 
+    #gets user id from session, and searches database for any current pending relationships to display
+    #NOTE - where user is requester.
     user_id = session['logged_in']
 
     pending_relationships = Relationship.query.filter_by(primary_friend=user_id, status="Pending").all()
 
+    #gets secondary friend info for each relationship in pending relationships
     secondary_friends = [(relationship.get_secondary_friend_info().user_name, relationship.relationship_id, relationship.status) for relationship in pending_relationships]
 
+    #renders search page along with any pending relationships, as defined above.
     return render_template('find_friends.html', pending_relationships=secondary_friends)
 
 
 @app.route('/search_friends')
 def search_friends():
 
+    #gets search term from search form, and user id from session
     friend = request.args.get('search')
     user_id = session['logged_in']
 
-    if '@' in friend:
-        possible_friends = db.session.query(User).filter(User.email.like("{}%".format(friend)), User.user_id != user_id).all() #NEED TO REMOVE ALREADY EXISTING RELATIONSHIPS FROM THIS
-    else:
-        possible_friends = db.session.query(User).filter(User.user_name.like("{}%".format(friend)), User.user_id != user_id).all()
+    #gets a dictionary of potential friend info from two functions in friends file
+    possible_friends = make_friend_dict(return_potential_friends(user_id, friend))
 
-    possible_friend_dict = {}
+    return render_template('possible_friends.html', friends=possible_friends)
 
-    for friend in possible_friends:
-        possible_friend_dict[friend.user_id] = friend.user_name
-
-
-    return render_template('possible_friends.html', friends=possible_friend_dict)
 
 @app.route('/add_friend/<friend_id>', methods=['POST', 'GET'])
 def add_friend(friend_id):
 
     user_id = session['logged_in']
     friend_user_id = friend_id
-    current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
-    relationship_1 = Relationship(primary_friend=user_id, secondary_friend=friend_user_id,
-                                  requesting_friend=True, status="Pending", date_initiated=current_date)
-    relationship_2 = Relationship(primary_friend=friend_user_id, secondary_friend=user_id,
-                                  requesting_friend=False, status="Pending", date_initiated=current_date)
-    db.session.add_all([relationship_1, relationship_2])
-    db.session.commit()
+    added_message = add_relationships(user_id, friend_user_id)
 
-    flash("Friend request sent!")
+    flash(added_message)
 
     return redirect("/find_friends")
 

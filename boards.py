@@ -1,6 +1,6 @@
 """BOARD SPECIFIC FUNCTIONALITY"""
 
-from model import connect_to_db, db, User, Book, Rating, Board
+from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 import datetime
 

@@ -1,7 +1,7 @@
 """DATABASE QUERIES AND FUNCTIONS"""
 
-from model import connect_to_db, db, User, Book, Rating, Board
-from collections import defaultdict
+from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
+import datetime
 
 
 def get_user_by_username(username):
@@ -40,6 +40,21 @@ def get_ratings_by_board_id(board_id):
     result = Rating.query.filter_by(board_id=board_id).all()
 
     return result
+
+
+def add_relationships(user_id, friend_id):
+    """Given a user's id and the friend's user id, add two relationships to the DB."""
+
+    current_date = datetime.datetime.now().strftime('%m-%d-%y')
+
+    relationship_1 = Relationship(primary_friend=user_id, secondary_friend=friend_id,
+                                  requesting_friend=True, status="Pending", date_initiated=current_date)
+    relationship_2 = Relationship(primary_friend=friend_id, secondary_friend=user_id,
+                                  requesting_friend=False, status="Pending", date_initiated=current_date)
+    db.session.add_all([relationship_1, relationship_2])
+    db.session.commit()
+
+    return "Friend request sent!"
 
 
 
