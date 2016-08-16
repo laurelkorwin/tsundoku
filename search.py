@@ -21,7 +21,7 @@ def search_API(search_term, page=1):
 
     api = setup_API()
 
-    result = api.item_search('Books', Title=search_term, ResponseGroup='Images,ItemAttributes', ItemPage=page, paginate=False)
+    result = api.item_search('Books', Title=search_term, ResponseGroup='Images,ItemAttributes,BrowseNodes', ItemPage=page, paginate=False)
 
     return result
 

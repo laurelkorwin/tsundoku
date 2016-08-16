@@ -240,6 +240,33 @@ def rate_book():
     return jsonify(results)
 
 
+@app.route('/find_friends')
+def friend_search():
+
+    return render_template('find_friends.html')
+
+
+@app.route('/search_friends')
+def search_friends():
+
+    friend = request.args.get('search')
+
+    if '@' in friend:
+        possible_friends = db.session.query(User).filter(User.email.like("{}%".format(friend))).all()
+    else:
+        possible_friends = db.session.query(User).filter(User.user_name.like("{}%".format(friend))).all()
+
+    possible_friend_dict = {}
+
+    for friend in possible_friends:
+        possible_friend_dict[friend.user_id] = friend.user_name
+    # [friend.user_name, friend.user_id for friend in possible_friends]
+
+    print possible_friend_dict
+
+    return render_template('possible_friends.html', friends=possible_friend_dict)
+
+
 @app.route('/logout')
 def logout_user():
     """Logout user"""

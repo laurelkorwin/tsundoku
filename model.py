@@ -21,6 +21,8 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
+    userrels = db.relationship('Relationship', backref=db.backref('users'))
+
     def __repr__(self):
         """Return user data in a better format"""
 
@@ -41,6 +43,9 @@ class Book(db.Model):
     md_image = db.Column(db.String(200))
     lg_image = db.Column(db.String(200))
     url = db.Column(db.String(400))
+    num_pages = db.Column(db.Integer, nullable=True) #ADDED FIELD
+    primary_node = db.Column(db.String(200), nullable=True) #ADDED FIELD
+    primary_node_id = db.Column(db.Integer, nullable=True) #ADDED FIELD
     date_added = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
@@ -62,6 +67,7 @@ class Rating(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'))
     rating = db.Column(db.Integer, nullable=True)
     has_read = db.Column(db.Boolean, nullable=False, default=False)
+    notes = db.Column(db.Text, nullable=True) #ADDED FIELD
     date_added = db.Column(db.DateTime, nullable=False)
     date_deleted = db.Column(db.DateTime, nullable=True)
 
@@ -98,6 +104,41 @@ class Board(db.Model):
         return "<Board Board ID: {}, Board name: {}, User ID: {}>".format(self.board_id,
                                                                    self.board_name,
                                                                    self.user_id)
+
+
+class Relationship(db.Model):
+    """User relationship information"""
+
+    __tablename__ = "relationships"
+
+    relationship_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    primary_friend = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    secondary_friend = db.Column(db.Integer, nullable=False)
+    requesting_friend = db.Column(db.Boolean, nullable=False)
+    status = db.Column(db.String(100), nullable=False)
+    date_initiated = db.Column(db.DateTime, nullable=False)
+
+    def get_secondary_friend_info(self): #put in one of the relationships you get back from a query for relationships (e.g. for friendship in friendships, friendship.get_secondary_friend_info)
+        """Query database for secondary friend info"""
+
+        secondary_friend = self.secondary_friend
+
+        secondary_friend_info = User.query.get(secondary_friend)
+
+        return secondary_friend_info
+
+
+class Recommendation(db.Model):
+    """User to user recommendation info"""
+
+    __tablename__ = "recommendations"
+
+    recommendation_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    relationship_id = db.Column(db.Integer, db.ForeignKey('relationships.relationship_id'))
+    referring_user = db.Column(db.Integer)
+    referred_user = db.Column(db.Integer)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
+    comments = db.Column(db.Text)
 
 
 

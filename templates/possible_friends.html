@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2> Potential Friends </h2>
+
+{% if friends %}
+
+    <p>Here are the potential friends we found for you:</p>
+
+    {% for friend_id, friend_name in friends.iteritems() %}
+
+    Friend name: {{ friend_name }}
+    <button class='friend_btn'><a href="/add_friend/{{ friend_id }}">Add friend</a></button><br>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>Hmm, we didn't find any friends with that name. Try searching again.</p>
+
+    <form action='/search_friends'>
+        <label for='search_field'>
+        <input type="text" name="search" placeholder="Search for a friend by username or email">
+        <input type="submit" value="Search">
+        </label>
+    </form>
+
+{% endif %}
+
+{% endblock %}

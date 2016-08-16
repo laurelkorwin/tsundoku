@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2> Search for friends </h2>
+
+
+<form action='/search_friends'>
+    <label for='search_field'>
+    <input type="text" name="search" placeholder="Search for a friend by username or email">
+    <input type="submit" value="Search">
+    </label>
+</form>
+
+{% endblock %}
