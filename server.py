@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, check_for_node
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, return_relationship_id, check_for_node, get_current_friends, get_current_recs
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
@@ -189,26 +189,26 @@ def show_board_details(board_id):
 
     my_boards = [board.board_id for board in get_board_by_userid(user_id)]
 
-    if int(board_id) in my_boards:
-        session['board_id'] = board_id
-        #gets ratings for that board, as well as board name
-        ratings = get_ratings_by_board_id(board_id)
-        board = Board.query.get(board_id).board_name
-
-        #goes through the list of ratings and unpacks them into variables (see boards.py)
-        books = evaluate_ratings(ratings)
-
-        #get current friends
-        current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
-
-        #get current friend info
-        current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
-
-        #renders template showing books currently on the board
-        return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends)
-    else:
+    if int(board_id) not in my_boards:
         flash("Oops, looks like you don't have a board with that ID.") #could show a 404 here - check this condition first and fail immediately if not
         return redirect('/create_board')
+
+    session['board_id'] = board_id
+    #gets ratings for that board, as well as board name
+    ratings = get_ratings_by_board_id(board_id)
+    board = Board.query.get(board_id).board_name
+
+    #goes through the list of ratings and unpacks them into variables (see boards.py)
+    books = evaluate_ratings(ratings)
+
+    #get current friend info
+    current_friends = get_current_friends(user_id)
+
+    #get current recommendations
+    my_recs = get_current_recs(user_id)
+
+    #renders template showing books currently on the board
+    return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends, my_recs=my_recs)
 
 
 @app.route('/get_read_books')
@@ -383,13 +383,11 @@ def recommend_book():
     board_id = session['board_id']
 
     #NOTE - this returns the relationship ID where the referring user is the primary friend.
-    your_relationship = db.session.query(Relationship.relationship_id).filter(Relationship.primary_friend == user_id, Relationship.secondary_friend == friend_id).first()[0]
+    relationship_id = return_relationship_id(user_id, friend_id)
 
-    recommendation = Recommendation(relationship_id=your_relationship, referring_user=user_id, referred_user=friend_id, book_id=book_id, comments=comment)
-    db.session.add(recommendation)
-    db.session.commit()
+    msg = add_recommendation(relationship_id, user_id, friend_id, book_id, comment)
 
-    flash('Recommendation made!')
+    flash(msg)
 
     return redirect('/board_details/' + board_id)
 

@@ -63,6 +63,13 @@ ul {
   font-weight: bold;
 }
 
+.btn-lg {
+  background-color: #36648B;
+  border-color: buttonface;
+  color: white;
+  font-size: 14px;
+}
+
 /****** Style Star Rating Widget *****/
 
 .rating { 

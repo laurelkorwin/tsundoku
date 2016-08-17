@@ -94,3 +94,40 @@ def deny_friend_db(user_id, friend_id):
 
     return "Denied friend."
 
+def get_current_friends(user_id):
+    """Given a user ID, get current friends from DB."""
+
+    current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
+
+    friend_info = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
+
+    return friend_info
+
+def get_current_recs(user_id):
+    """Given user ID, get current recommendations from the DB."""
+
+    current_recs = Recommendation.query.filter_by(referring_user=user_id).all()
+
+    my_recs = [(recommendation.book_id, recommendation.referred_user) for recommendation in current_recs]
+
+    return my_recs
+
+def return_relationship_id(primary_friend, secondary_friend):
+    """Given two user ids, return a relationship ID"""
+
+    your_relationship = db.session.query(Relationship.relationship_id).filter(Relationship.primary_friend == primary_friend, Relationship.secondary_friend == secondary_friend).first()
+
+    return your_relationship[0]
+
+def add_recommendation(relationship_id, user_id, friend_id, book_id, comment):
+    """Creates new recommendation in DB."""
+
+    recommendation = Recommendation(relationship_id=relationship_id, referring_user=user_id, referred_user=friend_id, book_id=book_id, comments=comment)
+    db.session.add(recommendation)
+    db.session.commit()
+
+    return "Recommendation made!"
+
+
+
+
