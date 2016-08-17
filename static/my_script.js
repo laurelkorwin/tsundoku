@@ -21,6 +21,10 @@ $('.book_result').click(
       var url = $(this).data('url');
       $('#url').val(url);
 
+      var numPages = $(this).data('num-pages');
+      $('#num_pages').val(numPages);
+      debugger;
+
       var primaryNodeID = $(this).data('primary-node-id');
       $('#primary_node_id').val(primaryNodeID);
 

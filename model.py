@@ -78,7 +78,7 @@ class Rating(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('boards.board_id'))
     rating = db.Column(db.Integer, nullable=True)
     has_read = db.Column(db.Boolean, nullable=False, default=False)
-    notes = db.Column(db.Text, nullable=True) #ADDED FIELD
+    notes = db.Column(db.Text, nullable=True)
     date_added = db.Column(db.DateTime, nullable=False)
     date_deleted = db.Column(db.DateTime, nullable=True)
 
@@ -129,7 +129,7 @@ class Relationship(db.Model):
     status = db.Column(db.String(100), nullable=False)
     date_initiated = db.Column(db.DateTime, nullable=False)
 
-    def get_secondary_friend_info(self): #put in one of the relationships you get back from a query for relationships (e.g. for friendship in friendships, friendship.get_secondary_friend_info)
+    def get_secondary_friend_info(self):
         """Query database for secondary friend info"""
 
         secondary_friend = self.secondary_friend

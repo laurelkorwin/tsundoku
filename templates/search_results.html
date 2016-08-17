@@ -17,7 +17,7 @@
                 <button type='button' class="btn btn-primary btn-lg book_result"
                 data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
                 data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
-                data-md-image="{{ result['md_image'] }}" data-lg-image="{{ result['lg_image'] }}"
+                data-md-image="{{ result['md_image'] }}" data-num-pages="{{ result['num_pages'] }}"data-lg-image="{{ result['lg_image'] }}"
                 data-url="{{ result['URL'] }}" data-primary-node-id="{{ result['primary_node_id'] }}"
                 data-primary-node="{{ result['primary_node'] }}", data-parent-node-id="{{ result['parent_node_id'] }}"
                 data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
@@ -43,6 +43,7 @@
             <input type="hidden" id='md_image' name="md_image" value=''>
             <input type="hidden" id='lg_image' name="lg_image" value=''>
             <input type="hidden" id='url' name="url" value=''>
+            <input type="hidden" id='num_pages' name="num_pages" value=''>
             <input type="hidden" id='primary_node_id' name="primary_node_id" value=''>
             <input type="hidden" id='primary_node' name='primary_node' value=''>
             <input type="hidden" id='parent_node_id' name='parent_node_id' value=''>

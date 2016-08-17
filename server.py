@@ -92,6 +92,7 @@ def add_book():
     md_image = request.form.get('md_image')
     lg_image = request.form.get('lg_image')
     url = request.form.get('url')
+    num_pages = request.form.get('num_pages')
     primary_node_id = request.form.get('primary_node_id')
     primary_node = request.form.get('primary_node')
     parent_node_id = request.form.get('parent_node_id')
@@ -130,7 +131,7 @@ def add_book():
     #if the book isn't in the database, adds both book and rating to the database
     #otherwise, uses the book id for the book currently in the db and creates a new rating
     if book_exists == None:
-        new_book = add_new_book(asin, title, author, md_image, lg_image, url, primary_node_id, parent_node_id)
+        new_book = add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primary_node_id, parent_node_id)
         new_book_id = get_book_by_asin(asin)
         new_rating = add_rating(new_book_id, user_id, board, current_date, hasread, rating)
     else:

@@ -42,6 +42,7 @@ def process_result(search_result):
             author = item.ItemAttributes.Author
             md_image = item.MediumImage.URL
             lg_image = item.LargeImage.URL
+            num_pages = item.ItemAttributes.NumberOfPages
             primary_node_id = item.BrowseNodes.BrowseNode.BrowseNodeId
             primary_node = item.BrowseNodes.BrowseNode.Name
             parent_node_id = item.BrowseNodes.BrowseNode.Ancestors.BrowseNode.BrowseNodeId
@@ -53,7 +54,7 @@ def process_result(search_result):
             lg_image = ''
         if len(title) > 0:
             results_list.append({'title': title, 'author': author, 'ASIN': asin,
-                                 'md_image': md_image, 'lg_image': lg_image, 'URL': url,
+                                 'md_image': md_image, 'lg_image': lg_image, 'URL': url, 'num_pages': num_pages,
                                  'primary_node_id': primary_node_id, 'primary_node': primary_node,
                                  'parent_node_id': parent_node_id, 'parent_node': parent_node})
 
