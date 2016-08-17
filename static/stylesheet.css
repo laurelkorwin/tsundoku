@@ -42,6 +42,13 @@ ul {
   font-size: 18px;
 }
 
+#book_comment {
+  height: 100px;
+  width: 400px;
+  resize: both;
+  word-wrap: break-word;
+}
+
 .centerBlock {
                 display: table;
                 margin: 0 auto;

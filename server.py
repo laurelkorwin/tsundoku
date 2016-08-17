@@ -198,8 +198,14 @@ def show_board_details(board_id):
         #goes through the list of ratings and unpacks them into variables (see boards.py)
         books = evaluate_ratings(ratings)
 
+        #get current friends
+        current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
+
+        #get current friend info
+        current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
+
         #renders template showing books currently on the board
-        return render_template("board_details.html", books=books, board_title=board, board_id=board_id)
+        return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends)
     else:
         flash("Oops, looks like you don't have a board with that ID.") #could show a 404 here - check this condition first and fail immediately if not
         return redirect('/create_board')
@@ -366,6 +372,26 @@ def show_friend_board_details(board_id):
 
     #renders template showing books currently on the board
     return render_template("friend_board_details.html", books=books, board_title=board, board_id=board_id, existing_boards=my_boards, my_book_ids=my_book_ids)
+
+@app.route('/recommend_book', methods=['POST'])
+def recommend_book():
+
+    user_id = session['logged_in']
+    friend_id = request.form.get('friend')
+    book_id = request.form.get('book_id')
+    comment = request.form.get('comment')
+    board_id = session['board_id']
+
+    #NOTE - this returns the relationship ID where the referring user is the primary friend.
+    your_relationship = db.session.query(Relationship.relationship_id).filter(Relationship.primary_friend == user_id, Relationship.secondary_friend == friend_id).first()[0]
+
+    recommendation = Recommendation(relationship_id=your_relationship, referring_user=user_id, referred_user=friend_id, book_id=book_id, comments=comment)
+    db.session.add(recommendation)
+    db.session.commit()
+
+    flash('Recommendation made!')
+
+    return redirect('/board_details/' + board_id)
 
 @app.route('/logout')
 def logout_user():

@@ -55,9 +55,36 @@
                     </div>
                 {% endif %}
             </div>
+            <div class="recommend_book">
+                <button type="button" class="btn btn-primary btn-lg friend_book"
+                data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Recommend this book to a friend!</button>
+            </div>
         </div>
         </div>
 {% endfor %}
 </div>
+<!-- MODAL WINDOW -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Which friend would you like to recommend this book to?:</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/recommend_book', method="POST"> 
+            <input type="hidden" id="book_id" name="book_id" value=''>
+            {% for friend  in current_friends %}
+            <input type="checkbox" name="friend" value="{{ friend[1] }}"> {{ friend[0] }}<br>
+            {% endfor %}
+            <p>Leave them a note about the book:</p>
+            <textarea id="book_comment" rows="20" cols="50" name="comment" placeholder="Comment"></textarea><br>
+            <input type="submit" value="Recommend!">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
+

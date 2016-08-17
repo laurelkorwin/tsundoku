@@ -45,22 +45,6 @@ $('.friend_book').click(
       var book_id = $(this).data('book-id');
       $('#book_id').val(book_id);
 
-      // var author = $(this).data('author');
-      // $('#author').val(author);
-
-      // var asin = $(this).data('asin');
-      // $('#asin').val(asin);
-
-      // var md_image = $(this).data('md-image');
-      // $('#md_image').val(md_image);
-
-      // var lg_image = $(this).data('lg-image');
-      // $('#lg_image').val(lg_image);
-
-      // var url = $(this).data('url');
-      // $('#url').val(url);
-
-
   });
 
 // Functions to update "read" status on board details page with AJAX
