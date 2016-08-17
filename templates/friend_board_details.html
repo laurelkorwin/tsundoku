@@ -39,10 +39,7 @@
             {% if book['book_id'] not in my_book_ids %}
             <div>
                 <button type="button" class="btn btn-primary btn-lg friend_book"
-                data-toggle="modal" data-target="#myModal" data-title="{{ book['title'] }}"
-                data-author="{{ book['author'] }}" data-asin="{{ book['asin'] }}"
-                data-md-image="{{ book['md_image'] }}" data-lg-image="{{ book['lg_image'] }}"
-                data-url="{{ book['url'] }}">Add book to one of my boards.</button>
+                data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Add book to one of my boards.</button>
             </div>
             {% endif %}
         </div>
@@ -59,13 +56,8 @@
         <h4 class="modal-title" id="myModalLabel">Give us a few more details:</h4>
       </div>
       <div class="modal-body">
-        <form action='/add_book', method="POST"> 
-            <input type="hidden" id="title" name="title" value=''>
-            <input type="hidden" id='author' name="author" value=''>
-            <input type="hidden" id='asin' name="asin" value=''>
-            <input type="hidden" id='md_image' name="md_image" value=''>
-            <input type="hidden" id='lg_image' name="lg_image" value=''>
-            <input type="hidden" id='url' name="url" value=''>
+        <form action='/add_friend_book', method="POST"> 
+            <input type="hidden" id="book_id" name="book_id" value=''>
             <p>Pick a board:</p>
             {% for board in existing_boards %}
             <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}<br>

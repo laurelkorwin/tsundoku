@@ -102,12 +102,6 @@ def add_book():
     hasread = request.form.get('hasread')
     rating = request.form.get('rating')
 
-    #reads toggle input and assigns a value to hasread accordingly
-    if hasread:
-        hasread = True
-    else:
-        hasread = False
-
     #gets user id from session key
     user_id = session['logged_in']
     #gets current date and formats it in a string
@@ -133,6 +127,26 @@ def add_book():
 
     #redirects to the board details page (should now show recently added book)
     return redirect('/board_details/' + board)
+
+@app.route('/add_friend_book', methods=['POST'])
+def add_friend_book():
+    """Add book from a friend's board to your own board."""
+
+    user_id = session['logged_in']
+
+    book_id = request.form.get('book_id')
+
+    board_id = request.form.get('board')
+
+    hasread = request.form.get('hasread')
+
+    rating = request.form.get('rating')
+
+    current_date = datetime.datetime.now().strftime('%m-%d-%y')
+
+    new_rating = add_rating(book_id, user_id, board_id, current_date, hasread, rating)
+
+    return redirect('/board_details/' + board_id)
 
 
 @app.route('/create_board')
@@ -347,10 +361,8 @@ def show_friend_board_details(board_id):
     board = Board.query.get(board_id).board_name
     my_boards = get_board_by_userid(user_id)
     my_book_ids = [book.book_id for book in db.session.query(Rating.book_id).filter(Rating.user_id==user_id).all()]
-    print my_book_ids
     #goes through the list of ratings and unpacks them into variables (see boards.py)
     books = evaluate_ratings(ratings)
-    print my_boards
 
     #renders template showing books currently on the board
     return render_template("friend_board_details.html", books=books, board_title=board, board_id=board_id, existing_boards=my_boards, my_book_ids=my_book_ids)
