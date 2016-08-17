@@ -78,3 +78,36 @@ def update_book_rating(user_id, book_id, score):
     db.session.commit()
 
     return asin
+
+
+def get_bd_imgs(lst):
+    """Takes in a list of tuples (of board id and board name).
+       Returns a dictionary w/key of tuple and value of list of image urls
+       for that board."""
+
+    my_dict = {}
+
+    for item in lst:
+        board_id = item[0]
+        my_dict[item] = []
+        ratings = Rating.query.filter_by(board_id=board_id)
+        for rating in ratings:
+            md_image = rating.book.md_image
+            my_dict[item].append(md_image)
+
+    return my_dict
+
+
+def filter_by_read(hasread, user_id, board_id):
+    """Given variable for hasread, user id and board id return a list of book objects"""
+
+    if hasread == "True":
+        hasread = True
+        read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
+    elif hasread == "False":
+        hasread = False
+        read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
+    else:
+        read_books = Rating.query.filter_by(user_id=user_id, board_id=board_id).all()
+
+    return read_books

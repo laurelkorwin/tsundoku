@@ -23,7 +23,6 @@ $('.book_result').click(
 
       var numPages = $(this).data('num-pages');
       $('#num_pages').val(numPages);
-      debugger;
 
       var primaryNodeID = $(this).data('primary-node-id');
       $('#primary_node_id').val(primaryNodeID);
@@ -71,7 +70,7 @@ function updateHTML(results){
       // sets book id equal to the value in results dict
       var book_id = results.book_id;
       // puts in HTML stating that user has read book before div with the same id as book id
-      $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Read').insertBefore('#' + book_id);
+      $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Read').insertBefore('#' + book_id);
       // hides div with id of book id
       $('#' + book_id).hide();
 }
@@ -80,6 +79,7 @@ function sendReadToDB (){
             
             // sets book id variable equal to the book id data for the particular button clicked
             var book_id = $(this).data('book-id');
+            
             // sends a post request to the read book route, providing book id
             // when returning from server, calls updateHTML function
             $.post('/read_book', {'book_id': book_id}, updateHTML);

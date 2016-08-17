@@ -4,8 +4,8 @@ from flask import Flask, render_template, redirect, request, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 from search import setup_API, search_API, process_result
-from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db
+from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, check_for_node
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
@@ -113,20 +113,11 @@ def add_book():
     #gets current date and formats it in a string
     current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
+    primary_node_exists = check_for_node(primary_node_id, primary_node)
+    parent_node_exists = check_for_node(parent_node_id, parent_node)
+
     #queries the database for book based on asin
     book_exists = get_book_by_asin(asin)
-
-    primary_node_exists = Node.query.filter_by(node_id=primary_node_id).first()
-    if primary_node_exists == None:
-        new_node = Node(node_id=primary_node_id, node_name=primary_node)
-        db.session.add(new_node)
-        db.session.commit()
-
-    parent_node_exists = Node.query.filter_by(node_id=parent_node_id).first()
-    if parent_node_exists == None:
-        new_node_2 = Node(node_id=parent_node_id, node_name=parent_node)
-        db.session.add(new_node_2)
-        db.session.commit()
 
     #if the book isn't in the database, adds both book and rating to the database
     #otherwise, uses the book id for the book currently in the db and creates a new rating
@@ -143,26 +134,23 @@ def add_book():
     #redirects to the board details page (should now show recently added book)
     return redirect('/board_details/' + board)
 
+
 @app.route('/create_board')
 def create_board():
     """Allows user to create a board"""
 
     user_id = session['logged_in']
+
+    #gets board ids by user and then makes a list of existing boards
     existing_boards = get_board_by_userid(user_id)
     existing_board_ids_names = [(board.board_id, board.board_name) for board in existing_boards]
 
-    my_dict = {}
-
-    for item in existing_board_ids_names:
-        board_id = item[0]
-        my_dict[item] = []
-        ratings = Rating.query.filter_by(board_id=board_id)
-        for rating in ratings:
-            md_image = rating.book.md_image
-            my_dict[item].append(md_image)
+    #makes a dictionary of images associated w/user board for user in jinja template
+    bd_img_dict = get_bd_imgs(existing_board_ids_names)
 
     # simple form input allowing user to specify a new board name
-    return render_template("create_board.html", existing_boards=existing_boards, my_dict=my_dict)
+    return render_template("create_board.html", existing_boards=existing_boards, my_dict=bd_img_dict)
+
 
 @app.route('/process_board', methods=['POST'])
 def process_new_board():
@@ -176,6 +164,7 @@ def process_new_board():
 
     #redirects to the boards page (should now show recently added board)
     return redirect('/create_board')
+
 
 @app.route('/board_details/<board_id>', methods=['POST', 'GET'])
 def show_board_details(board_id):
@@ -201,6 +190,7 @@ def show_board_details(board_id):
         flash("Oops, looks like you don't have a board with that ID.")
         return redirect('/create_board')
 
+
 @app.route('/get_read_books')
 def get_read_books():
     """Get books read by user ID"""
@@ -214,20 +204,14 @@ def get_read_books():
 
     #sets variable hasread according to route input, and returns a list of objects
     #either of read books, unread books, or all books
-    if hasread == "True":
-        hasread = True
-        read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
-    elif hasread == "False":
-        hasread = False
-        read_books = Rating.query.filter_by(user_id=user_id, has_read=hasread, board_id=board_id).all()
-    else:
-        read_books = Rating.query.filter_by(user_id=user_id, board_id=board_id).all()
+    read_books = filter_by_read(hasread, user_id, board_id)
 
     #goes through the list of ratings and unpacks them into variables (see boards.py)
     books = evaluate_ratings(read_books)
 
     #renders board details template again with filtered books
     return render_template("board_details.html", books=books, board_title=board)
+
 
 @app.route('/read_book', methods=['POST'])
 def mark_book_as_read():
@@ -245,6 +229,7 @@ def mark_book_as_read():
 
     #returns jsonified dictionary of results dict
     return jsonify(results)
+
 
 @app.route('/rate_book', methods=['POST'])
 def rate_book():
@@ -277,12 +262,16 @@ def friend_search():
     #gets secondary friend info for each relationship in pending relationships
     secondary_friends = [(relationship.get_secondary_friend_info().user_name, relationship.relationship_id, relationship.status) for relationship in pending_relationships]
 
+    #gets any requests that the user has received from others
     my_pending_requests = Relationship.query.filter_by(secondary_friend=user_id, status="Pending", requesting_friend=True).all()
 
+    #gets requester info for pending requests
     requester_info = [(relationship.users.user_name, relationship.primary_friend, relationship.status) for relationship in my_pending_requests]
 
+    #get current friends
     current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
 
+    #get current friend info
     current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
 
     #renders search page along with any pending relationships, as defined above.
@@ -344,15 +333,7 @@ def show_friend_boards(friend_id):
     friend_name = User.query.get(friend_id).user_name
     friend_board_names = [(board.board_id, board.board_name) for board in friend_boards]
 
-    friend_dict = {}
-
-    for item in friend_board_names:
-        board_id = item[0]
-        friend_dict[item] = []
-        ratings = Rating.query.filter_by(board_id=board_id)
-        for rating in ratings:
-            md_image = rating.book.md_image
-            friend_dict[item].append(md_image)
+    friend_dict = get_bd_imgs(friend_board_names)
 
     return render_template("friend_boards.html", existing_boards=friend_boards, friend_dict=friend_dict, friend_name=friend_name)
 

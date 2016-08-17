@@ -1,6 +1,6 @@
 """DATABASE QUERIES AND FUNCTIONS"""
 
-from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
+from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 import datetime
 
 
@@ -42,6 +42,20 @@ def get_ratings_by_board_id(board_id):
     return result
 
 
+def check_for_node(node_id, node_name):
+    """Given node id, check if node exists in DB and add it + name if it does not."""
+
+    node_exists = Node.query.filter_by(node_id=node_id).first()
+    if node_exists == None:
+        new_node = Node(node_id=node_id, node_name=node_name)
+        db.session.add(new_node)
+        db.session.commit()
+
+    return "Node added"
+
+
+"""RELATIONSHIPS FUNCTIONALITY"""
+
 def add_relationships(user_id, friend_id):
     """Given a user's id and the friend's user id, add two relationships to the DB."""
 
@@ -79,3 +93,4 @@ def deny_friend_db(user_id, friend_id):
     db.session.commit()
 
     return "Denied friend."
+
