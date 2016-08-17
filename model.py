@@ -45,8 +45,11 @@ class Book(db.Model):
     url = db.Column(db.String(400))
     num_pages = db.Column(db.Integer, nullable=True)
     primary_node_id = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=True)
-    parent_node_id = db.Column(db.Integer, nullable=True)
+    parent_node_id = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=True)
     date_added = db.Column(db.DateTime, nullable=True)
+
+    primnodebk = db.relationship('Node', foreign_keys=[primary_node_id])
+    parnodebk = db.relationship('Node', foreign_keys=[parent_node_id])
 
     def __repr__(self):
         """Return book data in a better format"""
@@ -63,8 +66,6 @@ class Node(db.Model):
 
     node_id = db.Column(db.Integer, primary_key=True)
     node_name = db.Column(db.String(100), nullable=False)
-
-    nodebk = db.relationship('Book', backref=db.backref('nodes'))
 
 
 class Rating(db.Model):

@@ -187,7 +187,7 @@ def show_board_details(board_id):
         #renders template showing books currently on the board
         return render_template("board_details.html", books=books, board_title=board, board_id=board_id)
     else:
-        flash("Oops, looks like you don't have a board with that ID.")
+        flash("Oops, looks like you don't have a board with that ID.") #could show a 404 here - check this condition first and fail immediately if not
         return redirect('/create_board')
 
 
