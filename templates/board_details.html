@@ -75,11 +75,8 @@
         <form action='/recommend_book', method="POST"> 
             <input type="hidden" id="book_id" name="book_id" value=''>
             <p>Which friend(s) would you like to recommend this book to?</p>
-            {% for friend  in current_friends %}
-                {% set tuple = (session['book_id']|int, friend[1]) %}
-                {% if tuple not in my_recs %}
-                        <input type="checkbox" name="friend" value="{{ friend[1] }}"> {{ friend[0] }}, {{ friend[1] }}<br>
-                {% endif %}
+            {% for friend in current_friends %}
+                        <input type="checkbox" name="friend" value="{{ friend[1] }}"> {{ friend[0] }} <br>
             {% endfor %}
             <p>Leave them a note about the book:</p>
             <textarea id="book_comment" rows="20" cols="50" name="comment" placeholder="Comment"></textarea><br>

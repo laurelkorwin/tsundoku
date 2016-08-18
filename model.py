@@ -44,8 +44,8 @@ class Book(db.Model):
     lg_image = db.Column(db.String(200))
     url = db.Column(db.String(400))
     num_pages = db.Column(db.Integer, nullable=True)
-    primary_node_id = db.Column(db.BigInteger, db.ForeignKey('nodes.node_id'), nullable=True)
-    parent_node_id = db.Column(db.BigInteger, db.ForeignKey('nodes.node_id'), nullable=True)
+    primary_node_id = db.Column(db.String(100), db.ForeignKey('nodes.node_id'), nullable=True)
+    parent_node_id = db.Column(db.String(100), db.ForeignKey('nodes.node_id'), nullable=True)
     date_added = db.Column(db.DateTime, nullable=True)
 
     primnodebk = db.relationship('Node', foreign_keys=[primary_node_id])
@@ -64,7 +64,7 @@ class Node(db.Model):
 
     __tablename__ = "nodes"
 
-    node_id = db.Column(db.BigInteger, primary_key=True)
+    node_id = db.Column(db.String(100), primary_key=True)
     node_name = db.Column(db.String(100), nullable=False)
 
 
@@ -150,6 +150,7 @@ class Recommendation(db.Model):
     referring_user = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     referred_user = db.Column(db.Integer)
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
+    status = db.Column(db.String(20), nullable=False)
     comments = db.Column(db.Text)
 
     relation = db.relationship('Relationship', backref=db.backref('recommendations'))

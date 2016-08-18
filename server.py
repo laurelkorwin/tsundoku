@@ -142,9 +142,18 @@ def add_friend_book():
 
     rating = request.form.get('rating')
 
+    rec_id = request.form.get('rec_id')
+    print rec_id
+
     current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
     new_rating = add_rating(book_id, user_id, board_id, current_date, hasread, rating)
+
+    if rec_id is not None:
+        this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
+        print this_rec
+        this_rec.status = "Accepted"
+        db.session.commit()
 
     return redirect('/board_details/' + board_id)
 
@@ -396,7 +405,9 @@ def show_recommendations():
 
     user_id = session['logged_in']
 
-    recs_for_me = Recommendation.query.filter_by(referred_user=user_id).all()
+    recs_for_me = Recommendation.query.filter_by(referred_user=user_id, status="Pending").all()
+
+    my_boards = get_board_by_userid(user_id)
 
     rec_dict = {}
 
@@ -406,20 +417,21 @@ def show_recommendations():
                                            'author': rec.bookinfo.author, 'md_image': rec.bookinfo.md_image,
                                            'comment': rec.comments}
 
-    return render_template('my_recommendations.html', rec_dict=rec_dict, rec_list=recs_for_me)
+    return render_template('my_recommendations.html', rec_dict=rec_dict, rec_list=recs_for_me, my_boards=my_boards)
 
-@app.route('/set_cookie')
-def set_cookie():
-    """Given JSON dict with a cookie value, set cookie for book id"""
+# CURRENTLY ABANDONED SET COOKIE CODE
+# @app.route('/set_cookie')
+# def set_cookie():
+#     """Given JSON dict with a cookie value, set cookie for book id"""
 
-    book_id = request.args.get('book_id')
-    print "BOOK ID {}".format(book_id)
+#     book_id = request.args.get('book_id')
+#     print "BOOK ID {}".format(book_id)
 
-    session['book_id'] = book_id
-    cookie = session['book_id']
-    print "HERE'S YOUR GODDAMN COOKIE {}".format(cookie)
+#     session['book_id'] = book_id
+#     cookie = session['book_id']
+#     print "HERE'S YOUR GODDAMN COOKIE {}".format(cookie)
 
-    return "Blah"
+#     return "Blah"
 
 
 @app.route('/logout')

@@ -119,10 +119,10 @@ def return_relationship_id(primary_friend, secondary_friend):
 
     return your_relationship[0]
 
-def add_recommendation(relationship_id, user_id, friend_id, book_id, comment):
+def add_recommendation(relationship_id, user_id, friend_id, book_id, comment, status="Pending"):
     """Creates new recommendation in DB."""
 
-    recommendation = Recommendation(relationship_id=relationship_id, referring_user=user_id, referred_user=friend_id, book_id=book_id, comments=comment)
+    recommendation = Recommendation(relationship_id=relationship_id, referring_user=user_id, referred_user=friend_id, book_id=book_id, comments=comment, status=status)
     db.session.add(recommendation)
     db.session.commit()
 

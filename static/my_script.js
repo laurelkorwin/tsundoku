@@ -51,23 +51,30 @@ $('.friend_book').click(
 
   });
 
-function showModal(results) {
-      $('#myModal').modal('show');
-}
+// CURRENTLY ABANDONED MODAL WINDOW CODE
+// function showModal(results) {
+//       $('#myModal').modal('show');
+// }
 
 
-function setCookie(){
-      $('#myModal').modal('hide');
-      console.log('IM HERE');
+// function setCookie(){
+//       $('#myModal').modal('hide');
+//       console.log('IM HERE');
 
-      var book_id = $(this).data('book-id');
-      $('#book_id').val(book_id);
+//       var book_id = $(this).data('book-id');
+//       $('#book_id').val(book_id);
 
-      $.get('/set_cookie', {'book_id': book_id}, showModal);
+//       $.get('/set_cookie', {'book_id': book_id}, showModal);
 
-}
+// }
 
-$('.recommend_book').on('click', setCookie);
+$('.recommend_book').click(
+      function(){
+
+            var book_id = $(this).data('book-id');
+            $('#book_id').val(book_id);
+
+      });
       // function (){
 
       // $('#myModal').modal('hide');
@@ -82,6 +89,17 @@ $('.recommend_book').on('click', setCookie);
 //             $('#myModal').modal('show');
 //       });
 // });
+
+$('.accept_rec').click(
+      function(){
+
+            var book_id = $(this).data('book-id');
+            $('#book_id').val(book_id);
+
+            var rec_id = $(this).data('rec-id');
+            $('#rec_id').val(rec_id);
+
+      });
 
 // Functions to update "read" status on board details page with AJAX
 
