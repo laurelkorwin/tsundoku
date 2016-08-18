@@ -92,11 +92,13 @@ $('.recommend_book').click(
 
 function showNotes(results){
       var notes = results.notes;
+      debugger;
       if (notes[0] !== null && notes[0] !== '') {
-            $('#notes').show();
-            $('#notes').html("<p>Your current notes:</p>" + notes);
+            $('#notes').html("<p>Your current notes:</p> <textarea id='book_notes' rows='8' cols='50' name='notes'>" + notes + "</textarea>");
+            $('#submit_button').val('Edit');
       } else {
-            $('#notes').hide();
+            $('#notes').html("<p>Add notes:</p> <textarea id='book_notes' rows='8' cols='50' name='notes' placeholder='Add notes'></textarea>");
+            $('#submit_button').val('Add');
       }
 }
 

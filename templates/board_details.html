@@ -95,13 +95,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Notes:</h4>
+        <h4 class="modal-title" id="myModalLabel">Notes</h4>
       </div>
       <div class="modal-body">
-        <form action='/recommend_book', method="POST"> 
+        <form action='/update_notes', method="POST"> 
             <input type="hidden" id="rating_id" name="rating_id" value=''>
-            <div id="notes"></div>
-            <input type="submit" value="blah">
+        <div id="notes">
+        </div>
+            <input id="submit_button" type="submit" value="">
         </form>
       </div>
     </div>

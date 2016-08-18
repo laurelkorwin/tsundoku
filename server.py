@@ -229,6 +229,21 @@ def get_notes_for_rating():
 
     return jsonify(results)
 
+@app.route('/update_notes', methods=['POST'])
+def update_notes():
+
+    rating_id = request.form.get('rating_id')
+    notes = request.form.get('notes')
+
+    this_rating = Rating.query.filter_by(rating_id=rating_id).first()
+    this_rating.notes = notes
+    db.session.commit()
+
+    this_rating = Rating.query.filter_by(rating_id=rating_id).first()
+
+    board_id = str(this_rating.board_id)
+
+    return redirect("/board_details/" + board_id)
 
 @app.route('/get_read_books')
 def get_read_books():
