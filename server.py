@@ -190,8 +190,7 @@ def show_board_details(board_id):
     my_boards = [board.board_id for board in get_board_by_userid(user_id)]
 
     if int(board_id) not in my_boards:
-        flash("Oops, looks like you don't have a board with that ID.") #could show a 404 here - check this condition first and fail immediately if not
-        return redirect('/create_board')
+        flash("Oops, looks like you don't have a board with that ID.")
 
     session['board_id'] = board_id
     #gets ratings for that board, as well as board name
@@ -206,6 +205,7 @@ def show_board_details(board_id):
 
     #get current recommendations
     my_recs = get_current_recs(user_id)
+    print my_recs
 
     #renders template showing books currently on the board
     return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends, my_recs=my_recs)
@@ -390,6 +390,37 @@ def recommend_book():
     flash(msg)
 
     return redirect('/board_details/' + board_id)
+
+@app.route('/recommendations')
+def show_recommendations():
+
+    user_id = session['logged_in']
+
+    recs_for_me = Recommendation.query.filter_by(referred_user=user_id).all()
+
+    rec_dict = {}
+
+    for rec in recs_for_me:
+        rec_dict[rec.recommendation_id] = {'book_id': rec.book_id, 'referring_user_id': rec.referring_user,
+                                           'referring_user': rec.users.user_name, 'title': rec.bookinfo.title,
+                                           'author': rec.bookinfo.author, 'md_image': rec.bookinfo.md_image,
+                                           'comment': rec.comments}
+
+    return render_template('my_recommendations.html', rec_dict=rec_dict, rec_list=recs_for_me)
+
+@app.route('/set_cookie')
+def set_cookie():
+    """Given JSON dict with a cookie value, set cookie for book id"""
+
+    book_id = request.args.get('book_id')
+    print "BOOK ID {}".format(book_id)
+
+    session['book_id'] = book_id
+    cookie = session['book_id']
+    print "HERE'S YOUR GODDAMN COOKIE {}".format(cookie)
+
+    return "Blah"
+
 
 @app.route('/logout')
 def logout_user():

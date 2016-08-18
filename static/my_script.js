@@ -45,7 +45,43 @@ $('.friend_book').click(
       var book_id = $(this).data('book-id');
       $('#book_id').val(book_id);
 
+      // $.get('/set_cookie', {'book_id': book_id}, function(results){
+      //       alert(results);
+      // });
+
   });
+
+function showModal(results) {
+      $('#myModal').modal('show');
+}
+
+
+function setCookie(){
+      $('#myModal').modal('hide');
+      console.log('IM HERE');
+
+      var book_id = $(this).data('book-id');
+      $('#book_id').val(book_id);
+
+      $.get('/set_cookie', {'book_id': book_id}, showModal);
+
+}
+
+$('.recommend_book').on('click', setCookie);
+      // function (){
+
+      // $('#myModal').modal('hide');
+
+      // console.log('IM HERE');
+
+      // var book_id = $(this).data('book-id');
+      // $('#book_id').val(book_id);
+
+//       $.get('/set_cookie', {'book_id': book_id}, function(results){
+//             alert(results);
+//             $('#myModal').modal('show');
+//       });
+// });
 
 // Functions to update "read" status on board details page with AJAX
 

@@ -55,8 +55,8 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="recommend_book">
-                <button type="button" class="btn btn-primary btn-lg friend_book"
+            <div class="recommend_this_book">
+                <button type="button" class="btn btn-primary btn-lg recommend_book"
                 data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Recommend</button>
             </div>
         </div>
@@ -69,13 +69,17 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Which friend would you like to recommend this book to?:</h4>
+        <h4 class="modal-title" id="myModalLabel">Recommendation Information</h4>
       </div>
       <div class="modal-body">
         <form action='/recommend_book', method="POST"> 
             <input type="hidden" id="book_id" name="book_id" value=''>
+            <p>Which friend(s) would you like to recommend this book to?</p>
             {% for friend  in current_friends %}
-            <input type="checkbox" name="friend" value="{{ friend[1] }}"> {{ friend[0] }}<br>
+                {% set tuple = (session['book_id']|int, friend[1]) %}
+                {% if tuple not in my_recs %}
+                        <input type="checkbox" name="friend" value="{{ friend[1] }}"> {{ friend[0] }}, {{ friend[1] }}<br>
+                {% endif %}
             {% endfor %}
             <p>Leave them a note about the book:</p>
             <textarea id="book_comment" rows="20" cols="50" name="comment" placeholder="Comment"></textarea><br>

@@ -147,11 +147,14 @@ class Recommendation(db.Model):
 
     recommendation_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     relationship_id = db.Column(db.Integer, db.ForeignKey('relationships.relationship_id'))
-    referring_user = db.Column(db.Integer)
+    referring_user = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     referred_user = db.Column(db.Integer)
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
     comments = db.Column(db.Text)
 
+    relation = db.relationship('Relationship', backref=db.backref('recommendations'))
+    users = db.relationship('User', backref=db.backref('recommendations'))
+    bookinfo = db.relationship('Book', backref=db.backref('recommendations'))
 
 
 ##############################################################################
