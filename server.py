@@ -143,7 +143,6 @@ def add_friend_book():
     rating = request.form.get('rating')
 
     rec_id = request.form.get('rec_id')
-    print rec_id
 
     current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
@@ -151,7 +150,6 @@ def add_friend_book():
 
     if rec_id is not None:
         this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
-        print this_rec
         this_rec.status = "Accepted"
         db.session.commit()
 
@@ -418,6 +416,21 @@ def show_recommendations():
                                            'comment': rec.comments}
 
     return render_template('my_recommendations.html', rec_dict=rec_dict, rec_list=recs_for_me, my_boards=my_boards)
+
+@app.route('/ignore_rec', methods=['POST'])
+def ignore_rec():
+
+    book_id = request.form.get('book_id')
+    rec_id = request.form.get('rec_id')
+
+    this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
+    this_rec.status = "Ignored"
+    db.session.commit()
+
+    results = {'rec_id': rec_id}
+
+    return jsonify(results)
+
 
 # CURRENTLY ABANDONED SET COOKIE CODE
 # @app.route('/set_cookie')

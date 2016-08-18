@@ -101,6 +101,23 @@ $('.accept_rec').click(
 
       });
 
+function hideDiv(results){
+      var div_id = results.rec_id;
+
+      $('#'+div_id+'').hide();
+
+}
+
+$('.ignore_rec').click(
+      function(){
+
+            var book_id = $(this).data('book-id');
+            var rec_id = $(this).data('rec-id');
+
+            $.post('/ignore_rec', {'book_id': book_id, 'rec_id': rec_id}, hideDiv);
+
+      });
+
 // Functions to update "read" status on board details page with AJAX
 
 function updateHTML(results){
