@@ -27,7 +27,7 @@ def add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primar
     db.session.commit()
 
 
-def add_rating(book_id, user_id, board, current_date, hasread, rating, notes):
+def add_rating(book_id, user_id, board, current_date, hasread, rating, notes=None):
     """Given inputs, add a new rating."""
 
     new_rating = Rating(book_id=book_id, user_id=user_id, board_id=board,

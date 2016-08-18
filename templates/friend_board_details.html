@@ -36,6 +36,9 @@
                     <p>Book currently unrated.</p>
                 {% endif %}
             </div>
+            <div class='notes'>
+                <b>Notes:</b> {{ book['notes'] }}
+            </div>
             {% if book['book_id'] not in my_book_ids %}
             <div>
                 <button type="button" class="btn btn-primary btn-lg friend_book"

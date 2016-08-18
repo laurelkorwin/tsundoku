@@ -45,28 +45,7 @@ $('.friend_book').click(
       var book_id = $(this).data('book-id');
       $('#book_id').val(book_id);
 
-      // $.get('/set_cookie', {'book_id': book_id}, function(results){
-      //       alert(results);
-      // });
-
   });
-
-// CURRENTLY ABANDONED MODAL WINDOW CODE
-// function showModal(results) {
-//       $('#myModal').modal('show');
-// }
-
-
-// function setCookie(){
-//       $('#myModal').modal('hide');
-//       console.log('IM HERE');
-
-//       var book_id = $(this).data('book-id');
-//       $('#book_id').val(book_id);
-
-//       $.get('/set_cookie', {'book_id': book_id}, showModal);
-
-// }
 
 $('.recommend_book').click(
       function(){
@@ -75,20 +54,6 @@ $('.recommend_book').click(
             $('#book_id').val(book_id);
 
       });
-      // function (){
-
-      // $('#myModal').modal('hide');
-
-      // console.log('IM HERE');
-
-      // var book_id = $(this).data('book-id');
-      // $('#book_id').val(book_id);
-
-//       $.get('/set_cookie', {'book_id': book_id}, function(results){
-//             alert(results);
-//             $('#myModal').modal('show');
-//       });
-// });
 
 function showNotes(results){
       var notes = results.notes;
