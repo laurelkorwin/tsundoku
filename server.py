@@ -101,6 +101,7 @@ def add_book():
     board = request.form.get('board')
     hasread = request.form.get('hasread')
     rating = request.form.get('rating')
+    notes = request.form.get('notes')
 
     #gets user id from session key
     user_id = session['logged_in']
@@ -118,10 +119,10 @@ def add_book():
     if book_exists == None:
         new_book = add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primary_node_id, parent_node_id)
         new_book_id = get_book_by_asin(asin)
-        new_rating = add_rating(new_book_id, user_id, board, current_date, hasread, rating)
+        new_rating = add_rating(new_book_id, user_id, board, current_date, hasread, rating, notes)
     else:
         current_book_id = book_exists
-        new_rating = add_rating(current_book_id, user_id, board, current_date, hasread, rating)
+        new_rating = add_rating(current_book_id, user_id, board, current_date, hasread, rating, notes)
 
     flash('Book successfully added!')
 
@@ -212,10 +213,21 @@ def show_board_details(board_id):
 
     #get current recommendations
     my_recs = get_current_recs(user_id)
-    print my_recs
 
     #renders template showing books currently on the board
     return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends, my_recs=my_recs)
+
+
+@app.route('/get_notes')
+def get_notes_for_rating():
+
+    rating_id = request.args.get('rating_id')
+
+    notes = db.session.query(Rating.notes).filter(Rating.rating_id == rating_id).first()
+
+    results = {'notes': notes}
+
+    return jsonify(results)
 
 
 @app.route('/get_read_books')

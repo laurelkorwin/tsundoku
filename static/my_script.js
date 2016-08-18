@@ -90,6 +90,24 @@ $('.recommend_book').click(
 //       });
 // });
 
+function showNotes(results){
+      var notes = results.notes;
+      if (notes[0] !== null && notes[0] !== '') {
+            $('#notes').show();
+            $('#notes').html("<p>Your current notes:</p>" + notes);
+      } else {
+            $('#notes').hide();
+      }
+}
+
+$('.see_notes').click(
+      function(){
+            var rating_id = $(this).data('rating-id');
+            $('#rating_id').val(rating_id);
+
+            $.get('/get_notes', {'rating_id': rating_id}, showNotes);
+});
+
 $('.accept_rec').click(
       function(){
 

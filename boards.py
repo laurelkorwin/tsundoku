@@ -27,11 +27,11 @@ def add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primar
     db.session.commit()
 
 
-def add_rating(book_id, user_id, board, current_date, hasread, rating):
+def add_rating(book_id, user_id, board, current_date, hasread, rating, notes):
     """Given inputs, add a new rating."""
 
     new_rating = Rating(book_id=book_id, user_id=user_id, board_id=board,
-                        date_added=current_date, has_read=hasread, rating=rating)
+                        date_added=current_date, has_read=hasread, rating=rating, notes=notes)
     db.session.add(new_rating)
     db.session.commit()
 
@@ -51,10 +51,13 @@ def evaluate_ratings(ratings):
         lg_image = rating.book.lg_image
         url = rating.book.url
         hasread = rating.has_read
+        notes = rating.notes
         rating = rating.rating
+        if notes is None:
+            notes = ''
         books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url,
                       'hasread': hasread, 'rating_id': rating_id, 'rating': rating, 'book_id': book_id,
-                      'asin': asin, 'lg_image': lg_image})
+                      'asin': asin, 'lg_image': lg_image, 'notes': notes})
 
     return books
 

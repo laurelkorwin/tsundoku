@@ -54,6 +54,9 @@
                         </form>
                     </div>
                 {% endif %}
+                <div class="notes">
+                    <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">Notes</button>
+                </div>
             </div>
             <div class="recommend_this_book">
                 <button type="button" class="btn btn-primary btn-lg recommend_book"
@@ -63,7 +66,7 @@
         </div>
 {% endfor %}
 </div>
-<!-- MODAL WINDOW -->
+<!-- RECOMMEND MODAL WINDOW -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -81,6 +84,24 @@
             <p>Leave them a note about the book:</p>
             <textarea id="book_comment" rows="20" cols="50" name="comment" placeholder="Comment"></textarea><br>
             <input type="submit" value="Recommend!">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- NOTES MODAL -->
+<div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Notes:</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/recommend_book', method="POST"> 
+            <input type="hidden" id="rating_id" name="rating_id" value=''>
+            <div id="notes"></div>
+            <input type="submit" value="blah">
         </form>
       </div>
     </div>
