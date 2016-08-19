@@ -37,7 +37,9 @@
                 {% endif %}
             </div>
             <div class='notes'>
+                {% if book['notes'] %}
                 <b>Notes:</b> {{ book['notes'] }}
+                {% endif %}
             </div>
             {% if book['book_id'] not in my_book_ids %}
             <div>

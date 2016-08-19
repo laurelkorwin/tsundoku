@@ -57,7 +57,7 @@ $('.recommend_book').click(
 
 function showNotes(results){
       var notes = results.notes;
-      debugger;
+
       if (notes[0] !== null && notes[0] !== '') {
             $('#notes').html("<p>Your current notes:</p> <textarea id='book_notes' rows='8' cols='50' name='notes'>" + notes + "</textarea>");
             $('#submit_button').val('Edit');
@@ -75,26 +75,25 @@ $('.see_notes').click(
             $.get('/get_notes', {'rating_id': rating_id}, showNotes);
 });
 
-$('.accept_rec').click(
-      function(){
+$('.accept_rec').click( function(){
 
-            var book_id = $(this).data('book-id');
-            $('#book_id').val(book_id);
+      var book_id = $(this).data('book-id');
+      $('#book_id').val(book_id);
 
-            var rec_id = $(this).data('rec-id');
-            $('#rec_id').val(rec_id);
+      var rec_id = $(this).data('rec-id');
+      $('#rec_id').val(rec_id);
 
-      });
+});
 
 function hideDiv(results){
+
       var div_id = results.rec_id;
 
       $('#'+div_id+'').hide();
 
 }
 
-$('.ignore_rec').click(
-      function(){
+$('.ignore_rec').click(function(){
 
             var book_id = $(this).data('book-id');
             var rec_id = $(this).data('rec-id');

@@ -11,6 +11,27 @@ ul {
   list-style-type: none;
 }
 
+.background {
+  margin-top: 20px;
+  margin-left: 0px;
+  margin-right: 0px;
+  height: 1100px;
+  position: relative;
+  text-align: center;
+  background-image: url("http://wallpaperrs.com/uploads/photography/book-wide-wallpaper-27832.jpg");
+}
+
+.homepage_title {
+  margin: 0 auto;
+  width: 300px;
+  display: inline-block;
+  position: absolute;
+  border: 2px solid #36648B;
+  border-radius: 15px;
+  background-color: white;
+  color: #36648B;
+}
+
 .board-title, .search-header, .board-header, .friend-header {
   color: #36648B;
   text-transform: capitalize;
