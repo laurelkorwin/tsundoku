@@ -10,9 +10,9 @@
     <a href="/get_read_books?hasread=NA"><button>All</button></a>
     <br>
 </div>
-<div class="row">
+<div class="row masonry">
 {% for book in books %}
-    <div class="col-xs-12 col-lg-3 book">
+    <div class="col-xs-12 col-lg-4 book item">
         <div class="centerBlock">
             <div class="title">
                 {{ book['title'] }} <br>

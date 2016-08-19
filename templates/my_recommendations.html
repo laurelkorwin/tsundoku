@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="search-header">
+<h2>Recommended Books</h2>
+</div>
+
+<div>
+{% if rec_list|length > 0%}
+
+{% for key, value in rec_dict.iteritems() %}
+<div id="{{key}}" class="col-xs-12 col-lg-3 book">
+
+    <div class="title">
+        {{ value['title'] }}
+    </div>
+    <div class="author">
+        {{ value['author'] }}
+    </div>
+    <div class="image">
+        <img src="{{value['md_image']}}"><br>
+    </div>
+    <div class="referred_by">
+        "{{ value['comment'] }}"<br>
+        -{{ value['referring_user'] }}
+    </div>
+    <div class="rec_buttons">
+        <button type="button" class="accept_rec"
+        data-toggle="modal" data-target="#myModal" data-book-id="{{ value['book_id'] }}" data-rec-id="{{ key }}">Add book to board</button>
+        <button class="ignore_rec" data-book-id="{{ value['book_id'] }}" data-rec-id="{{ key }}">Ignore</button>
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+<p>You don't have any currently recommended books.</p>
+
+{% endif %}
+<div>
+<!-- MODAL WINDOW -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Give us a few more details:</h4>
+      </div>
+      <div class="modal-body">
+        <form action='/add_friend_book', method="POST"> 
+            <input type="hidden" id="book_id" name="book_id" value=''>
+            <input type="hidden" id="rec_id" name="rec_id" value=''>
+            <p>Pick a board:</p>
+            {% for board in my_boards %}
+            <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}<br>
+            {% endfor %}
+            <p>Have you read this book before?</p>
+            <input type="checkbox" name="hasread" checked data-toggle="toggle" data-on="Yes" data-off="No" data-style="pretty"><br>
+            <p>If you've read the book, how would you rate it?</p>
+            <fieldset class="rating">
+                <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="5 stars"></label>
+                <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="4 stars"></label>
+                <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
+                <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
+                <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
+            </fieldset> <br> <br>
+            <input type="submit" value="Add book!">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
