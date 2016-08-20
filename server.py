@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, ignore_rec, return_relationship_id, edit_notes, check_for_node, get_current_friends, get_current_recs
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, ignore_rec_db, return_relationship_id, edit_notes, check_for_node, get_current_friends, get_current_recs
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
@@ -487,7 +487,7 @@ def ignore_rec():
 
     rec_id = request.form.get('rec_id')
 
-    this_rec_id = ignore_rec(rec_id)
+    this_rec_id = ignore_rec_db(rec_id)
 
     results = {'rec_id': this_rec_id}
 

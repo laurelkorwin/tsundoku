@@ -137,7 +137,7 @@ def add_recommendation(relationship_id, user_id, friend_id, book_id, comment, st
 
     return "Recommendation made!"
 
-def ignore_rec(rec_id):
+def ignore_rec_db(rec_id):
     """Given recommendation ID, changes status to 'ignored'"""
 
     this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
