@@ -53,6 +53,15 @@ def check_for_node(node_id, node_name):
 
     return "Node added"
 
+def edit_notes(rating_id, notes):
+    """Given rating id and notes for a rating, update notes in DB."""
+
+    this_rating = Rating.query.filter_by(rating_id=rating_id).first()
+    this_rating.notes = notes
+    db.session.commit()
+
+    return str(this_rating.board_id)
+
 
 """RELATIONSHIPS FUNCTIONALITY"""
 
@@ -128,6 +137,11 @@ def add_recommendation(relationship_id, user_id, friend_id, book_id, comment, st
 
     return "Recommendation made!"
 
+def ignore_rec(rec_id):
+    """Given recommendation ID, changes status to 'ignored'"""
 
+    this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
+    this_rec.status = "Ignored"
+    db.session.commit()
 
-
+    return this_rec.recommendation_id

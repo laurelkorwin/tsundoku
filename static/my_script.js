@@ -39,25 +39,26 @@ $('.book_result').click(
 
   });
 
-$('.friend_book').click(
-      function(){
+// SETS BOOK ID IN MODAL FORM USING DATA ON BUTTON THAT WAS CLICKED
 
-      var book_id = $(this).data('book-id');
+function setModalBookID(){
+      var book_id = $(this.data('book_id'));
       $('#book_id').val(book_id);
+}
 
-  });
+$('.friend_book').click(setModalBookID);
 
-$('.recommend_book').click(
-      function(){
+$('.recommend_book').click(setModalBookID);
 
-            var book_id = $(this).data('book-id');
-            $('#book_id').val(book_id);
-
-      });
+// FUNCTIONS TO SHOW NOTES FOR EACH BOOK
 
 function showNotes(results){
+
+      // sets notes variable according to the result sent back from the server
       var notes = results.notes;
 
+      // if notes exist, populate modal with textarea containing current notes and give user the ability to edit
+      // otherwise, populate modal with blank textarea and give user the ability to add
       if (notes[0] !== null && notes[0] !== '') {
             $('#notes').html("<p>Your current notes:</p> <textarea id='book_notes' rows='8' cols='50' name='notes'>" + notes + "</textarea>");
             $('#submit_button').val('Edit');
@@ -67,6 +68,8 @@ function showNotes(results){
       }
 }
 
+// upon clicking the notes button, set modal window rating-id form input equal to that book's rating id
+// also, send get request to server for any notes associated with that rating
 $('.see_notes').click(
       function(){
             var rating_id = $(this).data('rating-id');
@@ -75,6 +78,9 @@ $('.see_notes').click(
             $.get('/get_notes', {'rating_id': rating_id}, showNotes);
 });
 
+
+// RECOMMENDATION FUNCTIONALITY - ACCEPT AND IGNORE
+// sets book id and recommendation id on modal window form for the selected book
 $('.accept_rec').click( function(){
 
       var book_id = $(this).data('book-id');
@@ -85,6 +91,7 @@ $('.accept_rec').click( function(){
 
 });
 
+// hides ignored recommendation when data comes back from the server
 function hideDiv(results){
 
       var div_id = results.rec_id;
@@ -93,6 +100,7 @@ function hideDiv(results){
 
 }
 
+// upon clicking the 'ignore' button, sends data with book id and rec id to the server
 $('.ignore_rec').click(function(){
 
             var book_id = $(this).data('book-id');
@@ -102,7 +110,7 @@ $('.ignore_rec').click(function(){
 
       });
 
-// Functions to update "read" status on board details page with AJAX
+// FUNCTIONS TO UPDATE READ STATUS
 
 function updateHTML(results){
 
@@ -124,7 +132,10 @@ function sendReadToDB (){
             $.post('/read_book', {'book_id': book_id}, updateHTML);
       }
 
-// Functions to update "rating" status on board details page with AJAX
+// sets event listener for "mark read" buttons
+$('.mark_read').click(sendReadToDB);
+
+// FUNCTIONS TO UPDATE RATINGS SCORE
 
 // simple function to multiply a string by a certain number
 // creates a blank array with length of 1 greater than the number, and then joins with the string as the "joiner"
@@ -162,16 +173,6 @@ function sendRatingToDB(evt){
       // calls updateRating function upon return
 }
 
-// sets event listener for "mark read" buttons
-$('.mark_read').click(sendReadToDB);
-
 // sets event listener for "rate" buttons
 $('.rate_book').click(sendRatingToDB);
 
-
-
-$('.grid').masonry({
-  // options...
-  itemSelector: '.grid-item',
-  columnWidth: 200
-});

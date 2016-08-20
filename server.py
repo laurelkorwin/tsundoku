@@ -5,7 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, return_relationship_id, check_for_node, get_current_friends, get_current_recs
+from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, ignore_rec, return_relationship_id, edit_notes, check_for_node, get_current_friends, get_current_recs
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
@@ -16,7 +16,7 @@ app.secret_key = "ABC"
 
 app.jinja_env.undefined = StrictUndefined
 
-#ROUTES
+#LOGIN AND REGISTRATION FUNCTIONS
 
 @app.route('/')
 def show_homepage():
@@ -54,6 +54,7 @@ def register_user():
 
 @app.route('/process_registration', methods=['POST'])
 def process_registration():
+    """Processes user registration with form inputs"""
 
     username = request.form.get('username')
     email = request.form.get('email')
@@ -66,12 +67,26 @@ def process_registration():
     return process_new_registration(user_exists, username, email, password)
 
 
+@app.route('/logout')
+def logout_user():
+    """Logout user"""
+
+    del session['logged_in']
+    flash("You are successfully logged out!")
+
+    return redirect('/')
+
+
+# SEARCH API AND PIN BOOK ROUTES
+
+
 @app.route('/search')
 def search():
+    """Search API with search term given by user"""
 
     search_term = request.args.get('search')
 
-    #gets and processes search results from Amazon API (see search.py)
+    #gets and processes search results from Amazon API (see search.py), by default gets first page
     results_list = process_result(search_API(search_term, 1))
 
     #using session key, gets the boards for the logged-in user
@@ -81,9 +96,10 @@ def search():
     #renders search template with the results list from API call. Allows user to click a modal window and add a book to a board.
     return render_template('search_results.html', results_list=results_list, existing_boards=existing_boards)
 
+
 @app.route('/add_book', methods=['POST'])
 def add_book():
-    """Add book to board"""
+    """Add book to board from search page"""
 
     #hidden form inputs
     title = request.form.get('title')
@@ -129,32 +145,8 @@ def add_book():
     #redirects to the board details page (should now show recently added book)
     return redirect('/board_details/' + board)
 
-@app.route('/add_friend_book', methods=['POST'])
-def add_friend_book():
-    """Add book from a friend's board to your own board."""
 
-    user_id = session['logged_in']
-
-    book_id = request.form.get('book_id')
-
-    board_id = request.form.get('board')
-
-    hasread = request.form.get('hasread')
-
-    rating = request.form.get('rating')
-
-    rec_id = request.form.get('rec_id')
-
-    current_date = datetime.datetime.now().strftime('%m-%d-%y')
-
-    new_rating = add_rating(book_id, user_id, board_id, current_date, hasread, rating)
-
-    if rec_id is not None:
-        this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
-        this_rec.status = "Accepted"
-        db.session.commit()
-
-    return redirect('/board_details/' + board_id)
+# ROUTES TO CREATE AND VIEW USER BOARDS
 
 
 @app.route('/create_board')
@@ -218,8 +210,12 @@ def show_board_details(board_id):
     return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends, my_recs=my_recs)
 
 
+# FUNCTIONALITY TO UPDATE RATING INFORMATION (NOTES, READ STATUS, SCORE)
+
+
 @app.route('/get_notes')
 def get_notes_for_rating():
+    """Gets notes for a particular rating and passes back to JS callback"""
 
     rating_id = request.args.get('rating_id')
 
@@ -229,21 +225,18 @@ def get_notes_for_rating():
 
     return jsonify(results)
 
+
 @app.route('/update_notes', methods=['POST'])
 def update_notes():
+    """Updates notes for a particular rating"""
 
     rating_id = request.form.get('rating_id')
     notes = request.form.get('notes')
 
-    this_rating = Rating.query.filter_by(rating_id=rating_id).first()
-    this_rating.notes = notes
-    db.session.commit()
-
-    this_rating = Rating.query.filter_by(rating_id=rating_id).first()
-
-    board_id = str(this_rating.board_id)
+    board_id = edit_notes(rating_id, notes)
 
     return redirect("/board_details/" + board_id)
+
 
 @app.route('/get_read_books')
 def get_read_books():
@@ -304,8 +297,12 @@ def rate_book():
     return jsonify(results)
 
 
+# RELATIONSHIP FUNCTIONALITY
+
+
 @app.route('/find_friends')
 def friend_search():
+    """Renders page with search box for friends, pending relationships and current friends"""
 
     #gets user id from session, and searches database for any current pending relationships to display
     #NOTE - where user is requester.
@@ -334,6 +331,7 @@ def friend_search():
 
 @app.route('/search_friends')
 def search_friends():
+    """Processes search input from user and returns possible friends for selection"""
 
     #gets search term from search form, and user id from session
     friend = request.args.get('search')
@@ -347,6 +345,7 @@ def search_friends():
 
 @app.route('/add_friend/<friend_id>', methods=['POST', 'GET'])
 def add_friend(friend_id):
+    """Creates relationship between two users, with status 'Pending'"""
 
     user_id = session['logged_in']
     friend_user_id = friend_id
@@ -357,8 +356,10 @@ def add_friend(friend_id):
 
     return redirect("/find_friends")
 
+
 @app.route('/accept_friend/<friend_id>', methods=['POST', 'GET'])
 def accept_friend(friend_id):
+    """Changes status of relationship(s) btwn two users to 'Accepted'"""
 
     user_id = session['logged_in']
 
@@ -371,6 +372,7 @@ def accept_friend(friend_id):
 
 @app.route('/deny_friend/<friend_id>', methods=['POST', 'GET'])
 def deny_friend(friend_id):
+    """Changes status of relationship(s) btwn two users to 'Denied'"""
 
     user_id = session['logged_in']
 
@@ -380,8 +382,10 @@ def deny_friend(friend_id):
 
     return redirect('/find_friends')
 
+
 @app.route('/friend_boards/<friend_id>', methods=['POST', 'GET'])
 def show_friend_boards(friend_id):
+    """Shows overview page of a particular friend's boards"""
 
     friend_boards = get_board_by_userid(friend_id)
     friend_name = User.query.get(friend_id).user_name
@@ -394,6 +398,7 @@ def show_friend_boards(friend_id):
 
 @app.route('/friend_board_details/<board_id>', methods=['POST', 'GET'])
 def show_friend_board_details(board_id):
+    """Shows details of a particular board for a friend"""
 
     user_id = session['logged_in']
 
@@ -407,8 +412,38 @@ def show_friend_board_details(board_id):
     #renders template showing books currently on the board
     return render_template("friend_board_details.html", books=books, board_title=board, board_id=board_id, existing_boards=my_boards, my_book_ids=my_book_ids)
 
+
+@app.route('/add_friend_book', methods=['POST'])
+def add_friend_book():
+    """Adds book from a friend's board to user's board."""
+
+    user_id = session['logged_in']
+
+    book_id = request.form.get('book_id')
+
+    board_id = request.form.get('board')
+
+    hasread = request.form.get('hasread')
+
+    rating = request.form.get('rating')
+
+    rec_id = request.form.get('rec_id')
+
+    current_date = datetime.datetime.now().strftime('%m-%d-%y')
+
+    new_rating = add_rating(book_id, user_id, board_id, current_date, hasread, rating)
+
+    if rec_id is not None:
+        this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
+        this_rec.status = "Accepted"
+        db.session.commit()
+
+    return redirect('/board_details/' + board_id)
+
+
 @app.route('/recommend_book', methods=['POST'])
 def recommend_book():
+    """Creates book recommendation for a friend"""
 
     user_id = session['logged_in']
     friend_id = request.form.get('friend')
@@ -427,6 +462,7 @@ def recommend_book():
 
 @app.route('/recommendations')
 def show_recommendations():
+    """Shows any recommendations you have from friends with status 'Pending'"""
 
     user_id = session['logged_in']
 
@@ -444,44 +480,18 @@ def show_recommendations():
 
     return render_template('my_recommendations.html', rec_dict=rec_dict, rec_list=recs_for_me, my_boards=my_boards)
 
+
 @app.route('/ignore_rec', methods=['POST'])
 def ignore_rec():
+    """Sets recommendation status to 'Ignored' for selected recommendation."""
 
-    book_id = request.form.get('book_id')
     rec_id = request.form.get('rec_id')
 
-    this_rec = Recommendation.query.filter_by(recommendation_id=rec_id).first()
-    this_rec.status = "Ignored"
-    db.session.commit()
+    this_rec_id = ignore_rec(rec_id)
 
-    results = {'rec_id': rec_id}
+    results = {'rec_id': this_rec_id}
 
     return jsonify(results)
-
-
-# CURRENTLY ABANDONED SET COOKIE CODE
-# @app.route('/set_cookie')
-# def set_cookie():
-#     """Given JSON dict with a cookie value, set cookie for book id"""
-
-#     book_id = request.args.get('book_id')
-#     print "BOOK ID {}".format(book_id)
-
-#     session['book_id'] = book_id
-#     cookie = session['book_id']
-#     print "HERE'S YOUR GODDAMN COOKIE {}".format(cookie)
-
-#     return "Blah"
-
-
-@app.route('/logout')
-def logout_user():
-    """Logout user"""
-
-    del session['logged_in']
-    flash("You are successfully logged out!")
-
-    return redirect('/')
 
 
 if __name__ == "__main__":
