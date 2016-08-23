@@ -2,6 +2,7 @@
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_triangle import Triangle
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
 from search import setup_API, search_API, process_result
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
@@ -10,7 +11,8 @@ from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, static_path='/static')
+Triangle(app)
 
 app.secret_key = "ABC"
 
@@ -85,9 +87,14 @@ def search():
     """Search API with search term given by user"""
 
     search_term = request.args.get('search')
+    current_url = request.url
 
     #gets and processes search results from Amazon API (see search.py), by default gets first page
     results_list = process_result(search_API(search_term, 1))
+
+    if not results_list:
+        flash("Didn't find anything with that title! Please try again.")
+        return redirect(request.referrer)
 
     #using session key, gets the boards for the logged-in user
     user_id = session['logged_in']

@@ -4,12 +4,10 @@
 <div class="search-header">
 <h2>Search Results</h2>
 </div>
-<!-- <div class="row"> -->
-<!-- <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'> -->
+
 {% for result in results_list %}
 
     <ul>
-        <!-- <div class='grid-item'> -->
             <li>
                 {{ result['title'] }} <br>
                 {{ result['author'] }} <br><br>
@@ -22,11 +20,9 @@
                 data-primary-node="{{ result['primary_node'] }}" data-parent-node-id="{{ result['parent_node_id'] }}"
                 data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
             </li>
-        <!-- </div> -->
     </ul>
 
 {% endfor %}
-<!-- </div> -->
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
