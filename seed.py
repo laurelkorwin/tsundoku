@@ -1,9 +1,5 @@
 from sqlalchemy import func
-from model import User
-from model import Book
-from model import Rating
-from model import Board
-
+from model import User, Book, Board, Node, Rating, Recommendation, Relationship
 from model import connect_to_db, db
 from server import app
 import datetime
