@@ -3,6 +3,7 @@
 from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 import datetime
+from tsundoku import check_for_node
 
 
 def add_board(board_name, user_id):
@@ -21,10 +22,25 @@ def add_board(board_name, user_id):
 def add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primary_node_id, parent_node_id):
     """Given inputs, adds a new book to the database."""
 
+    title = str(title)
+    if len(title) > 100:
+        title = title[0:100]
+
     new_book = Book(asin=asin, title=title, author=author, md_image=md_image,
                     lg_image=lg_image, url=url, num_pages=num_pages, primary_node_id=primary_node_id, parent_node_id=parent_node_id)
     db.session.add(new_book)
     db.session.commit()
+
+def add_new_books_from_list(lst):
+
+    for book in lst:
+        new_book = Book(asin=book['ASIN'], title=book['title'], author=book['author'], md_image=book['md_image'],
+                        lg_image=book['lg_image'], url=book['URL'], num_pages=book['num_pages'],
+                        primary_node_id=book['primary_node_id'], parent_node_id=book['parent_node_id'])
+        db.session.add(new_book)
+        db.session.commit()
+        add_node_primary = check_for_node(book['primary_node_id'], book['primary_node'])
+        add_node_parent = check_for_node(book['parent_node_id'], book['parent_node'])
 
 
 def add_rating(book_id, user_id, board, current_date, hasread, rating, notes=None):

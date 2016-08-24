@@ -42,9 +42,7 @@ def process_result(search_result):
             try:
                 asin = item.ASIN
                 url = item.DetailPageURL
-                title = str(item.ItemAttributes.Title)
-                if len(title) > 100:
-                    title = title[0:100]
+                title = item.ItemAttributes.Title
                 author = item.ItemAttributes.Author
                 md_image = item.MediumImage.URL
                 lg_image = item.LargeImage.URL
@@ -65,3 +63,40 @@ def process_result(search_result):
                                      'parent_node_id': parent_node_id, 'parent_node': parent_node})
 
         return results_list
+
+def return_first_result(search_result):
+
+    if search_result:
+
+        result_items = search_result.Items.Item
+
+        our_result = result_items[0]
+
+        try:
+            asin = our_result.ASIN
+            url = our_result.DetailPageURL
+            title = our_result.ItemAttributes.Title
+            author = our_result.ItemAttributes.Author
+            md_image = our_result.MediumImage.URL
+            lg_image = our_result.LargeImage.URL
+            num_pages = our_result.ItemAttributes.NumberOfPages
+            primary_node_id = our_result.BrowseNodes.BrowseNode.BrowseNodeId
+            primary_node = our_result.BrowseNodes.BrowseNode.Name
+            parent_node_id = our_result.BrowseNodes.BrowseNode.Ancestors.BrowseNode.BrowseNodeId
+            parent_node = our_result.BrowseNodes.BrowseNode.Ancestors.BrowseNode.Name
+        except AttributeError:
+                        title = ''
+                        author = ''
+                        md_image = ''
+                        lg_image = ''
+
+        if len(title) > 0:
+            processed_result = {'title': title, 'author': author, 'ASIN': asin,
+                                 'md_image': md_image, 'lg_image': lg_image, 'URL': url, 'num_pages': num_pages,
+                                 'primary_node_id': primary_node_id, 'primary_node': primary_node,
+                                 'parent_node_id': parent_node_id, 'parent_node': parent_node}
+
+            return processed_result
+        else:
+            return None
+
