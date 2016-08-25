@@ -6,7 +6,7 @@ from flask_triangle import Triangle
 from models import *
 from model import *
 from search import *
-from boards import add_board, add_new_book, add_rating, evaluate_ratings, update_book_rating, get_bd_imgs, filter_by_read
+from boards import add_board, add_new_book, add_rating, evaluate_ratings, get_bd_imgs, filter_by_read
 from tsundoku import *
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
@@ -297,7 +297,8 @@ def rate_book():
     score = request.form.get('score')
 
     #updates book rating (see boards.py) and returns asin of book
-    asin = update_book_rating(user_id, book_id, score)
+    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+    asin = this_rating.update_rating(score)
 
     #returns asin and score in a dictionary to pass back to JS
     results = {'asin': asin, 'score': score}

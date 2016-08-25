@@ -79,17 +79,6 @@ def evaluate_ratings(ratings):
     return books
 
 
-def update_book_rating(user_id, book_id, score):
-    """Given a user ID, book ID and score, rate the book in the DB."""
-
-    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
-    asin = this_rating.book.asin
-    this_rating.rating = score
-    db.session.commit()
-
-    return asin
-
-
 def get_bd_imgs(lst):
     """Takes in a list of tuples (of board id and board name).
        Returns a dictionary w/key of tuple and value of list of image urls

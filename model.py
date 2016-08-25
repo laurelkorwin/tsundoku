@@ -131,6 +131,15 @@ class Rating(db.Model):
 
         return "Marked this book as read!"
 
+    def update_rating(self, score):
+        """Given new score, update book rating"""
+
+        asin = self.book.asin
+        self.rating = score
+        db.session.commit()
+
+        return asin
+
 
 
 class Relationship(db.Model):
