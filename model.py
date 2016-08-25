@@ -88,6 +88,17 @@ class Book(db.Model):
                                                                     self.asin, self.title,
                                                                     self.author)
 
+    @classmethod
+    def get_book_by_asin(cls, ASIN):
+        """Given ASIN, return book."""
+
+        result = Book.query.filter_by(asin=ASIN).first()
+
+        if result != None:
+            return result.book_id
+        else:
+            return None
+
 class Rating(db.Model):
     """Rating information for each book/user"""
 

@@ -136,13 +136,13 @@ def add_book():
     parent_node_exists = check_for_node(parent_node_id, parent_node)
 
     #queries the database for book based on asin
-    book_exists = get_book_by_asin(asin)
+    book_exists = Book.get_book_by_asin(asin)
 
     #if the book isn't in the database, adds both book and rating to the database
     #otherwise, uses the book id for the book currently in the db and creates a new rating
     if book_exists == None:
         new_book = add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primary_node_id, parent_node_id)
-        new_book_id = get_book_by_asin(asin)
+        new_book_id = Book.get_book_by_asin(asin)
         new_rating = add_rating(new_book_id, user_id, board, current_date, hasread, rating, notes)
     else:
         current_book_id = book_exists

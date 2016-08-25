@@ -15,15 +15,15 @@ def get_user_by_username(username):
         return None
 
 # These can be class methods rather than object methods
-def get_book_by_asin(asin):
-    """Given a book ASIN, query database to return books."""
+# def get_book_by_asin(asin):
+#     """Given a book ASIN, query database to return books."""
 
-    result = Book.query.filter_by(asin=asin).first()
+#     result = Book.query.filter_by(asin=asin).first()
 
-    if result != None:
-        return result.book_id
-    else:
-        return None
+#     if result != None:
+#         return result.book_id
+#     else:
+#         return None
 
 
 def get_board_by_userid(user_id):
