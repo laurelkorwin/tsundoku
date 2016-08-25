@@ -2,6 +2,7 @@ from model import User, Book, Board, Node, Rating, Recommendation, Relationship
 from model import connect_to_db, db
 from server import app
 import requests
+# PUT IN SCRIPTS FOLDER
 
 def get_user_data():
     """Get user data from random user API"""

@@ -4,7 +4,7 @@ from model import connect_to_db, db
 from server import app
 import datetime
 
-
+# PUT THIS IN SCRIPTS FOLDER
 
 
 def set_val_user_id():

@@ -14,7 +14,7 @@ def get_user_by_username(username):
     else:
         return None
 
-
+# These can be class methods rather than object methods
 def get_book_by_asin(asin):
     """Given a book ASIN, query database to return books."""
 

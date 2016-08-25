@@ -7,6 +7,7 @@ from model import connect_to_db, db
 from tsundoku import check_for_node
 from server import app
 
+# PUT IN SCRIPTS
 # SCRAPE DATA FROM GOODREADS
 def scrape_data(link):
     """Given link, scrape data."""

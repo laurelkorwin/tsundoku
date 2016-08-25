@@ -5,6 +5,7 @@ from boards import add_board
 from model import connect_to_db, db
 from tsundoku import check_for_node
 from server import app
+# PUT IN SCRIPTS FOLDER
 
 def add_boards(int1, int2):
     """Given two integers, add boards for users in that range"""
