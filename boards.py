@@ -79,16 +79,6 @@ def evaluate_ratings(ratings):
     return books
 
 
-def mark_read(user_id, book_id):
-    """Given a user ID and Book ID, mark the book as read for that user."""
-
-    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
-    this_rating.has_read = True
-    db.session.commit()
-
-    return "Marked this book as read!"
-
-
 def update_book_rating(user_id, book_id, score):
     """Given a user ID, book ID and score, rate the book in the DB."""
 

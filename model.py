@@ -117,11 +117,19 @@ class Rating(db.Model):
                                                                                 self.board_id)
 
     def update_notes(self, notes):
-        """Given rating id and notes for a rating, update notes in DB."""
+        """Given notes for a rating, update notes in DB."""
 
         self.notes = notes
         db.session.commit()
         return self.board_id
+
+    def mark_read(self):
+        """Mark book as read in DB"""
+
+        self.has_read = True
+        db.session.commit()
+
+        return "Marked this book as read!"
 
 
 
@@ -165,7 +173,7 @@ class Recommendation(db.Model):
     bookinfo = db.relationship('Book', backref=db.backref('recommendations'))
 
     def ignore_rec(self):
-        """Given recommendation id, mark recommendation as ignored."""
+        """Mark recommendation as ignored."""
 
         self.status = "Ignored"
         db.session.commit()

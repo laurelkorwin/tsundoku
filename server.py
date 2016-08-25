@@ -6,7 +6,7 @@ from flask_triangle import Triangle
 from models import *
 from model import *
 from search import *
-from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
+from boards import add_board, add_new_book, add_rating, evaluate_ratings, update_book_rating, get_bd_imgs, filter_by_read
 from tsundoku import *
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
@@ -277,7 +277,8 @@ def mark_book_as_read():
     book_id = request.form.get('book_id')
 
     #sets a message based on calling the "mark read" function that marks book read in the DB (see boards.py)
-    message = mark_read(user_id, book_id)
+    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+    message = this_rating.mark_read()
 
     #sets a dictionary of results to pass back to JS
     results = {'book_id': book_id, 'message': message}
