@@ -3,8 +3,9 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_triangle import Triangle
-from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
-from search import setup_API, search_API, process_result
+import models
+import model
+import search
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
 from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, ignore_rec_db, return_relationship_id, edit_notes, check_for_node, get_current_friends, get_current_recs
 from login import process_new_login, process_new_registration

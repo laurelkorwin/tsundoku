@@ -31,34 +31,6 @@ class User(db.Model):
                                                                   self.email)
 
 
-class Book(db.Model):
-    """Books saved by users"""
-
-    __tablename__ = "books"
-
-    book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    asin = db.Column(db.String(100), unique=True, nullable=False)
-    title = db.Column(db.String(100), nullable=False)
-    author = db.Column(db.String(100))
-    md_image = db.Column(db.String(200))
-    lg_image = db.Column(db.String(200))
-    url = db.Column(db.String(400))
-    num_pages = db.Column(db.Integer, nullable=True)
-    primary_node_id = db.Column(db.String(100), db.ForeignKey('nodes.node_id'), nullable=True)
-    parent_node_id = db.Column(db.String(100), db.ForeignKey('nodes.node_id'), nullable=True)
-    date_added = db.Column(db.DateTime, nullable=True)
-
-    primnodebk = db.relationship('Node', foreign_keys=[primary_node_id])
-    parnodebk = db.relationship('Node', foreign_keys=[parent_node_id])
-
-    def __repr__(self):
-        """Return book data in a better format"""
-
-        return "<Book Book ID: {}, ASIN: {}, Title: {}, Author: {}>".format(self.book_id,
-                                                                    self.asin, self.title,
-                                                                    self.author)
-
-
 class Node(db.Model):
     """Amazon product node information"""
 

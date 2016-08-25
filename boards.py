@@ -1,6 +1,7 @@
 """BOARD SPECIFIC FUNCTIONALITY"""
 
-from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
+from model import connect_to_db, db, User, Rating, Board, Relationship, Recommendation
+from models import Book
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 import datetime
 from tsundoku import check_for_node

@@ -1,7 +1,7 @@
 """FRIEND FUNCTIONALITY"""
 
-from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation
-
+import models
+import model
 
 def return_potential_friends(user_id, friend_term):
     """Given user's id and a search term, returns list of potential friend objects"""

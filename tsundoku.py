@@ -1,6 +1,7 @@
 """DATABASE QUERIES AND FUNCTIONS"""
 
-from model import connect_to_db, db, User, Book, Rating, Board, Relationship, Recommendation, Node
+import model
+import models
 import datetime
 
 
