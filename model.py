@@ -1,5 +1,6 @@
 
 from flask_sqlalchemy import SQLAlchemy
+from models import *
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -40,6 +41,53 @@ class Node(db.Model):
     node_name = db.Column(db.String(100), nullable=False)
 
 
+class Board(db.Model):
+    """Board information"""
+
+    __tablename__ = "boards"
+
+    board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    board_name = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    published = db.Column(db.Boolean, nullable=False, default=False)
+    date_created = db.Column(db.DateTime, nullable=False)
+
+    userbd = db.relationship('User', backref=db.backref('users', order_by=user_id))
+
+    def __repr__(self):
+        """Return board data in a better format."""
+
+        return "<Board Board ID: {}, Board name: {}, User ID: {}>".format(self.board_id,
+                                                                   self.board_name,
+                                                                   self.user_id)
+
+class Book(db.Model):
+    """Books saved by users"""
+
+    __tablename__ = "books"
+
+    book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    asin = db.Column(db.String(100), unique=True, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(100))
+    md_image = db.Column(db.String(200))
+    lg_image = db.Column(db.String(200))
+    url = db.Column(db.String(400))
+    num_pages = db.Column(db.Integer, nullable=True)
+    primary_node_id = db.Column(db.String(100), db.ForeignKey('nodes.node_id'), nullable=True)
+    parent_node_id = db.Column(db.String(100), db.ForeignKey('nodes.node_id'), nullable=True)
+    date_added = db.Column(db.DateTime, nullable=True)
+
+    primnodebk = db.relationship('Node', foreign_keys=[primary_node_id])
+    parnodebk = db.relationship('Node', foreign_keys=[parent_node_id])
+
+    def __repr__(self):
+        """Return book data in a better format"""
+
+        return "<Book Book ID: {}, ASIN: {}, Title: {}, Author: {}>".format(self.book_id,
+                                                                    self.asin, self.title,
+                                                                    self.author)
+
 class Rating(db.Model):
     """Rating information for each book/user"""
 
@@ -68,26 +116,13 @@ class Rating(db.Model):
                                                                                 self.user_id,
                                                                                 self.board_id)
 
+    def update_notes(self, notes):
+        """Given rating id and notes for a rating, update notes in DB."""
 
-class Board(db.Model):
-    """Board information"""
+        self.notes = notes
+        db.session.commit()
+        return self.board_id
 
-    __tablename__ = "boards"
-
-    board_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    board_name = db.Column(db.String(100), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    published = db.Column(db.Boolean, nullable=False, default=False)
-    date_created = db.Column(db.DateTime, nullable=False)
-
-    userbd = db.relationship('User', backref=db.backref('users', order_by=user_id))
-
-    def __repr__(self):
-        """Return board data in a better format."""
-
-        return "<Board Board ID: {}, Board name: {}, User ID: {}>".format(self.board_id,
-                                                                   self.board_name,
-                                                                   self.user_id)
 
 
 class Relationship(db.Model):
@@ -128,6 +163,14 @@ class Recommendation(db.Model):
     relation = db.relationship('Relationship', backref=db.backref('recommendations'))
     users = db.relationship('User', backref=db.backref('recommendations'))
     bookinfo = db.relationship('Book', backref=db.backref('recommendations'))
+
+    def ignore_rec(self):
+        """Given recommendation id, mark recommendation as ignored."""
+
+        self.status = "Ignored"
+        db.session.commit()
+
+        return self.recommendation_id
 
 
 ##############################################################################

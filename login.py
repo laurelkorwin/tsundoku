@@ -1,7 +1,7 @@
 """LOGIN AND REGISTRATION FEATURES"""
 
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
-import model
+from model import *
 import models
 from tsundoku import get_user_by_username
 

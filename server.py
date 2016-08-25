@@ -3,11 +3,11 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_triangle import Triangle
-import models
-import model
-import search
+from models import *
+from model import *
+from search import *
 from boards import add_board, add_new_book, add_rating, evaluate_ratings, mark_read, update_book_rating, get_bd_imgs, filter_by_read
-from tsundoku import get_user_by_username, get_book_by_asin, get_board_by_userid, get_ratings_by_board_id, add_relationships, accept_friend_db, deny_friend_db, add_recommendation, ignore_rec_db, return_relationship_id, edit_notes, check_for_node, get_current_friends, get_current_recs
+from tsundoku import *
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
@@ -240,10 +240,10 @@ def update_notes():
 
     rating_id = request.form.get('rating_id')
     notes = request.form.get('notes')
+    rating = Rating.query.get(rating_id)
+    board_id = rating.update_notes(notes)
 
-    board_id = edit_notes(rating_id, notes)
-
-    return redirect("/board_details/" + board_id)
+    return redirect("/board_details/" + str(board_id))
 
 
 @app.route('/get_read_books')
@@ -494,8 +494,8 @@ def ignore_rec():
     """Sets recommendation status to 'Ignored' for selected recommendation."""
 
     rec_id = request.form.get('rec_id')
-
-    this_rec_id = ignore_rec_db(rec_id)
+    this_rec = Recommendation.query.get(rec_id)
+    this_rec_id = this_rec.ignore_rec()
 
     results = {'rec_id': this_rec_id}
 
