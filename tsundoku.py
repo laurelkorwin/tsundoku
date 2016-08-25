@@ -3,26 +3,7 @@ from models import *
 from model import *
 import datetime
 
-
-# def get_user_by_username(username):
-#     """Given a username, query database to return users."""
-
-#     result = User.query.filter_by(user_name=username).first()
-
-#     if result != None:
-#         return result
-#     else:
-#         return None
-
 # These can be class methods rather than object methods
-
-def get_ratings_by_board_id(board_id):
-    """Given a board ID, return ratings information."""
-
-    result = Rating.query.filter_by(board_id=board_id).all()
-
-    return result
-
 
 def check_for_node(node_id, node_name):
     """Given node id, check if node exists in DB and add it + name if it does not."""
@@ -52,14 +33,6 @@ def add_relationships(user_id, friend_id):
 
     return "Friend request sent!"
 
-def get_current_friends(user_id):
-    """Given a user ID, get current friends from DB."""
-
-    current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
-
-    friend_info = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
-
-    return friend_info
 
 def get_current_recs(user_id):
     """Given user ID, get current recommendations from the DB."""

@@ -37,10 +37,8 @@ class User(db.Model):
 
         result = User.query.filter_by(user_name=username).first()
 
-        if result != None:
-            return result
-        else:
-            return None
+        return result
+
 
 class Node(db.Model):
     """Amazon product node information"""
@@ -78,6 +76,7 @@ class Board(db.Model):
         result = Board.query.filter_by(user_id=user_id).all()
 
         return result
+
 
 class Book(db.Model):
     """Books saved by users"""
@@ -117,6 +116,7 @@ class Book(db.Model):
         else:
             return None
 
+
 class Rating(db.Model):
     """Rating information for each book/user"""
 
@@ -144,6 +144,14 @@ class Rating(db.Model):
                                                                                 self.book_id,
                                                                                 self.user_id,
                                                                                 self.board_id)
+
+    @classmethod
+    def get_ratings_by_board_id(cls, board_id):
+        """Given a board ID, return ratings information."""
+
+        result = Rating.query.filter_by(board_id=board_id).all()
+
+        return result
 
     def update_notes(self, notes):
         """Given notes for a rating, update notes in DB."""
@@ -182,6 +190,15 @@ class Relationship(db.Model):
     requesting_friend = db.Column(db.Boolean, nullable=False)
     status = db.Column(db.String(100), nullable=False)
     date_initiated = db.Column(db.DateTime, nullable=False)
+
+    @classmethod
+    def get_current_friends(cls, user_id):
+        """Given user id, return a list of tuples of friend info"""
+        current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
+
+        friend_info = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
+
+        return friend_info
 
     def get_secondary_friend_info(self):
         """Query database for secondary friend info"""

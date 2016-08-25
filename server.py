@@ -202,14 +202,14 @@ def show_board_details(board_id):
 
     session['board_id'] = board_id
     #gets ratings for that board, as well as board name
-    ratings = get_ratings_by_board_id(board_id)
+    ratings = Rating.get_ratings_by_board_id(board_id)
     board = Board.query.get(board_id).board_name
 
     #goes through the list of ratings and unpacks them into variables (see boards.py)
     books = evaluate_ratings(ratings)
 
     #get current friend info
-    current_friends = get_current_friends(user_id)
+    current_friends = Relationship.get_current_friends(user_id)
 
     #get current recommendations
     my_recs = get_current_recs(user_id)
@@ -336,10 +336,7 @@ def friend_search():
     requester_info = [(relationship.users.user_name, relationship.primary_friend, relationship.status) for relationship in my_pending_requests]
 
     #get current friends
-    current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
-
-    #get current friend info
-    current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
+    current_friends = Relationship.get_current_friends(user_id)
 
     #renders search page along with any pending relationships, as defined above.
     return render_template('find_friends.html', pending_relationships=secondary_friends, pending_requests=requester_info, current_friends=current_friends)
@@ -424,7 +421,7 @@ def show_friend_board_details(board_id):
 
     user_id = session['logged_in']
 
-    ratings = get_ratings_by_board_id(board_id)
+    ratings = Rating.get_ratings_by_board_id(board_id)
     board = Board.query.get(board_id).board_name
     my_boards = Board.get_board_by_userid(user_id)
     my_book_ids = [book.book_id for book in db.session.query(Rating.book_id).filter(Rating.user_id==user_id).all()]
