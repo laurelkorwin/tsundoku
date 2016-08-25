@@ -4,6 +4,10 @@ import os
 import lxml
 from amazonproduct import API
 import collections
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 def setup_API():
     """Setup API connection."""
@@ -75,7 +79,9 @@ def return_first_result(search_result):
         try:
             asin = our_result.ASIN
             url = our_result.DetailPageURL
-            title = our_result.ItemAttributes.Title
+            title = str(our_result.ItemAttributes.Title)
+            if len(title) > 100:
+                title = title[0:100]
             author = our_result.ItemAttributes.Author
             md_image = our_result.MediumImage.URL
             lg_image = our_result.LargeImage.URL
@@ -91,10 +97,10 @@ def return_first_result(search_result):
                         lg_image = ''
 
         if len(title) > 0:
-            processed_result = {'title': title, 'author': author, 'ASIN': asin,
-                                 'md_image': md_image, 'lg_image': lg_image, 'URL': url, 'num_pages': num_pages,
-                                 'primary_node_id': primary_node_id, 'primary_node': primary_node,
-                                 'parent_node_id': parent_node_id, 'parent_node': parent_node}
+            processed_result = {'title': title, 'author': str(author), 'ASIN': str(asin),
+                                 'md_image': str(md_image), 'lg_image': str(lg_image), 'URL': str(url), 'num_pages': int(num_pages),
+                                 'primary_node_id': str(primary_node_id), 'primary_node': str(primary_node),
+                                 'parent_node_id': str(parent_node_id), 'parent_node': str(parent_node)}
 
             return processed_result
         else:
