@@ -61,6 +61,14 @@ class Board(db.Model):
                                                                    self.board_name,
                                                                    self.user_id)
 
+    @classmethod
+    def get_board_by_userid(cls, user_id):
+        """Given a user ID, query database to return any boards."""
+
+        result = Board.query.filter_by(user_id=user_id).all()
+
+        return result
+
 class Book(db.Model):
     """Books saved by users"""
 

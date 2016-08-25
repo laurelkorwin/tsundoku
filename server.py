@@ -99,7 +99,7 @@ def search():
 
     #using session key, gets the boards for the logged-in user
     user_id = session['logged_in']
-    existing_boards = get_board_by_userid(user_id)
+    existing_boards = Board.get_board_by_userid(user_id)
 
     #renders search template with the results list from API call. Allows user to click a modal window and add a book to a board.
     return render_template('search_results.html', results_list=results_list, existing_boards=existing_boards)
@@ -164,7 +164,7 @@ def create_board():
     user_id = session['logged_in']
 
     #gets board ids by user and then makes a list of existing boards
-    existing_boards = get_board_by_userid(user_id)
+    existing_boards = Board.get_board_by_userid(user_id)
     existing_board_ids_names = [(board.board_id, board.board_name) for board in existing_boards]
 
     #makes a dictionary of images associated w/user board for user in jinja template
@@ -195,7 +195,7 @@ def show_board_details(board_id):
     #sets session key to board id when page is visited
     user_id = session['logged_in']
 
-    my_boards = [board.board_id for board in get_board_by_userid(user_id)]
+    my_boards = [board.board_id for board in Board.get_board_by_userid(user_id)]
 
     if int(board_id) not in my_boards:
         flash("Oops, looks like you don't have a board with that ID.")
@@ -409,7 +409,7 @@ def deny_friend(friend_id):
 def show_friend_boards(friend_id):
     """Shows overview page of a particular friend's boards"""
 
-    friend_boards = get_board_by_userid(friend_id)
+    friend_boards = Board.get_board_by_userid(friend_id)
     friend_name = User.query.get(friend_id).user_name
     friend_board_names = [(board.board_id, board.board_name) for board in friend_boards]
 
@@ -426,7 +426,7 @@ def show_friend_board_details(board_id):
 
     ratings = get_ratings_by_board_id(board_id)
     board = Board.query.get(board_id).board_name
-    my_boards = get_board_by_userid(user_id)
+    my_boards = Board.get_board_by_userid(user_id)
     my_book_ids = [book.book_id for book in db.session.query(Rating.book_id).filter(Rating.user_id==user_id).all()]
     #goes through the list of ratings and unpacks them into variables (see boards.py)
     books = evaluate_ratings(ratings)
@@ -490,7 +490,7 @@ def show_recommendations():
 
     recs_for_me = Recommendation.query.filter_by(referred_user=user_id, status="Pending").all()
 
-    my_boards = get_board_by_userid(user_id)
+    my_boards = Board.get_board_by_userid(user_id)
 
     rec_dict = {}
 
