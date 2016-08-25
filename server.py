@@ -264,8 +264,14 @@ def get_read_books():
     #goes through the list of ratings and unpacks them into variables (see boards.py)
     books = evaluate_ratings(read_books)
 
+    #get current friends
+    current = Relationship.query.filter_by(primary_friend=user_id, status="Accepted").all()
+
+    #get current friend info
+    current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
+
     #renders board details template again with filtered books
-    return render_template("board_details.html", books=books, board_title=board)
+    return render_template("board_details.html", books=books, board_title=board, current_friends=current_friends)
 
 
 @app.route('/read_book', methods=['POST'])
