@@ -42,7 +42,8 @@ $('.book_result').click(
 // SETS BOOK ID IN MODAL FORM USING DATA ON BUTTON THAT WAS CLICKED
 
 function setModalBookID(){
-      var book_id = $(this.data('book_id'));
+      var book_id = $(this).data('book-id');
+      debugger;
       $('#book_id').val(book_id);
 }
 

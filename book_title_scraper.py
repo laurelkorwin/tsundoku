@@ -61,7 +61,7 @@ def process_scraped_scifi_data(data):
 
 # lst_4 = process_scraped_scifi_data(scrape_data('https://www.goodreads.com/list/show/3.Best_Science_Fiction_Fantasy_Books'))
 
-lst_5 = process_scraped_scifi_data(scrape_data('https://www.goodreads.com/list/show/3.Best_Science_Fiction_Fantasy_Books?page=2'))
+# lst_5 = process_scraped_scifi_data(scrape_data('https://www.goodreads.com/list/show/3.Best_Science_Fiction_Fantasy_Books?page=2'))
 
 # SEARCH FUNCTION
 
