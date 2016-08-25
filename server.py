@@ -379,7 +379,10 @@ def accept_friend(friend_id):
 
     user_id = session['logged_in']
 
-    accept_message = accept_friend_db(user_id, friend_id)
+    this_relationship_1 = Relationship.query.filter_by(primary_friend=user_id, secondary_friend=friend_id).first()
+    this_relationship_2 = Relationship.query.filter_by(primary_friend=friend_id, secondary_friend=user_id).first()
+    this_relationship_1.accept()
+    accept_message = this_relationship_2.accept()
 
     flash(accept_message)
 
@@ -392,7 +395,10 @@ def deny_friend(friend_id):
 
     user_id = session['logged_in']
 
-    deny_message = deny_friend_db(user_id, friend_id)
+    this_relationship_1 = Relationship.query.filter_by(primary_friend=user_id, secondary_friend=friend_id).first()
+    this_relationship_2 = Relationship.query.filter_by(primary_friend=friend_id, secondary_friend=user_id).first()
+    this_relationship_1.deny()
+    deny_message = this_relationship_2.deny()
 
     flash(deny_message)
 

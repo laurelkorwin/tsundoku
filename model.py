@@ -163,6 +163,22 @@ class Relationship(db.Model):
 
         return secondary_friend_info
 
+    def deny(self):
+        """Mark relationship status as denied"""
+
+        self.status = "Denied"
+        db.session.commit()
+
+        return "Denied friend."
+
+    def accept(self):
+        """Mark relationship status as accepted"""
+
+        self.status = "Accepted"
+        db.session.commit()
+
+        return "Accepted friend!"
+
 
 class Recommendation(db.Model):
     """User to user recommendation info"""
