@@ -42,7 +42,7 @@ def process_login():
     password = request.form.get('password')
 
     #queries the database for user based on username
-    user_exists = get_user_by_username(username)
+    user_exists = User.get_user_by_username(username)
 
     #processes login with user object and entered password (see login.py)
     return process_new_login(user_exists, password)
@@ -64,7 +64,7 @@ def process_registration():
     password = request.form.get('password')
 
     #queries the database for user based on username
-    user_exists = get_user_by_username(username)
+    user_exists = User.get_user_by_username(username)
 
     #processes registration with user object, and entered info (see login.py)
     return process_new_registration(user_exists, username, email, password)

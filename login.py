@@ -3,7 +3,6 @@
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from model import *
 import models
-from tsundoku import get_user_by_username
 
 
 def process_new_login(user_object, password):
@@ -30,7 +29,7 @@ def process_new_registration(user_object, username, email, password):
         new_user = User(user_name=username, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
-        new_user_id = get_user_by_username(username).user_id
+        new_user_id = User.get_user_by_username(username).user_id
 
         flash('Your account has been successfully created!')
         session['logged_in'] = new_user_id

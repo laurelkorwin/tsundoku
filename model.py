@@ -31,6 +31,16 @@ class User(db.Model):
                                                                   self.user_name,
                                                                   self.email)
 
+    @classmethod
+    def get_user_by_username(cls, username):
+        """Given a username, query database to return user object."""
+
+        result = User.query.filter_by(user_name=username).first()
+
+        if result != None:
+            return result
+        else:
+            return None
 
 class Node(db.Model):
     """Amazon product node information"""

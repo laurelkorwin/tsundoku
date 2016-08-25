@@ -4,15 +4,15 @@ from model import *
 import datetime
 
 
-def get_user_by_username(username):
-    """Given a username, query database to return users."""
+# def get_user_by_username(username):
+#     """Given a username, query database to return users."""
 
-    result = User.query.filter_by(user_name=username).first()
+#     result = User.query.filter_by(user_name=username).first()
 
-    if result != None:
-        return result
-    else:
-        return None
+#     if result != None:
+#         return result
+#     else:
+#         return None
 
 # These can be class methods rather than object methods
 
