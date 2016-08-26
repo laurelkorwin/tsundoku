@@ -7,19 +7,6 @@ import datetime
 from tsundoku import check_for_node
 
 
-def add_board(board_name, user_id):
-    """Given board details, create new board."""
-
-    date_created = datetime.datetime.now().strftime('%m-%d-%y')
-
-    new_board = Board(board_name=board_name, user_id=user_id, date_created=date_created)
-
-    db.session.add(new_board)
-    db.session.commit()
-
-    flash("Your board successfully created!")
-
-
 def add_new_book(asin, title, author, md_image, lg_image, url, num_pages, primary_node_id, parent_node_id):
     """Given inputs, adds a new book to the database."""
 
@@ -59,22 +46,8 @@ def evaluate_ratings(ratings):
     books = []
 
     for rating in ratings:
-        rating_id = rating.rating_id
-        asin = rating.book.asin
-        book_id = rating.book_id
-        title = rating.book.title
-        author = rating.book.author
-        md_image = rating.book.md_image
-        lg_image = rating.book.lg_image
-        url = rating.book.url
-        hasread = rating.has_read
-        notes = rating.notes
-        rating = rating.rating
-        if notes is None:
-            notes = ''
-        books.append({'title': title, 'author': author, 'md_image': md_image, 'url': url,
-                      'hasread': hasread, 'rating_id': rating_id, 'rating': rating, 'book_id': book_id,
-                      'asin': asin, 'lg_image': lg_image, 'notes': notes})
+        rating_info = rating.evaluate_rating()
+        books.append(rating_info)
 
     return books
 

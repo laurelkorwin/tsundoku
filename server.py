@@ -6,7 +6,7 @@ from flask_triangle import Triangle
 from models import *
 from model import *
 from search import *
-from boards import add_board, add_new_book, add_rating, evaluate_ratings, get_bd_imgs, filter_by_read
+from boards import add_new_book, add_rating, evaluate_ratings, get_bd_imgs, filter_by_read
 from tsundoku import *
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
@@ -182,7 +182,8 @@ def process_new_board():
     user_id = session['logged_in']
 
     #given the board name chosen by the user, adds a new board to the DB (see boards.py)
-    new_board = add_board(board_name, user_id)
+    msg = Board.add_board(board_name, user_id)
+    flash(msg)
 
     #redirects to the boards page (should now show recently added board)
     return redirect('/create_board')
@@ -212,7 +213,7 @@ def show_board_details(board_id):
     current_friends = Relationship.get_current_friends(user_id)
 
     #get current recommendations
-    my_recs = get_current_recs(user_id)
+    my_recs = Recommendation.get_current_recs_referring(user_id)
 
     #renders template showing books currently on the board
     return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends, my_recs=my_recs)
@@ -485,19 +486,11 @@ def show_recommendations():
 
     user_id = session['logged_in']
 
-    recs_for_me = Recommendation.query.filter_by(referred_user=user_id, status="Pending").all()
-
     my_boards = Board.get_board_by_userid(user_id)
 
-    rec_dict = {}
+    rec_dict = Recommendation.get_current_recs_referred(user_id)
 
-    for rec in recs_for_me:
-        rec_dict[rec.recommendation_id] = {'book_id': rec.book_id, 'referring_user_id': rec.referring_user,
-                                           'referring_user': rec.users.user_name, 'title': rec.bookinfo.title,
-                                           'author': rec.bookinfo.author, 'md_image': rec.bookinfo.md_image,
-                                           'comment': rec.comments}
-
-    return render_template('my_recommendations.html', rec_dict=rec_dict, rec_list=recs_for_me, my_boards=my_boards)
+    return render_template('my_recommendations.html', rec_dict=rec_dict, my_boards=my_boards)
 
 
 @app.route('/ignore_rec', methods=['POST'])

@@ -1,6 +1,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from models import *
+import datetime
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -76,6 +77,19 @@ class Board(db.Model):
         result = Board.query.filter_by(user_id=user_id).all()
 
         return result
+
+    @classmethod
+    def add_board(cls, board_name, user_id):
+        """Given board details, create new board."""
+
+        date_created = datetime.datetime.now().strftime('%m-%d-%y')
+
+        new_board = Board(board_name=board_name, user_id=user_id, date_created=date_created)
+
+        db.session.add(new_board)
+        db.session.commit()
+
+        return "Your board successfully created!"
 
 
 class Book(db.Model):
@@ -177,6 +191,28 @@ class Rating(db.Model):
 
         return asin
 
+    def evaluate_rating(self):
+        """Return userful information in dictionary format"""
+
+        rating_id = self.rating_id
+        asin = self.book.asin
+        book_id = self.book_id
+        title = self.book.title
+        author = self.book.author
+        md_image = self.book.md_image
+        lg_image = self.book.lg_image
+        url = self.book.url
+        hasread = self.has_read
+        notes = self.notes
+        rating = self.rating
+        if notes is None:
+            notes = ''
+        rating_info = {'title': title, 'author': author, 'md_image': md_image, 'url': url,
+                      'hasread': hasread, 'rating_id': rating_id, 'rating': rating, 'book_id': book_id,
+                      'asin': asin, 'lg_image': lg_image, 'notes': notes}
+
+        return rating_info
+
 
 
 class Relationship(db.Model):
@@ -242,6 +278,31 @@ class Recommendation(db.Model):
     relation = db.relationship('Relationship', backref=db.backref('recommendations'))
     users = db.relationship('User', backref=db.backref('recommendations'))
     bookinfo = db.relationship('Book', backref=db.backref('recommendations'))
+
+    @classmethod
+    def get_current_recs_referring(cls, user_id):
+        """Given user ID, get current recommendations from the DB where you referred the book."""
+
+        current_recs = Recommendation.query.filter_by(referring_user=user_id).all()
+
+        my_recs = [(recommendation.book_id, recommendation.referred_user) for recommendation in current_recs]
+
+        return my_recs
+
+    @classmethod
+    def get_current_recs_referred(cls, user_id):
+        """Given user ID, get current recs from the DB where you are the referred user."""
+
+        recs_for_me = Recommendation.query.filter_by(referred_user=user_id, status="Pending").all()
+
+        rec_dict = {}
+
+        for rec in recs_for_me:
+            rec_dict[rec.recommendation_id] = {'book_id': rec.book_id, 'referring_user_id': rec.referring_user,
+                                           'referring_user': rec.users.user_name, 'title': rec.bookinfo.title,
+                                           'author': rec.bookinfo.author, 'md_image': rec.bookinfo.md_image,
+                                           'comment': rec.comments}
+        return rec_dict
 
     def ignore_rec(self):
         """Mark recommendation as ignored."""

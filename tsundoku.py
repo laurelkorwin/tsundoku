@@ -17,8 +17,6 @@ def check_for_node(node_id, node_name):
     return "Node added"
 
 
-"""RELATIONSHIPS FUNCTIONALITY"""
-
 def add_relationships(user_id, friend_id):
     """Given a user's id and the friend's user id, add two relationships to the DB."""
 
@@ -34,21 +32,13 @@ def add_relationships(user_id, friend_id):
     return "Friend request sent!"
 
 
-def get_current_recs(user_id):
-    """Given user ID, get current recommendations from the DB."""
-
-    current_recs = Recommendation.query.filter_by(referring_user=user_id).all()
-
-    my_recs = [(recommendation.book_id, recommendation.referred_user) for recommendation in current_recs]
-
-    return my_recs
-
 def return_relationship_id(primary_friend, secondary_friend):
     """Given two user ids, return a relationship ID"""
 
     your_relationship = db.session.query(Relationship.relationship_id).filter(Relationship.primary_friend == primary_friend, Relationship.secondary_friend == secondary_friend).first()
 
     return your_relationship[0]
+
 
 def add_recommendation(relationship_id, user_id, friend_id, book_id, comment, status="Pending"):
     """Creates new recommendation in DB."""
