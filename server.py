@@ -213,10 +213,26 @@ def show_board_details(board_id):
     current_friends = Relationship.get_current_friends(user_id)
 
     #get current recommendations
-    my_recs = Recommendation.get_current_recs_referring(user_id)
+    # my_recs = Recommendation.get_current_recs_referring(user_id)
 
     #renders template showing books currently on the board
-    return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends, my_recs=my_recs)
+    return render_template("board_details.html", books=books, board_title=board, board_id=board_id, current_friends=current_friends)
+
+@app.route('/get_rec_friends')
+def get_rec_friends():
+
+    user_id = session['logged_in']
+    book_id = request.args.get('book_id')
+
+    # list of friends you've already referred the book to
+    my_current_recs = Recommendation.get_current_recs_referring(user_id, book_id)
+
+    current_friends = Relationship.get_current_friends(user_id)
+
+    possible_friends = [(friend[0], friend[1]) for friend in current_friends if friend[1] not in my_current_recs]
+    print possible_friends
+
+    return jsonify({'possible_friends': possible_friends, 'book_id': book_id})
 
 
 # FUNCTIONALITY TO UPDATE RATING INFORMATION (NOTES, READ STATUS, SCORE)
@@ -285,6 +301,7 @@ def mark_book_as_read():
 
     #sets a message based on calling the "mark read" function that marks book read in the DB (see boards.py)
     this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+
     message = this_rating.mark_read()
 
     #sets a dictionary of results to pass back to JS
@@ -292,6 +309,23 @@ def mark_book_as_read():
 
     #returns jsonified dictionary of results dict
     return jsonify(results)
+
+@app.route('/delete_book', methods=['POST'])
+def delete_book():
+
+    user_id = session['logged_in']
+
+    book_id = request.form.get('book_id')
+
+    current_date = datetime.datetime.now().strftime('%m-%d-%y')
+
+    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+
+    this_rating.date_deleted = current_date
+    db.session.commit()
+
+    return jsonify({'yay': current_date})
+
 
 
 @app.route('/rate_book', methods=['POST'])

@@ -64,8 +64,9 @@ def get_bd_imgs(lst):
         my_dict[item] = []
         ratings = Rating.query.filter_by(board_id=board_id)
         for rating in ratings:
-            md_image = rating.book.md_image
-            my_dict[item].append(md_image)
+            if rating.date_deleted is None:
+                md_image = rating.book.md_image
+                my_dict[item].append(md_image)
 
     return my_dict
 

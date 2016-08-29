@@ -205,11 +205,12 @@ class Rating(db.Model):
         hasread = self.has_read
         notes = self.notes
         rating = self.rating
+        date_deleted = self.date_deleted
         if notes is None:
             notes = ''
         rating_info = {'title': title, 'author': author, 'md_image': md_image, 'url': url,
                       'hasread': hasread, 'rating_id': rating_id, 'rating': rating, 'book_id': book_id,
-                      'asin': asin, 'lg_image': lg_image, 'notes': notes}
+                      'asin': asin, 'lg_image': lg_image, 'notes': notes, 'date_deleted': date_deleted}
 
         return rating_info
 
@@ -280,12 +281,13 @@ class Recommendation(db.Model):
     bookinfo = db.relationship('Book', backref=db.backref('recommendations'))
 
     @classmethod
-    def get_current_recs_referring(cls, user_id):
+    def get_current_recs_referring(cls, user_id, book_id):
         """Given user ID, get current recommendations from the DB where you referred the book."""
 
-        current_recs = Recommendation.query.filter_by(referring_user=user_id).all()
+        current_recs = Recommendation.query.filter_by(referring_user=user_id, book_id=book_id).all()
 
-        my_recs = [(recommendation.book_id, recommendation.referred_user) for recommendation in current_recs]
+        # list of users you've already recommended the book to
+        my_recs = [recommendation.referred_user for recommendation in current_recs]
 
         return my_recs
 

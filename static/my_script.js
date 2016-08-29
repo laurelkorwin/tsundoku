@@ -39,17 +39,52 @@ $('.book_result').click(
 
   });
 
+function deleteBook() {
+      var book_id = $(this).data('book-id');
+      var master_div = $(this).parent().parent().parent();
+
+      $.post('/delete_book', {'book_id': book_id}, function(results){
+
+            $(master_div).hide();
+      });
+}
+
+$('.delete-book').click(deleteBook);
+
 // SETS BOOK ID IN MODAL FORM USING DATA ON BUTTON THAT WAS CLICKED
 
 function setModalBookID(){
       var book_id = $(this).data('book-id');
-      debugger;
       $('#book_id').val(book_id);
 }
 
 $('.friend_book').click(setModalBookID);
 
-$('.recommend_book').click(setModalBookID);
+function updateFriendDiv(results){
+      var potentials = results.possible_friends;
+      $('#friends_to_rec').empty();
+
+      if (potentials.length === 0) {
+            $('#friends_to_rec').html("<p>Looks like you've already recommended this book to all your friends!</p>");
+            debugger;
+            $('#recommend_notes').hide();
+      }
+
+      else { for (var i = 0; i < potentials.length; i++){
+            $('#friends_to_rec').append('<p>Which friend(s) would you like to recommend this book to?</p> <input type="checkbox" name="friend" value="'+ potentials[i][1] + '"> ' + potentials[i][0] + '<br>');
+            $('#recommend_notes').show();
+      }
+      }
+}
+
+$('.recommend_book').click(function(){
+
+      var book_id = $(this).data('book-id');
+      $('#book_id').val(book_id);
+
+      $.get('/get_rec_friends', {'book_id': book_id}, updateFriendDiv);
+
+});
 
 // FUNCTIONS TO SHOW NOTES FOR EACH BOOK
 
@@ -113,24 +148,23 @@ $('.ignore_rec').click(function(){
 
 // FUNCTIONS TO UPDATE READ STATUS
 
-function updateHTML(results){
-
-      // sets book id equal to the value in results dict
-      var book_id = results.book_id;
-      // puts in HTML stating that user has read book before div with the same id as book id
-      $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>Read').insertBefore('#' + book_id);
-      // hides div with id of book id
-      $('#' + book_id).hide();
-}
-
 function sendReadToDB (){
             
             // sets book id variable equal to the book id data for the particular button clicked
             var book_id = $(this).data('book-id');
+            var that = this;
+            var glyph = $(this).prev();
+            debugger;
             
             // sends a post request to the read book route, providing book id
             // when returning from server, calls updateHTML function
-            $.post('/read_book', {'book_id': book_id}, updateHTML);
+            $.post('/read_book', {'book_id': book_id}, function (results){
+                  debugger;
+                  $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>').insertBefore($(that));
+                  $(that).hide();
+                  $(glyph).hide();
+
+            });
       }
 
 // sets event listener for "mark read" buttons

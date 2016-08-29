@@ -5,6 +5,7 @@
 </div>
 <div class="row masonry">
 {% for book in books %}
+    {% if book['date_deleted'] is none %}
     <div class="col-xs-12 col-lg-3 book item">
         <div class="centerBlock">
             <div class="title">
@@ -49,6 +50,7 @@
             {% endif %}
         </div>
         </div>
+    {% endif %}
 {% endfor %}
 </div>
 

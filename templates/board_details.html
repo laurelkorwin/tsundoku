@@ -12,6 +12,7 @@
 </div>
 <div class="row masonry">
 {% for book in books %}
+    {% if book['date_deleted'] is none %}
     <div class="col-xs-12 col-lg-4 book item">
         <div class="centerBlock">
             <div class="title">
@@ -28,7 +29,7 @@
                 {% if book['hasread'] %}
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 {% else %}
-                    <div id="{{ book['book_id'] }}">
+                    <div>
                         <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                             <button class="mark_read" data-book-id="{{ book['book_id'] }}">Mark book as read</button>
                     </div>
@@ -54,10 +55,13 @@
                         </form>
                     </div>
                 {% endif %}
+            </div>
                 <div class="notes">
                     <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Notes</button>
                 </div>
+            <div>
+                <button class="delete-book" data-book-id="{{ book['book_id'] }}">Delete</button>
             </div>
             <div class="recommend_this_book">
                 <button type="button" class="btn btn-primary btn-lg recommend_book"
@@ -65,6 +69,7 @@
             </div>
         </div>
         </div>
+        {% endif %}
 {% endfor %}
 </div>
 <!-- RECOMMEND MODAL WINDOW -->
@@ -78,13 +83,13 @@
       <div class="modal-body">
         <form action='/recommend_book', method="POST"> 
             <input type="hidden" id="book_id" name="book_id" value=''>
-            <p>Which friend(s) would you like to recommend this book to?</p>
-            {% for friend in current_friends %}
-                        <input type="checkbox" name="friend" value="{{ friend[1] }}"> {{ friend[0] }} <br>
-            {% endfor %}
+            <div id='friends_to_rec'>
+            </div>
+            <div id='recommend_notes'>
             <p>Leave them a note about the book:</p>
             <textarea id="book_comment" rows="20" cols="50" name="comment" placeholder="Comment"></textarea><br>
             <input type="submit" value="Recommend!">
+        </div>
         </form>
       </div>
     </div>
