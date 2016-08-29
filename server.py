@@ -230,7 +230,6 @@ def get_rec_friends():
     current_friends = Relationship.get_current_friends(user_id)
 
     possible_friends = [(friend[0], friend[1]) for friend in current_friends if friend[1] not in my_current_recs]
-    print possible_friends
 
     return jsonify({'possible_friends': possible_friends, 'book_id': book_id})
 

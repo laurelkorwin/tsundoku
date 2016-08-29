@@ -30,6 +30,12 @@ ul {
   color: white;
   font-size: 16px;
 }
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover{
+  color:white;
+  font-weight: bold;
+}
+
 .navbar-default .navbar-nav>li>a:hover {
   color: white;
   font-size: 16px;
@@ -127,9 +133,10 @@ ul {
   transform: translate(-50%,-50%);
   width: 250px;
   height: 50px;
-  border: 1px solid #36648B;
+  border: 1px solid gray;
   border-radius: 5px;
 }
+
 
 .btn-lg {
   background-color: #36648B;

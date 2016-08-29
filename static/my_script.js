@@ -42,6 +42,7 @@ $('.book_result').click(
 function deleteBook() {
       var book_id = $(this).data('book-id');
       var master_div = $(this).parent().parent().parent();
+      // add parent class to make above less finicky
 
       $.post('/delete_book', {'book_id': book_id}, function(results){
 
@@ -60,24 +61,26 @@ function setModalBookID(){
 
 $('.friend_book').click(setModalBookID);
 
+// FUNCTIONS TO UPDATE MODAL WINDOW WITH POTENTIAL FRIENDS FOR RECOMMENDATIONS
+
 function updateFriendDiv(results){
       var potentials = results.possible_friends;
       $('#friends_to_rec').empty();
 
       if (potentials.length === 0) {
             $('#friends_to_rec').html("<p>Looks like you've already recommended this book to all your friends!</p>");
-            debugger;
             $('#recommend_notes').hide();
-      }
-
-      else { for (var i = 0; i < potentials.length; i++){
-            $('#friends_to_rec').append('<p>Which friend(s) would you like to recommend this book to?</p> <input type="checkbox" name="friend" value="'+ potentials[i][1] + '"> ' + potentials[i][0] + '<br>');
-            $('#recommend_notes').show();
-      }
+      } else {
+            for (var i = 0; i < potentials.length; i++){
+                  var friendId = potentials[i][1];
+                  var friendName = potentials[i][0];
+                  $('#friends_to_rec').append('<p>Which friend(s) would you like to recommend this book to?</p> <input type="checkbox" name="friend" value="'+ friendId + '"> ' + friendName + '<br>');
+                  $('#recommend_notes').show();
+            }
       }
 }
 
-$('.recommend_book').click(function(){
+$('.recommend_book').click(function(evt){
 
       var book_id = $(this).data('book-id');
       $('#book_id').val(book_id);
