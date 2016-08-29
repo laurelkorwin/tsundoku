@@ -1,7 +1,9 @@
 fieldset, label { margin: 0; padding: 0; }
-body{ margin: 20px;
+body{ 
       font-family: Avenir;
-      font-size: 14px;  }
+      font-size: 14px;
+      margin: 0;
+      padding: 0;}
 h1 { font-size: 1.5em; margin: 10px; }
 form {
   display: inline-block;
@@ -11,6 +13,28 @@ ul {
   list-style-type: none;
 }
 
+.navbar-default {
+  background-color: #4682B4;
+  margin: 0px;
+}
+
+.navbar-brand {
+  font-size: 28px;
+}
+
+.navbar-default .navbar-brand {
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a {
+  color: white;
+  font-size: 16px;
+}
+.navbar-default .navbar-nav>li>a:hover {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
 .background {
   margin-top: 20px;
   margin-left: 0px;
@@ -44,10 +68,16 @@ ul {
 .book, .board {
   margin: 10px;
   padding: 20px;
-  border: 2px solid #36648B;
-  background-color: #f6f6f6;
-  border-radius: 15px;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+  border: 1px solid gray;
   box-shadow: 5px 5px 5px #888888;
+}
+
+.board {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .title{
@@ -83,9 +113,22 @@ ul {
   padding: 5px;
 }
 
+#book-search {
+  width: 300px;
+}
+
 .board-name {
-  font-size: 18px;
-  font-weight: bold;
+  width: 200px;
+  background-color: white;
+  font-size: 24px;
+  padding: 5px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 250px;
+  height: 50px;
+  border: 1px solid #36648B;
+  border-radius: 5px;
 }
 
 .btn-lg {
@@ -93,6 +136,11 @@ ul {
   border-color: buttonface;
   color: white;
   font-size: 14px;
+}
+
+.board-images {
+  height: 325px;
+  postion: relative;
 }
 
 /****** Style Star Rating Widget *****/

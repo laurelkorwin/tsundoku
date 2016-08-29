@@ -8,25 +8,47 @@
     <link rel="stylesheet" href="../static/stylesheet.css">
 </head>
 <body>
-    <nav>
-        <a id='nav_title' href="/">tsundoku</a>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">tsundoku</a>
+        </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
         {% if 'logged_in' in session %}
-            <button class='nav_btn'><a href="/logout">Log out</a></button>
-            <button class='nav_btn'><a href="/create_board">Boards</a></button>
-            <button class='nav_btn'><a href="/find_friends">Friends</a></button>
-            <button class='nav_btn'><a href="/recommendations">Recommendations</a></button>
-            <form action='/search'>
-            <label for='search_field'>
-            <input type="text" name="search" placeholder="Search for a book title">
-            <input type="submit" id='search_btn' value="Search">
-            </label>
-            </form>
-          </form>
+       <!--  <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li> -->
+        <li><a href="/create_board">Boards</a></li>
+        <li><a href="/find_friends">Friends</a></li>
+        <li><a href="/recommendations">Recommendations</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" action='/search'>
+        <div class="form-group">
+                <input type="text" id='book-search' name="search" class="form-control" placeholder="Search for a book title">
+        </div>
+        <button type="submit" class="btn btn-default">Search</button>
+      </form>
+      {% endif %}
+      <ul class="nav navbar-nav navbar-right">
+        {% if 'logged_in' in session %}
+        <li><a href="/logout">Logout</a></li>
         {% else %}
-            <button class='nav_btn'><a href="login">Login</a></button>
-            <button class='nav_btn'><a href="register">Register</a></button>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
         {% endif %}
-    </nav>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}

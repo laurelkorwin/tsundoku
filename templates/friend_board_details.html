@@ -17,7 +17,7 @@
                 <img src="{{ book['md_image'] }}"> <br>
             </div>
             <div class="read-info">
-                <button><a href="{{ book.url }}"> Buy </a></button>
+                <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></a></button>
                 {% if book['hasread'] %}
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 {% else %}
@@ -44,7 +44,7 @@
             {% if book['book_id'] not in my_book_ids %}
             <div>
                 <button type="button" class="btn btn-primary btn-lg friend_book"
-                data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Add book to one of my boards.</button>
+                data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Add book</button>
             </div>
             {% endif %}
         </div>

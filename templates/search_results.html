@@ -6,7 +6,7 @@
 </div>
 
 {% for result in results_list %}
-
+<div class="col-xs-12 col-lg-3 book">
     <ul>
             <li>
                 {{ result['title'] }} <br>
@@ -21,7 +21,7 @@
                 data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
             </li>
     </ul>
-
+</div>
 {% endfor %}
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

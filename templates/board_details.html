@@ -24,7 +24,7 @@
                 <img src="{{ book['md_image'] }}"> <br>
             </div>
             <div class="read-info">
-                <button><a href="{{ book.url }}"> Buy </a></button>
+                <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></span></a></button>
                 {% if book['hasread'] %}
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 {% else %}
@@ -55,7 +55,8 @@
                     </div>
                 {% endif %}
                 <div class="notes">
-                    <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">Notes</button>
+                    <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Notes</button>
                 </div>
             </div>
             <div class="recommend_this_book">
