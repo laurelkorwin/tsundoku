@@ -214,3 +214,18 @@ function sendRatingToDB(evt){
 // sets event listener for "rate" buttons
 $('.rate_book').click(sendRatingToDB);
 
+// CHARTS
+
+var options = {responsive: true,
+               maintainAspectRatio: true,
+               title: {display: true,
+                       text: 'Most-read categories'}};
+
+var ctxDonut = $("#donutChart").get(0).getContext("2d");
+
+$.get('/pages_data.json', function(data){
+      var myDonutChart = new Chart(ctxDonut, {
+            type: 'doughnut', data: data, options: options
+      });
+});
+

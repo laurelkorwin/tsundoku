@@ -11,6 +11,7 @@ from tsundoku import *
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
+from collections import OrderedDict
 
 app = Flask(__name__, static_path='/static')
 Triangle(app)
@@ -537,6 +538,42 @@ def ignore_rec():
     results = {'rec_id': this_rec_id}
 
     return jsonify(results)
+
+@app.route('/profile')
+def show_user_profile():
+    """Show user 'book profile' and stats"""
+
+    return render_template('profile.html')
+
+@app.route('/pages_data.json')
+def return_num_pages():
+    """Return number of pages a user has read by genre"""
+
+    user_id = session['logged_in']
+
+    ratings = Rating.query.filter_by(user_id=user_id, has_read=True).all()
+
+    our_data = OrderedDict()
+
+    for rating in ratings:
+        parent_node_id = rating.book.parent_node_id
+        node_name = Node.query.get(parent_node_id).node_name
+        our_data[parent_node_id] = OrderedDict()
+        our_data[parent_node_id]['name'] = node_name
+        num_pages = int(rating.book.num_pages)
+        if 'pages' in our_data[parent_node_id]:
+            our_data[parent_node_id]['pages'] += num_pages
+        else:
+            our_data[parent_node_id]['pages'] = num_pages
+
+    top = OrderedDict(sorted(our_data.iteritems(), key=lambda x: x[1]['pages'], reverse=True))
+
+    new_data_dict = {'labels': [], 'datasets': [{'data': [], 'backgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74'],
+                     'hoverBackgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74']}]}
+    new_data_dict['labels'] = [values['name'] for node, values in top.items()[:5]]
+    new_data_dict['datasets'][0]['data'] = [values['pages'] for node, values in top.items()[:5]]
+
+    return jsonify(new_data_dict)
 
 
 if __name__ == "__main__":
