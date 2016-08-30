@@ -216,16 +216,49 @@ $('.rate_book').click(sendRatingToDB);
 
 // CHARTS
 
-var options = {responsive: true,
+var donutOptions = {responsive: true,
                maintainAspectRatio: true,
                title: {display: true,
-                       text: 'Most-read categories'}};
+                       text: 'Most-read categories',
+                       fontSize: 20},
+               cutoutPercentage: 65,
+               legend: {position: 'bottom', fullWidth: false,
+                        labels: {
+                              fontFamily: 'Avenir',
+                              fontStyle: 'normal',
+                              fontSize: 12,
+                              fontColor: 'black'
+                              }
+                        }
+         };
 
-var ctxDonut = $("#donutChart").get(0).getContext("2d");
+var barOptions = {responsive: true,
+                  title: {display: true,
+                          text: 'Highest rated categories',
+                          fontSize: 20},
+                  legend: {display: false},
+                  scales: {
+                        yAxes: [{ticks: {beginAtZero: true}, gridLines: {display: false}}],
+                        xAxes: [{gridLines: {display: false}}]
+                  }};
+
+var ctxDonut = $("#pagesChart").get(0).getContext("2d");
+var ctxBar = $("#donutChart").get(0).getContext("2d");
+
+var nodes;
 
 $.get('/pages_data.json', function(data){
       var myDonutChart = new Chart(ctxDonut, {
-            type: 'doughnut', data: data, options: options
+            type: 'doughnut',
+            data: data,
+            options: donutOptions
       });
 });
 
+$.get('/avg_ratings.json', function(data) {
+      var myBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: data,
+            options: barOptions
+      });
+});

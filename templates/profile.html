@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="num-pages-chart" style="width: 600px; height: 600px">
+<div class="col-xs-12 col-lg-6 chart">
+  <canvas id="pagesChart"></canvas>
+</div>
+
+<div class="col-xs-12 col-lg-6 chart">
   <canvas id="donutChart"></canvas>
-  <div id="donutLegend" class="chart-legend"></div>
-<div>
+</div>
 
 {% endblock %}

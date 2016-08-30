@@ -11,7 +11,7 @@ from tsundoku import *
 from login import process_new_login, process_new_registration
 from friends import return_potential_friends, make_friend_dict
 import datetime
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 app = Flask(__name__, static_path='/static')
 Triangle(app)
@@ -572,6 +572,36 @@ def return_num_pages():
                      'hoverBackgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74']}]}
     new_data_dict['labels'] = [values['name'] for node, values in top.items()[:5]]
     new_data_dict['datasets'][0]['data'] = [values['pages'] for node, values in top.items()[:5]]
+
+    return jsonify(new_data_dict)
+
+@app.route('/avg_ratings.json')
+def return_avg_ratings():
+    """Return average ratings by genre for a user, ordered in descending order."""
+
+    user_id = session['logged_in']
+
+    ratings = ratings = Rating.query.filter(Rating.user_id == user_id, Rating.rating != None).all()
+
+    scores = {}
+
+    for rating in ratings:
+        node_name = rating.book.parnodebk.node_name
+        score = rating.rating
+        if node_name not in scores:
+            scores[node_name] = defaultdict(int)
+        scores[node_name]['counter'] += 1
+        scores[node_name]['sum_score'] += score
+
+    for score in scores:
+        scores[score]['avg'] = float(scores[score]['sum_score']) / scores[score]['counter']
+
+    new_data_dict = {'labels': [], 'datasets': [{'data': [], 'backgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74', "#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74'],
+                     'hoverBackgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74', "#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74']}]}
+
+    for name, scores in sorted(scores.iteritems(), key=lambda x: x[1]['avg'], reverse=True)[:10]:
+        new_data_dict['labels'].append(name)
+        new_data_dict['datasets'][0]['data'].append(scores['avg'])
 
     return jsonify(new_data_dict)
 
