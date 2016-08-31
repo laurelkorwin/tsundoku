@@ -215,7 +215,7 @@ function sendRatingToDB(evt){
 $('.rate_book').click(sendRatingToDB);
 
 // CHARTS
-
+// Set options for charts
 var donutOptions = {responsive: true,
                maintainAspectRatio: true,
                title: {display: true,
@@ -262,12 +262,13 @@ var bar2Options = {responsive: true,
                         xAxes: [{gridLines: {display: false}}]
                   }};
 
+// Grab chart elements
 var ctxDonut = $("#pagesChart").get(0).getContext("2d");
 var ctxBar = $("#donutChart").get(0).getContext("2d");
 var ctxBasicRec = $('#basicRecChart').get(0).getContext('2d');
 var ctxMostTrusted = $('#mostTrustedChart').get(0).getContext('2d');
 
-var nodes;
+// Data & chart creation
 
 $.get('/pages_data.json', function(data){
       var myDonutChart = new Chart(ctxDonut, {

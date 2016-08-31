@@ -168,6 +168,38 @@ class Rating(db.Model):
 
         return result
 
+    @classmethod
+    def get_average_scores(cls, user_id):
+
+        ratings = Rating.query.filter(Rating.user_id == user_id, Rating.rating != None).all()
+
+        scores = {}
+
+        for rating in ratings:
+            node_name = rating.book.parnodebk.node_name
+            score = rating.rating
+            if node_name not in scores:
+                scores[node_name] = defaultdict(int)
+            scores[node_name]['counter'] += 1
+            scores[node_name]['sum_score'] += score
+            scores[node_name]['avg'] = float(scores[node_name]['sum_score']) / scores[node_name]['counter']
+
+        return scores
+
+    @classmethod
+    def get_num_pages(cls, user_id):
+
+        ratings = Rating.query.filter_by(user_id=user_id, has_read=True).all()
+
+        our_data = defaultdict(int)
+
+        for rating in ratings:
+            node_name = rating.book.parnodebk.node_name
+            num_pages = int(rating.book.num_pages)
+            our_data[node_name] += num_pages
+
+        return our_data
+
     def update_notes(self, notes):
         """Given notes for a rating, update notes in DB."""
 
@@ -214,7 +246,6 @@ class Rating(db.Model):
                       'asin': asin, 'lg_image': lg_image, 'notes': notes, 'date_deleted': date_deleted}
 
         return rating_info
-
 
 
 class Relationship(db.Model):
@@ -343,7 +374,6 @@ class Recommendation(db.Model):
                 rec_dict[user_name]['accepted'] += 1
             rec_dict[user_name]['percent_accepted'] = (float(rec_dict[user_name]['accepted']) / rec_dict[user_name]['total']) * 100
 
-        print rec_dict
         return rec_dict
 
     def ignore_rec(self):
