@@ -240,11 +240,19 @@ var barOptions = {responsive: true,
                   legend: {display: false},
                   scales: {
                         yAxes: [{ticks: {beginAtZero: true}, gridLines: {display: false}}],
-                        xAxes: [{gridLines: {display: false}}]
+                        xAxes: [{display: false, gridLines: {display: false}}]
                   }};
+
+var recOptions = {responsive: true,
+                  title: {display: true,
+                          text: 'Recommendations for you',
+                          fontSize: 20,
+                          margin: 15}
+                  };
 
 var ctxDonut = $("#pagesChart").get(0).getContext("2d");
 var ctxBar = $("#donutChart").get(0).getContext("2d");
+var ctxBasicRec = $('#basicRecChart').get(0).getContext('2d');
 
 var nodes;
 
@@ -261,5 +269,13 @@ $.get('/avg_ratings.json', function(data) {
             type: 'bar',
             data: data,
             options: barOptions
+      });
+});
+
+$.get('/basic_rec_data.json', function(data) {
+      var myBasicRecChart = new Chart (ctxBasicRec, {
+            type: 'pie',
+            data: data,
+            options: recOptions
       });
 });

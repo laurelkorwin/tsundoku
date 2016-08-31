@@ -605,6 +605,24 @@ def return_avg_ratings():
 
     return jsonify(new_data_dict)
 
+@app.route('/basic_rec_data.json')
+def return_basic_rec_data():
+
+    user_id = session['logged_in']
+
+    recs_for_me = Recommendation.get_all_recs_referred(user_id)
+
+    new_data_dict = {'labels': [], 'datasets': [{'data': [], 'backgroundColor': ["#7180AC", "#2B4570", '#A8D0DB'],
+                     'hoverBackgroundColor': ["#7180AC", "#2B4570", '#A8D0DB']}]}
+
+    for key, value in recs_for_me.items():
+        new_data_dict['labels'].append(key)
+        new_data_dict['datasets'][0]['data'].append(value)
+
+    fake_data = {'labels': ['Accepted', 'Ignored', 'Pending'], 'datasets': [{'data': [5, 2, 10], 'backgroundColor': [], 'hoverBackgroundColor': []}]}
+
+    return jsonify(new_data_dict)
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the

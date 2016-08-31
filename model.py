@@ -2,6 +2,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from models import *
 import datetime
+from collections import defaultdict
 
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -305,6 +306,25 @@ class Recommendation(db.Model):
                                            'author': rec.bookinfo.author, 'md_image': rec.bookinfo.md_image,
                                            'comment': rec.comments}
         return rec_dict
+
+    @classmethod
+    def get_all_recs_referred(cls, user_id):
+        """Given user ID, get all recs for that user and return totals of each status."""
+
+        recs_for_me = db.session.query(Recommendation.recommendation_id, Recommendation.status).filter_by(referred_user=user_id).all()
+
+        sum_dict = defaultdict(int)
+
+        for rec in recs_for_me:
+            status = rec.status
+            if status == "Accepted":
+                sum_dict["Accepted"] += 1
+            elif status == "Ignored":
+                sum_dict["Ignored"] += 1
+            else:
+                sum_dict["Pending"] += 1
+
+        return sum_dict
 
     def ignore_rec(self):
         """Mark recommendation as ignored."""
