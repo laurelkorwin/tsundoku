@@ -619,8 +619,6 @@ def return_basic_rec_data():
         new_data_dict['labels'].append(key)
         new_data_dict['datasets'][0]['data'].append(value)
 
-    fake_data = {'labels': ['Accepted', 'Ignored', 'Pending'], 'datasets': [{'data': [5, 2, 10], 'backgroundColor': [], 'hoverBackgroundColor': []}]}
-
     return jsonify(new_data_dict)
 
 
