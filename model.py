@@ -326,6 +326,26 @@ class Recommendation(db.Model):
 
         return sum_dict
 
+    @classmethod
+    def get_most_trusted(cls, user_id):
+        """Given user id, return dict with friend and rec info"""
+
+        recs_for_me = Recommendation.query.filter_by(referred_user=user_id).all()
+
+        rec_dict = {}
+
+        for rec in recs_for_me:
+            user_name = User.query.get(rec.referring_user).user_name
+            if user_name not in rec_dict:
+                rec_dict[user_name] = {'total': 0, 'accepted': 0, 'percent_accepted': 0.0}
+            rec_dict[user_name]['total'] += 1
+            if rec.status == "Accepted":
+                rec_dict[user_name]['accepted'] += 1
+            rec_dict[user_name]['percent_accepted'] = (float(rec_dict[user_name]['accepted']) / rec_dict[user_name]['total']) * 100
+
+        print rec_dict
+        return rec_dict
+
     def ignore_rec(self):
         """Mark recommendation as ignored."""
 

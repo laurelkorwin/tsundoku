@@ -12,6 +12,8 @@
   <canvas id="donutChart"></canvas>
 </div>
 </div>
+
+{% if any_recs|length > 0 %}
 <div class="board-title">
     <h2>Friend Highlights</h2>
 </div>
@@ -20,5 +22,11 @@
 <div class="col-xs-12 col-lg-5 chart">
   <canvas id="basicRecChart"></canvas>
 </div>
+
+<div class="col-xs-12 col-lg-5 chart">
+  <canvas id="mostTrustedChart"></canvas>
 </div>
+
+</div>
+{% endif %}
 {% endblock %}

@@ -239,7 +239,7 @@ var barOptions = {responsive: true,
                           margin: 15},
                   legend: {display: false},
                   scales: {
-                        yAxes: [{ticks: {beginAtZero: true}, gridLines: {display: false}}],
+                        yAxes: [{display: false, ticks: {beginAtZero: true}, gridLines: {display: false}}],
                         xAxes: [{display: false, gridLines: {display: false}}]
                   }};
 
@@ -247,12 +247,25 @@ var recOptions = {responsive: true,
                   title: {display: true,
                           text: 'Recommendations for you',
                           fontSize: 20,
-                          margin: 15}
+                          margin: 15},
+                  legend: {position: 'bottom'}
                   };
+
+var bar2Options = {responsive: true,
+                  title: {display: true,
+                          text: 'Most trusted friends',
+                          fontSize: 20,
+                          margin: 15},
+                  legend: {display: false},
+                  scales: {
+                        yAxes: [{display: false, ticks: {beginAtZero: true}, gridLines: {display: false}}],
+                        xAxes: [{gridLines: {display: false}}]
+                  }};
 
 var ctxDonut = $("#pagesChart").get(0).getContext("2d");
 var ctxBar = $("#donutChart").get(0).getContext("2d");
 var ctxBasicRec = $('#basicRecChart').get(0).getContext('2d');
+var ctxMostTrusted = $('#mostTrustedChart').get(0).getContext('2d');
 
 var nodes;
 
@@ -277,5 +290,13 @@ $.get('/basic_rec_data.json', function(data) {
             type: 'pie',
             data: data,
             options: recOptions
+      });
+});
+
+$.get('/most_trusted_data.json', function(data) {
+      var myMostTrustedChart = new Chart (ctxMostTrusted, {
+            type: 'bar',
+            data: data,
+            options: bar2Options
       });
 });

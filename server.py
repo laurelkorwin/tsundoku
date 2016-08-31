@@ -543,7 +543,11 @@ def ignore_rec():
 def show_user_profile():
     """Show user 'book profile' and stats"""
 
-    return render_template('profile.html')
+    user_id = session['logged_in']
+
+    any_recs = Recommendation.get_all_recs_referred(user_id)
+
+    return render_template('profile.html', any_recs=any_recs)
 
 @app.route('/pages_data.json')
 def return_num_pages():
@@ -557,7 +561,7 @@ def return_num_pages():
 
     for rating in ratings:
         parent_node_id = rating.book.parent_node_id
-        node_name = Node.query.get(parent_node_id).node_name
+        node_name = rating.book.parnodebk.node_name
         our_data[parent_node_id] = OrderedDict()
         our_data[parent_node_id]['name'] = node_name
         num_pages = int(rating.book.num_pages)
@@ -618,6 +622,24 @@ def return_basic_rec_data():
     for key, value in recs_for_me.items():
         new_data_dict['labels'].append(key)
         new_data_dict['datasets'][0]['data'].append(value)
+
+    return jsonify(new_data_dict)
+
+@app.route('/most_trusted_data.json')
+def return_most_trusted_data():
+
+    user_id = session['logged_in']
+
+    most_trusted = Recommendation.get_most_trusted(user_id)
+
+    new_data_dict = {'labels': [], 'datasets': [{'data': [], 'backgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74'],
+                     'hoverBackgroundColor': ["#7180AC", "#2B4570", '#A8D0DB', '#E49273', '#A37A74']}]}
+
+    for friend, data in sorted(most_trusted.iteritems(), key=lambda x: x[1]['percent_accepted'], reverse=True)[:5]:
+        new_data_dict['labels'].append(friend)
+        new_data_dict['datasets'][0]['data'].append(data['percent_accepted'])
+
+    print new_data_dict
 
     return jsonify(new_data_dict)
 
