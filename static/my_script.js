@@ -71,10 +71,11 @@ function updateFriendDiv(results){
             $('#friends_to_rec').html("<p>Looks like you've already recommended this book to all your friends!</p>");
             $('#recommend_notes').hide();
       } else {
+            $('#friends_to_rec').append('<p>Which friend(s) would you like to recommend this book to?</p>');
             for (var i = 0; i < potentials.length; i++){
                   var friendId = potentials[i][1];
                   var friendName = potentials[i][0];
-                  $('#friends_to_rec').append('<p>Which friend(s) would you like to recommend this book to?</p> <input type="checkbox" name="friend" value="'+ friendId + '"> ' + friendName + '<br>');
+                  $('#friends_to_rec').append('<input type="checkbox" name="friend" value="'+ friendId + '"> ' + friendName + '<br>');
                   $('#recommend_notes').show();
             }
       }
