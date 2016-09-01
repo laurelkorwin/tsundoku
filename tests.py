@@ -58,6 +58,29 @@ class UserLoggedIn(unittest.TestCase):
         self.assertIn('Boards', result.data)
         self.assertNotIn('Register', result.data)
 
+
+class SearchFunctions(unittest.TestCase):
+
+    def setUp(self):
+        """Stuff to do before every test."""
+
+        self.client = server.app.test_client()
+        server.app.config['TESTING'] = True
+        server.app.config['SECRET_KEY'] = 'key'
+
+        with self.client as c:
+            with c.session_transaction() as session:
+                session['logged_in'] = 1
+
+        model.connect_to_db(server.app, "postgresql:///testdb")
+
+        model.db.create_all()
+
+    def tearDown(self):
+        """Do at end of every test."""
+
+        model.db.session.close()
+
     def testSearch(self):
 
         my_search = search.search_API('harry potter')
