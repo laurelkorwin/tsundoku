@@ -3,7 +3,6 @@
 import os
 import lxml
 from amazonproduct import API
-import collections
 import sys
 
 reload(sys)
@@ -37,8 +36,6 @@ def process_result(search_result):
     if search_result:
 
         result_items = search_result.Items.Item
-
-        # results_dict = collections.OrderedDict()
 
         results_list = []
 
