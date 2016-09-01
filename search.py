@@ -38,7 +38,7 @@ def process_result(search_result):
 
         result_items = search_result.Items.Item
 
-        results_dict = collections.OrderedDict()
+        # results_dict = collections.OrderedDict()
 
         results_list = []
 
