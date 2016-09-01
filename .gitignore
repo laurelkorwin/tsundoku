@@ -4,3 +4,5 @@ lenv/
 *.pyc
 .coverage
 .DS_Store
+data.sql
+local_requirements.txt
