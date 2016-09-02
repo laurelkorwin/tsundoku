@@ -272,33 +272,53 @@ var ctxMostTrusted = $('#mostTrustedChart').get(0).getContext('2d');
 // Data & chart creation
 
 $.get('/pages_data.json', function(data){
+      if ((data.labels).length > 0) {
       var myDonutChart = new Chart(ctxDonut, {
             type: 'doughnut',
             data: data,
             options: donutOptions
       });
+   } else {
+      $('#pagesChart').hide();
+      $('#pagesChart').parent().hide();
+   }
 });
 
 $.get('/avg_ratings.json', function(data) {
+      if ((data.labels).length > 0) {
       var myBarChart = new Chart(ctxBar, {
             type: 'bar',
             data: data,
             options: barOptions
       });
+   } else {
+      $('#donutChart').hide();
+      $('#donutChart').parent().hide();
+   }
 });
 
 $.get('/basic_rec_data.json', function(data) {
+      if ((data.labels).length > 0) {
       var myBasicRecChart = new Chart (ctxBasicRec, {
             type: 'pie',
             data: data,
             options: recOptions
       });
+   } else {
+      $('#basicRecChart').hide();
+      $('#basicRecChart').parent().hide();
+   }
 });
 
 $.get('/most_trusted_data.json', function(data) {
+      if ((data.labels).length > 0) {
       var myMostTrustedChart = new Chart (ctxMostTrusted, {
             type: 'bar',
             data: data,
             options: bar2Options
       });
+   } else {
+      $('#mostTrustedChart').hide();
+      $('#mostTrustedChart').parent().hide();
+   }
 });
