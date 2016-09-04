@@ -75,7 +75,7 @@ function updateFriendDiv(results){
             for (var i = 0; i < potentials.length; i++){
                   var friendId = potentials[i][1];
                   var friendName = potentials[i][0];
-                  $('#friends_to_rec').append('<input type="checkbox" name="friend" value="'+ friendId + '"> ' + friendName + '<br>');
+                  $('#friends_to_rec').append('<input type="radio" name="friend" value="'+ friendId + '"> ' + friendName + '<br>');
                   $('#recommend_notes').show();
             }
       }
