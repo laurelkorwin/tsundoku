@@ -41,6 +41,10 @@ ul {
   font-weight: bold;
 }
 
+.board:hover{
+  background-color: #a2c0d9;
+}
+
 .navbar-default .navbar-nav>li>a:hover {
   color: white;
   font-size: 16px;
