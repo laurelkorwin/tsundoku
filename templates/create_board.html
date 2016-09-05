@@ -1,22 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-xs-12 col-lg-offset-2 col-lg-10">
-    <div class="col-xs-12 col-lg-offset-3 board-header">
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
+    <div class="board-header">
         <h2>Create New Board</h2>
     </div>
-        <div class="col-xs-12 col-lg-offset-3">
+        <div>
             <form action='/process_board' method='POST'>
                 <input type='text' id='board_name_field' name='board_name'>
                 <input type='submit' value='Create Board'>
             </form>
         </div>
-</div>
 {% if existing_boards|length > 0 %}
 <div class="row">
-    <div class="col-xs-12 col-lg-offset-2 col-lg-10">
-        <div class="col-xs-12 col-lg-offset-3 board-header">
+    <div class="board-header">
             <h2>Your Current Boards</h2>
-        </div>
+    </div>
+    <div class="col-xs-12 col-lg-offset-2 col-lg-10">
 {% for item, values in my_dict.iteritems() %}
         <a class="board_link" href="board_details/{{ item[0] }}"><div class="col-xs-12 col-lg-3 board">
             <div class="board-name">
@@ -32,5 +31,5 @@
     </div>
 </div>
 {% endif %}
-
+</div>
 {% endblock %}

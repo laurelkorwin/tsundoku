@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-xs-12 col-lg-offset-1 col-lg-10">
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
 <div class="board-title">
     <h2>{{ board_title }}</h2>
 </div>
 <div class="filters">
-    <h4>Filter by:
-    <a href="/get_read_books?hasread=True"><button>Read</button></a>
-    <a href="/get_read_books?hasread=False"><button>Unread</button></a>
-    <a href="/get_read_books?hasread=NA"><button>All</button></a>
+    <h4>Filter by</h4>
+    <a href="/get_read_books?hasread=True"><button class="btn btn-outline-primary">Read</button></a>
+    <a href="/get_read_books?hasread=False"><button class="btn btn-outline-primary">Unread</button></a>
+    <a href="/get_read_books?hasread=NA"><button class="btn btn-outline-primary">All</button></a>
     <br>
 </div>
+<div class="col-xs-12 col-lg-offset-1 col-lg-10">
 <div class="row masonry">
 {% for book in books %}
     {% if book['date_deleted'] is none %}
-    <div class="col-xs-12 col-lg-5 book item">
-        <div class="centerBlock">
+    <div class="col-xs-12 col-lg-3 book item">
+        <div class="book-info">
             <div class="title">
                 {{ book['title'] }} <br>
             </div>
@@ -28,10 +29,10 @@
             <div class="read-info">
                 <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></span></a></button>
                 {% if book['hasread'] %}
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                 {% else %}
                     <div>
-                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                        <span class="glyphicons glyphicons-book-open"></span>
                             <button class="mark_read" data-book-id="{{ book['book_id'] }}">Mark book as read</button>
                     </div>
                 {% endif %}
@@ -74,6 +75,8 @@
 {% endfor %}
 </div>
 </div>
+</div>
+</div>
 <!-- RECOMMEND MODAL WINDOW -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -96,7 +99,6 @@
       </div>
     </div>
   </div>
-</div>
 <!-- NOTES MODAL -->
 <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">

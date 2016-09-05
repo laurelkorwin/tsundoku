@@ -3,7 +3,8 @@ body{
       font-family: Avenir, sans-serif;
       font-size: 14px;
       margin: 0;
-      padding: 0;}
+      padding: 0;
+      height: 102%;}
 h1 { font-size: 1.5em; margin: 10px; }
 form {
   display: inline-block;
@@ -18,9 +19,26 @@ ul {
   padding: 5px;
 }
 
+.full-page {
+  height: 100%;
+}
+
+.page-holder {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  background-color: white;
+}
+
+.page-bgkd {
+  background-color: white;
+}
+
 .navbar-default {
   background-color: #4682B4;
   margin: 0px;
+  border: 0;
+  border-radius: 0;
 }
 
 .navbar-brand {
@@ -56,13 +74,28 @@ ul {
   margin-left: 0px;
 }
 .background {
-  margin-top: 20px;
+  margin-top: 0px;
   margin-left: 0px;
   margin-right: 0px;
-  height: 1100px;
+  padding: 0px;
+  height: 1184px;
   position: relative;
   text-align: center;
-  background-image: url("http://wallpaperrs.com/uploads/photography/book-wide-wallpaper-27832.jpg");
+  background-image: url("books-1246674_1920.jpg");
+}
+
+.flashes {
+  z-index: 1000;
+  background-color: white;
+  display: block;
+  position: absolute;
+  left: 40%;
+  text-align: center;
+  padding: 0;
+}
+
+li {
+  text-align: center;
 }
 
 .homepage_title {
@@ -97,6 +130,10 @@ ul {
 .board {
   display: table-cell;
   vertical-align: middle;
+  text-align: center;
+}
+
+.book-info {
   text-align: center;
 }
 
