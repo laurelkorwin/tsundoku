@@ -10,9 +10,12 @@
     <p>Here are the potential friends we found for you:</p>
 
     {% for friend_id, friend_name in friends.iteritems() %}
-
-    Friend name: {{ friend_name }}
-    <button class='friend_btn'><a href="/add_friend/{{ friend_id }}">Add friend</a></button><br>
+    <div class="friend-rep col-xs-12 col-lg-2">
+        <div class="username">
+            Name: {{ friend_name }}<br><br>
+            <button class='friend_btn btn-primary'><a class="btn-text" href="/add_friend/{{ friend_id }}">Add friend</a></button>
+        </div>
+    </div>
 
     {% endfor %}
 

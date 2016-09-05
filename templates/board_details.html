@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="col-xs-12 col-lg-offset-1 col-lg-10">
 <div class="board-title">
     <h2>{{ board_title }}</h2>
 </div>
@@ -13,7 +14,7 @@
 <div class="row masonry">
 {% for book in books %}
     {% if book['date_deleted'] is none %}
-    <div class="col-xs-12 col-lg-4 book item">
+    <div class="col-xs-12 col-lg-5 book item">
         <div class="centerBlock">
             <div class="title">
                 {{ book['title'] }} <br>
@@ -71,6 +72,7 @@
         </div>
         {% endif %}
 {% endfor %}
+</div>
 </div>
 <!-- RECOMMEND MODAL WINDOW -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

@@ -14,45 +14,58 @@
 </form>
 
 {% if pending_relationships|length > 0%}
+<div class="row margin">
 <div class="friend-header">
 <h2>Requests you've sent:</h2>
 </div>
 
     {% for relationship in pending_relationships %}
-
-    Username: {{ relationship[0] }}<br>
-    Status {{ relationship[2] }}<br><br>
-
+    <div class="friend-rep col-xs-12 col-lg-2">
+        <div class="username">
+            Username: {{ relationship[0] }}<br>
+            Status: {{ relationship[2] }}
+        </div>
+    </div>
 
     {% endfor %}
 
-
+</div>
 {% endif %}
 
 {% if pending_requests|length > 0%}
+<div class="row margin">
 <div class="friend-header">
 <h2>Requests for you:</h2>
 </div>
 
     {% for request in pending_requests %}
-    Username: {{ request[0] }}<br>
-    Status {{ request[2] }}<br><br>
-    <button><a href="/accept_friend/{{ request[1] }}">Accept</a></button>
-    <button><a href="/deny_friend/{{ request[1] }}">Deny</a></button><br>
+    <div class="friend-rep col-xs-12 col-lg-2">
+        <div class="username">
+            {{ request[0] }}<br>
+            Status: {{ request[2] }}<br>
+            <button class="btn-primary"><a class="btn-text" href="/accept_friend/{{ request[1] }}">Accept</a></button>
+            <button class="btn-primary"><a class="btn-text" href="/deny_friend/{{ request[1] }}">Deny</a></button>
+        </div>
+    </div>
     {% endfor %}
-
+</div>
 {% endif %}
 
 {% if current_friends|length > 0 %}
+<div class="row margin">
 <div class="friend-header">
 <h2>Your current friends:</h2>
 </div>
 
     {% for friend in current_friends %}
-    Username: {{ friend[0] }} <br>
-    <button><a href="/friend_boards/{{ friend[1] }}">See {{ friend[0] }}'s boards!</a></button><br>
+    <div class="friend-rep col-xs-12 col-lg-2">
+        <div class="username">
+            {{ friend[0] }}<br><br>
+            <button class="btn btn-primary"><a class="btn-text" href="/friend_boards/{{ friend[1] }}">{{ friend[0] }}'s boards</a></button>
+        </div>
+    </div>
     {% endfor %}
-
+</div>
 {% endif %}
 
 {% endblock %}

@@ -201,6 +201,7 @@ def show_board_details(board_id):
 
     if int(board_id) not in my_boards:
         flash("Oops, looks like you don't have a board with that ID.")
+        return redirect('/create_board')
 
     session['board_id'] = board_id
     #gets ratings for that board, as well as board name
