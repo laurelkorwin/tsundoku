@@ -41,32 +41,25 @@
                                 <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
                                 <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
                                 <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
-                            </fieldset> <br>
-                                <input type="submit" class="rate_book" data-book-id="{{ book['book_id'] }}"value="Rate book">
+                            </fieldset>
+                                <input type="submit" class="rate_book" data-book-id="{{ book['book_id'] }}"value="Rate">
                         </form>
                     </div>
                 {% endif %}
             </div>
             <div class="book_options row">
                 <div class="col-sm-offset-1 col-sm-10">
-                <div class="read-info col-sm-3">
                     <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></span></a></button>
                     {% if book['hasread'] %}
                         <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                     {% else %}
-                        <div>
-                            <span class="glyphicons glyphicons-book-open"></span>
-                                <button class="mark_read" data-book-id="{{ book['book_id'] }}">Mark book as read</button>
-                        </div>
+                    <button class="mark_read" data-book-id="{{ book['book_id'] }}">
+                        <span class="glyphicon glyphicon-book"></span>
+                    </button>
                     {% endif %}
-                </div>
-                <div class="notes col-sm-5">
                     <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">
-                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Notes</button>
-                </div>
-                <div>
-                    <button class="delete-book col-sm-3" data-book-id="{{ book['book_id'] }}">Delete</button>
-                </div>
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                    <button class="delete-book" data-book-id="{{ book['book_id'] }}"><span class="glyphicon glyphicon-trash"></span></button>
                 </div>
             </div>
             <div class="recommend_this_book">

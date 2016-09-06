@@ -14,9 +14,10 @@
 
 <div>
 {% if rec_dict.keys()|length > 0%}
-
+<div class="col-xs-12 col-lg-offset-1 col-lg-10">
+    <div class="row masonry">
 {% for key, value in rec_dict.iteritems() %}
-<div id="{{key}}" class="col-xs-12 col-lg-3 book">
+<div id="{{key}}" class="col-xs-12 col-lg-3 book item">
 
     <div class="title">
         {{ value['title'] }}
@@ -25,7 +26,7 @@
         {{ value['author'] }}
     </div>
     <div class="image">
-        <img src="{{value['md_image']}}"><br>
+        <img class="book_image" src="{{value['lg_image']}}"><br>
     </div>
     <div class="referred_by">
         "{{ value['comment'] }}"<br>
@@ -40,7 +41,8 @@
 </div>
 
 {% endfor %}
-
+    </div>
+</div>
 {% else %}
 <p>You don't have any currently recommended books.</p>
 

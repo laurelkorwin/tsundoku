@@ -335,7 +335,7 @@ class Recommendation(db.Model):
             rec_dict[rec.recommendation_id] = {'book_id': rec.book_id, 'referring_user_id': rec.referring_user,
                                            'referring_user': rec.users.user_name, 'title': rec.bookinfo.title,
                                            'author': rec.bookinfo.author, 'md_image': rec.bookinfo.md_image,
-                                           'comment': rec.comments}
+                                           'lg_image': rec.bookinfo.lg_image, 'comment': rec.comments}
         return rec_dict
 
     @classmethod
