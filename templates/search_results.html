@@ -1,71 +1,77 @@
 {% extends 'base.html' %}
+{% block extrahead %}
+<style type="text/css">
+.background {
+    height: 100%;
+}   
+</style>
+{% endblock %}
 {% block content %}
-
-<div class="search-header">
-<h2>Search Results</h2>
-</div>
-
-{% for result in results_list %}
-<div class="col-xs-12 col-lg-3 book">
-    <ul>
-            <li>
-                {{ result['title'] }} <br>
-                {{ result['author'] }} <br><br>
-                <img src="{{ result['md_image'] }}"> <br><br>
-                <button type='button' class="btn btn-primary btn-lg book_result"
-                data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
-                data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
-                data-md-image="{{ result['md_image'] }}" data-num-pages="{{ result['num_pages'] }}" data-lg-image="{{ result['lg_image'] }}"
-                data-url="{{ result['URL'] }}" data-primary-node-id="{{ result['primary_node_id'] }}"
-                data-primary-node="{{ result['primary_node'] }}" data-parent-node-id="{{ result['parent_node_id'] }}"
-                data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
-            </li>
-    </ul>
-</div>
-{% endfor %}
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Give us a few more details:</h4>
-      </div>
-      <div class="modal-body">
-        <form action='add_book', method="POST"> 
-            <input type="hidden" id="title" name="title" value=''>
-            <input type="hidden" id='author' name="author" value=''>
-            <input type="hidden" id='asin' name="asin" value=''>
-            <input type="hidden" id='md_image' name="md_image" value=''>
-            <input type="hidden" id='lg_image' name="lg_image" value=''>
-            <input type="hidden" id='url' name="url" value=''>
-            <input type="hidden" id='num_pages' name="num_pages" value=''>
-            <input type="hidden" id='primary_node_id' name="primary_node_id" value=''>
-            <input type="hidden" id='primary_node' name='primary_node' value=''>
-            <input type="hidden" id='parent_node_id' name='parent_node_id' value=''>
-            <input type="hidden" id='parent_node' name='parent_node' value=''>
-            <p>Pick a board:</p>
-            {% for board in existing_boards %}
-            <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}<br>
-            {% endfor %}
-            Have you read this book before?
-            <input type="checkbox" name="hasread" checked data-toggle="toggle" data-on="Yes" data-off="No" data-style="pretty"><br>
-            If you've read the book, how would you rate it? <br>
-            <fieldset class="rating">
-                <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="5 stars"></label>
-                <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="4 stars"></label>
-                <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
-                <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
-                <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
-            </fieldset> <br> <br>
-            Add any notes you'd like about this book:<br>
-            <textarea rows="5" cols="50" name="notes" placeholder="Notes"></textarea><br>
-            <input type="submit" value="Add book!">
-        </form>
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
+    <div class="search-header">
+        <h2>Search Results</h2>
+    </div>
+    <div class="row">
+        {% for result in results_list %}
+        <div class="col-xs-12 col-lg-3 book">
+            <ul>
+                    <li>
+                        {{ result['title'] }} <br>
+                        {{ result['author'] }} <br><br>
+                        <img src="{{ result['md_image'] }}"> <br><br>
+                        <button type='button' class="btn btn-primary btn-lg book_result"
+                        data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
+                        data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
+                        data-md-image="{{ result['md_image'] }}" data-num-pages="{{ result['num_pages'] }}" data-lg-image="{{ result['lg_image'] }}"
+                        data-url="{{ result['URL'] }}" data-primary-node-id="{{ result['primary_node_id'] }}"
+                        data-primary-node="{{ result['primary_node'] }}" data-parent-node-id="{{ result['parent_node_id'] }}"
+                        data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
+                    </li>
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Give us a few more details:</h4>
+          </div>
+          <div class="modal-body">
+            <form action='add_book', method="POST"> 
+                <input type="hidden" id="title" name="title" value=''>
+                <input type="hidden" id='author' name="author" value=''>
+                <input type="hidden" id='asin' name="asin" value=''>
+                <input type="hidden" id='md_image' name="md_image" value=''>
+                <input type="hidden" id='lg_image' name="lg_image" value=''>
+                <input type="hidden" id='url' name="url" value=''>
+                <input type="hidden" id='num_pages' name="num_pages" value=''>
+                <input type="hidden" id='primary_node_id' name="primary_node_id" value=''>
+                <input type="hidden" id='primary_node' name='primary_node' value=''>
+                <input type="hidden" id='parent_node_id' name='parent_node_id' value=''>
+                <input type="hidden" id='parent_node' name='parent_node' value=''>
+                <p>Pick a board:</p>
+                {% for board in existing_boards %}
+                <input type="radio" name="board" value="{{ board.board_id }}"> {{ board.board_name }}<br>
+                {% endfor %}
+                Have you read this book before?
+                <input type="checkbox" name="hasread" checked data-toggle="toggle" data-on="Yes" data-off="No" data-style="pretty"><br>
+                If you've read the book, how would you rate it? <br>
+                <fieldset class="rating">
+                    <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="4 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="3 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="2 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="1 star"></label>
+                </fieldset> <br> <br>
+                Add any notes you'd like about this book:<br>
+                <textarea rows="5" cols="50" name="notes" placeholder="Notes"></textarea><br>
+                <input type="submit" value="Add book!">
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </div>
-
-
 {% endblock %}

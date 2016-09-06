@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
+{% block extrahead %}
+<style type="text/css">
+.background {
+    height: 100%;
+}   
+</style>
+{% endblock %}
 {% block content %}
-
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
+<div class="board-header">
 <h2>Registration Form</h2>
+</div>
 <form action='/process_registration' method="POST">
     <label for='username_field'>Username:</label>
     <input type='text' id='username_field' name='username'><br>
@@ -11,5 +20,5 @@
     <input type='password' id='password_field' name='password'><br>
     <input type='submit' value='Register'>
 </form>
-
+</div>
 {% endblock %}

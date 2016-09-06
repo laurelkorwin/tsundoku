@@ -24,18 +24,7 @@
                 {{ book['author'] }} <br>
             </div>
             <div class="image">
-                <img src="{{ book['md_image'] }}"> <br>
-            </div>
-            <div class="read-info">
-                <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></span></a></button>
-                {% if book['hasread'] %}
-                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
-                {% else %}
-                    <div>
-                        <span class="glyphicons glyphicons-book-open"></span>
-                            <button class="mark_read" data-book-id="{{ book['book_id'] }}">Mark book as read</button>
-                    </div>
-                {% endif %}
+                <img class="book_image" src="{{ book['lg_image'] }}"> <br>
             </div>
             <div class='rating-info'>
                 {% if book['rating'] %}
@@ -58,16 +47,31 @@
                     </div>
                 {% endif %}
             </div>
-                <div class="notes">
+            <div class="book_options row">
+                <div class="col-sm-offset-1 col-sm-10">
+                <div class="read-info col-sm-3">
+                    <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></span></a></button>
+                    {% if book['hasread'] %}
+                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                    {% else %}
+                        <div>
+                            <span class="glyphicons glyphicons-book-open"></span>
+                                <button class="mark_read" data-book-id="{{ book['book_id'] }}">Mark book as read</button>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="notes col-sm-5">
                     <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Notes</button>
                 </div>
-            <div>
-                <button class="delete-book" data-book-id="{{ book['book_id'] }}">Delete</button>
+                <div>
+                    <button class="delete-book col-sm-3" data-book-id="{{ book['book_id'] }}">Delete</button>
+                </div>
+                </div>
             </div>
             <div class="recommend_this_book">
-                <button type="button" class="btn btn-primary btn-lg recommend_book"
-                data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Recommend</button>
+                    <button type="button" class="btn btn-primary btn-lg recommend_book"
+                    data-toggle="modal" data-target="#myModal" data-book-id="{{ book['book_id'] }}">Recommend</button>
             </div>
         </div>
         </div>

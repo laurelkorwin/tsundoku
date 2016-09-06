@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
+{% block extrahead %}
+<style type="text/css">
+.background {
+    height: 100%;
+}   
+</style>
+{% endblock %}
 {% block content %}
-<div class="row full-page">
-    <div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
+    <div class="board-header">
         <h2>Login Form</h2>
-        <form action='/process_login' method="POST">
-            <label for='username_field'>Username:</label>
-            <input type='text' id='username_field' name='username'>
-            <label for='password_field'>Password:</label>
-            <input type='password' id='password_field' name='password'>
-            <input type='submit' id='login' value='Login'>
-        </form>
     </div>
+    <form action='/process_login' method="POST">
+        <label for='username_field'>Username:</label>
+        <input type='text' id='username_field' name='username'>
+        <label for='password_field'>Password:</label>
+        <input type='password' id='password_field' name='password'>
+        <input type='submit' id='login' value='Login'>
+    </form>
 </div>
 
 {% endblock %}

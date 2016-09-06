@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
+{% block extrahead %}
+<style type="text/css">
+    .background {
+        height: 100%;
+    }   
+</style>
+{% endblock %}
 {% block content %}
-
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
 <div class="search-header">
 <h2>Recommended Books</h2>
 </div>
@@ -38,7 +45,8 @@
 <p>You don't have any currently recommended books.</p>
 
 {% endif %}
-<div>
+</div>
+</div>
 <!-- MODAL WINDOW -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
