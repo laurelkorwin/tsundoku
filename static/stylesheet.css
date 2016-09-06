@@ -86,10 +86,12 @@ ul {
   margin-left: 0px;
 }
 
-.notes, .delete-book {
+/*.notes, .delete-book {
   margin-top: 5px;
+}*/
+.rating-info {
+  margin-bottom: 5px;
 }
-
 .background {
   background-attachment: fixed;
   text-align: center;

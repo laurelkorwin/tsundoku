@@ -289,7 +289,7 @@ def get_read_books():
     current_friends = [(friend.get_secondary_friend_info().user_name, friend.secondary_friend) for friend in current]
 
     #renders board details template again with filtered books
-    return render_template("board_details.html", books=books, board_title=board, current_friends=current_friends)
+    return render_template("board_details.html", board_id=board_id, books=books, board_title=board, current_friends=current_friends)
 
 
 @app.route('/read_book', methods=['POST'])
