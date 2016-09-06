@@ -16,7 +16,7 @@ Python, Javascript (jQuery, AJAX, JSON, Chart.js), Flask, Selenium, SQLAlchemy, 
 
 <b> Board Overview Page </b>
 
-![alt tag](https://raw.githubusercontent.com/laurelkorwin/tsundoku/master/static/boards_ss.png)
+![alt tag](https://raw.githubusercontent.com/laurelkorwin/tsundoku/master/static/board_over_ss.png)
 
 <b> Board Details Page </b>
 
