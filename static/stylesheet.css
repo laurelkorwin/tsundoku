@@ -6,7 +6,8 @@ body{
       padding: 0;
       height: 100%;
       min-height: 100%;
-      background-image: url("books-1246674_1920.jpg");}
+      background-image: url("books-1246674_1920.jpg");
+      overflow: auto;}
 h1 { font-size: 1.5em; margin: 10px; }
 form {
   display: inline-block;
@@ -31,10 +32,7 @@ ul {
   height: 100%;
   background-color: white;
   padding-bottom: 10em;
-}
-
-.page-bgkd {
-  background-color: white;
+  overflow: auto;
 }
 
 .navbar-default {
@@ -94,8 +92,8 @@ ul {
   background-attachment: fixed;
   text-align: center;
   background-repeat: no-repeat;
-  background-image: url("books-1246674_1920.jpg");
-
+  overflow: auto;
+  /*background-image: url("books-1246674_1920.jpg");*/
 }
 
 .flashes {

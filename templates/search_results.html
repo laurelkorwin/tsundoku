@@ -11,25 +11,33 @@
     <div class="search-header">
         <h2>Search Results</h2>
     </div>
-    <div class="row">
+    <div class="col-xs-12 col-lg-offset-1 col-lg-10">
+        <div class="row masonry">
         {% for result in results_list %}
-        <div class="col-xs-12 col-lg-3 book">
-            <ul>
-                    <li>
-                        {{ result['title'] }} <br>
-                        {{ result['author'] }} <br><br>
-                        <img src="{{ result['md_image'] }}"> <br><br>
-                        <button type='button' class="btn btn-primary btn-lg book_result"
-                        data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
-                        data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
-                        data-md-image="{{ result['md_image'] }}" data-num-pages="{{ result['num_pages'] }}" data-lg-image="{{ result['lg_image'] }}"
-                        data-url="{{ result['URL'] }}" data-primary-node-id="{{ result['primary_node_id'] }}"
-                        data-primary-node="{{ result['primary_node'] }}" data-parent-node-id="{{ result['parent_node_id'] }}"
-                        data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
-                    </li>
-            </ul>
-        </div>
+            <div class="col-xs-12 col-lg-3 book item">
+                <ul>
+                        <li>
+                        <div class="title">
+                            {{ result['title'] }}
+                        </div>
+                        <div class="author">
+                            {{ result['author'] }}
+                        </div>
+                        <div class="image">
+                            <img class="book_image" src="{{ result['lg_image'] }}">
+                        </div>
+                            <button type='button' class="btn btn-primary btn-lg book_result"
+                            data-toggle="modal" data-target="#myModal" data-title="{{ result['title'] }}"
+                            data-author="{{ result['author'] }}" data-asin="{{ result['ASIN'] }}"
+                            data-md-image="{{ result['md_image'] }}" data-num-pages="{{ result['num_pages'] }}" data-lg-image="{{ result['lg_image'] }}"
+                            data-url="{{ result['URL'] }}" data-primary-node-id="{{ result['primary_node_id'] }}"
+                            data-primary-node="{{ result['primary_node'] }}" data-parent-node-id="{{ result['parent_node_id'] }}"
+                            data-parent-node="{{ result['parent_node'] }}"> Add book to board</button>
+                        </li>
+                </ul>
+            </div>
         {% endfor %}
+        </div>
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
