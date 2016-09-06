@@ -7,10 +7,10 @@
 
 {% if friends %}
 <div class="col-xs-12 col-lg-offset-1 col-lg-10">
-    <form action='/search_friends'>
+    <form class="friend_search_form" action='/search_friends'>
         <label for='search_field'>
-        <input type="text" name="search" placeholder="Search for a friend by username or email">
-        <input type="submit" value="Search">
+        <input class="new_friend_search" type="text" name="search" placeholder="Search for a friend by username or email">
+        <input class="btn btn-primary" type="submit" value="Search">
         </label>
     </form>
     <p>Here are the potential friends we found for you:</p>
@@ -31,8 +31,8 @@
 
     <form action='/search_friends'>
         <label for='search_field'>
-        <input type="text" name="search" placeholder="Search for a friend by username or email">
-        <input type="submit" value="Search">
+        <input class="new_friend_search" type="text" name="search" placeholder="Search for a friend by username or email">
+        <input class="btn btn-primary" type="submit" value="Search">
         </label>
     </form>
 </div>

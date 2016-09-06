@@ -196,8 +196,19 @@ ul {
   padding: 5px;
 }
 
-#book-search {
+#book-search, #friend_search, .new_friend_search {
   width: 300px;
+  border-radius: 5px;
+  font-weight: none;
+}
+
+#friend_search, .new_friend_search{
+  height: 35px;
+  padding: 10px;
+}
+
+.friend_search_form {
+  margin-bottom: 20px;
 }
 
 .board-name {
@@ -288,6 +299,11 @@ ul {
 .rating { 
   border: none;
   float: left;
+/*  position: relative;
+  left: 30%;*/
+}
+
+.modal_rating {
   position: relative;
   left: 30%;
 }
