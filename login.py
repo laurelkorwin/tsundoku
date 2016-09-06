@@ -11,7 +11,7 @@ def process_new_login(user_object, password):
     if user_object != None and user_object.password == password:
         flash('Successfully logged in!')
         session['logged_in'] = user_object.user_id
-        return redirect('/')
+        return redirect('/create_board')
     elif user_object != None and user_object.password != password:
         flash('Incorrect password. Please reenter.')
         return redirect('/login')
