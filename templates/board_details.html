@@ -51,7 +51,7 @@
                 <div class="col-sm-offset-1 col-sm-10">
                     <button><a href="{{ book.url }}"><span class="glyphicon glyphicon-shopping-cart"></span></a></button>
                     {% if book['hasread'] %}
-                        <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                     {% else %}
                     <button class="mark_read" data-book-id="{{ book['book_id'] }}">
                         <span class="glyphicon glyphicon-book"></span>

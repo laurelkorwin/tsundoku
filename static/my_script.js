@@ -156,16 +156,13 @@ function sendReadToDB (){
             // sets book id variable equal to the book id data for the particular button clicked
             var book_id = $(this).data('book-id');
             var that = this;
-            var glyph = $(this).prev();
             debugger;
             
             // sends a post request to the read book route, providing book id
             // when returning from server, calls updateHTML function
             $.post('/read_book', {'book_id': book_id}, function (results){
-                  debugger;
-                  $('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>').insertBefore($(that));
+                  $('<span class="glyphicon glyphicon-book" aria-hidden="true"></span>').insertBefore($(that));
                   $(that).hide();
-                  $(glyph).hide();
 
             });
       }
