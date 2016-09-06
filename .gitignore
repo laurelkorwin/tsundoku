@@ -6,3 +6,4 @@ lenv/
 .DS_Store
 data.sql
 local_requirements.txt
+README.md
