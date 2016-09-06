@@ -245,6 +245,10 @@ ul {
   background-color: white;
 }
 
+.modal_direction {
+  font-weight: bold;
+}
+
 .btn-lg {
   background-color: #36648B;
   border-color: buttonface;
@@ -284,6 +288,8 @@ ul {
 .rating { 
   border: none;
   float: left;
+  position: relative;
+  left: 30%;
 }
 
 .rating > input { display: none; } 
