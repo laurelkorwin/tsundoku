@@ -41,10 +41,11 @@ $('.book_result').click(
 
 function deleteBook() {
       var book_id = $(this).data('book-id');
+      var board_id = $(this).data('board-id');
       var master_div = $(this).parent().parent().parent().parent();
       // add parent class to make above less finicky
 
-      $.post('/delete_book', {'book_id': book_id}, function(results){
+      $.post('/delete_book', {'book_id': book_id, 'board_id': board_id}, function(results){
             $(master_div).hide();
       });
 }

@@ -318,9 +318,11 @@ def delete_book():
 
     book_id = request.form.get('book_id')
 
+    board_id = request.form.get('board_id')
+
     current_date = datetime.datetime.now().strftime('%m-%d-%y')
 
-    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id).first()
+    this_rating = Rating.query.filter_by(user_id=user_id, book_id=book_id, board_id=board_id).first()
 
     this_rating.date_deleted = current_date
     db.session.commit()

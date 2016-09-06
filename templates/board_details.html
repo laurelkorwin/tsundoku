@@ -59,7 +59,7 @@
                     {% endif %}
                     <button class="see_notes" data-toggle="modal" data-target="#notesModal" data-rating-id="{{ book['rating_id'] }}">
                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
-                    <button class="delete-book" data-book-id="{{ book['book_id'] }}"><span class="glyphicon glyphicon-trash"></span></button>
+                    <button class="delete-book" data-book-id="{{ book['book_id'] }}" data-board-id="{{ board_id }}"><span class="glyphicon glyphicon-trash"></span></button>
                 </div>
             </div>
             <div class="recommend_this_book">
