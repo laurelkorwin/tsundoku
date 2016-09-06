@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
 {% if existing_boards|length > 0 %}
 <div class="board-header">
 <h2>{{ friend_name }}'s Boards: </h2>
 </div>
 
+<div class="col-xs-12 col-lg-offset-1 col-lg-12">
 {% for item, values in friend_dict.iteritems() %}
 <a class="board_link" href="/friend_board_details/{{ item[0] }}"><div class="col-xs-12 col-lg-3 board">
     <div class="board-name">
@@ -18,7 +19,7 @@
     </div>
 </div></a>
 {% endfor %}
-
+</div>
 {% endif %}
-
+</div>
 {% endblock %}
