@@ -104,23 +104,6 @@ ul {
   text-align: center;
   background-repeat: no-repeat;
   overflow: auto;
-  /*background-image: url("books-1246674_1920.jpg");*/
-}
-
-.flashes {
-  z-index: 1000;
-  background-color: white;
-  display: block;
-  position: absolute;
-  left: 40%;
-  text-align: center;
-  padding: 5px;
-  border: 1px solid #4682B4;
-  border-radius: 5px;
-}
-
-.flashes>li {
-  text-align: center;
 }
 
 .homepage_title {
@@ -150,7 +133,6 @@ ul {
   border-radius: 5px;
   border: 1px solid gray;
   opacity: 1;
-/*  box-shadow: 5px 5px 5px #888888;*/
 }
 
 .board {
@@ -248,7 +230,7 @@ ul {
   height: 41px;
 }
 
-.referred_by {
+.referred_by, .friend_notes {
   margin: 5px;
   padding: 5px;
   border: 1px solid gray;
