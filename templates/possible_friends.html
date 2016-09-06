@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class="col-xs-12 col-lg-offset-1 col-lg-10 page-holder">
 <div class="friend-header">
 <h2> Find Friends </h2>
 </div>
 
 {% if friends %}
-
+<div class="col-xs-12 col-lg-offset-1 col-lg-10">
+    <form action='/search_friends'>
+        <label for='search_field'>
+        <input type="text" name="search" placeholder="Search for a friend by username or email">
+        <input type="submit" value="Search">
+        </label>
+    </form>
     <p>Here are the potential friends we found for you:</p>
 
     {% for friend_id, friend_name in friends.iteritems() %}
-    <div class="friend-rep col-xs-12 col-lg-2">
+    <div class="friend-rep col-xs-12 col-lg-3">
         <div class="username">
-            Name: {{ friend_name }}<br><br>
+            {{ friend_name }}<br><br>
             <button class='friend_btn btn-primary'><a class="btn-text" href="/add_friend/{{ friend_id }}">Add friend</a></button>
         </div>
     </div>
@@ -29,7 +35,7 @@
         <input type="submit" value="Search">
         </label>
     </form>
-
+</div>
 {% endif %}
-
+</div>
 {% endblock %}

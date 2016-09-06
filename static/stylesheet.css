@@ -30,6 +30,7 @@ ul {
 
 .page-holder {
   height: 100%;
+  min-height: 600px;
   background-color: white;
   padding-bottom: 10em;
   overflow: auto;
