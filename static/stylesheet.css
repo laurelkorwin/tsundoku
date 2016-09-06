@@ -86,9 +86,16 @@ ul {
   margin-left: 0px;
 }
 
-/*.notes, .delete-book {
-  margin-top: 5px;
-}*/
+.filters>a {
+  color: black;
+}
+
+.filters>h4 {
+  color: #36648B;
+  text-transform: capitalize;
+  font-variant: small-caps;
+}
+
 .rating-info {
   margin-bottom: 5px;
 }
@@ -230,6 +237,14 @@ ul {
   height: 41px;
 }
 
+.referred_by {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background-color: white;
+}
+
 .btn-lg {
   background-color: #36648B;
   border-color: buttonface;
@@ -239,6 +254,9 @@ ul {
 
 .btn-primary {
   border-radius: 5px;
+  background-color: #36648B;
+  color: white;
+  font-size: 14px;
 }
 
 .btn-text {

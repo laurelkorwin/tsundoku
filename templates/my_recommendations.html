@@ -33,9 +33,9 @@
         -{{ value['referring_user'] }}
     </div>
     <div class="rec_buttons">
-        <button type="button" class="accept_rec"
-        data-toggle="modal" data-target="#myModal" data-book-id="{{ value['book_id'] }}" data-rec-id="{{ key }}">Add book to board</button>
-        <button class="ignore_rec" data-book-id="{{ value['book_id'] }}" data-rec-id="{{ key }}">Ignore</button>
+        <button type="button" class="accept_rec btn btn-primary"
+        data-toggle="modal" data-target="#myModal" data-book-id="{{ value['book_id'] }}" data-rec-id="{{ key }}">Add book</button>
+        <button class="ignore_rec btn btn-primary" data-book-id="{{ value['book_id'] }}" data-rec-id="{{ key }}">Ignore</button>
     </div>
 
 </div>
